@@ -1,0 +1,284 @@
+
+body{
+    background-color: rgb(0,0,0);
+    margin: 0px;
+    color: white;
+}
+
+.flexcontainer {
+    display: flex;
+}
+
+.settings{
+    background-color: rgb(0,0,0);
+    position: fixed;
+    right:0;
+    bottom: 0;
+    z-index : 10;
+    display: none;
+}
+
+#settingsbutton{
+    position: fixed;
+    right:0;
+    bottom:0;
+    z-index:11;
+    background-color: rgb(0,0,0);
+    color: red;
+}
+
+.tracker{
+    background-color: rgba(0,0,0,0);
+    position: relative;
+    top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    empty-cells: show;
+    border-spacing: 0px;
+    border: 0px;
+}
+
+.tracker td{
+    width: 64px;
+    height: 64px;
+    padding: 0px;
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+}
+
+.itemconfig {
+    border-spacing: 0px;
+    border: 1px solid white;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.stoops{
+    width: 128;
+    height: 128;
+    background-size: 200% 200%;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display:inline-block;
+    *display: inline;     /* for IE7*/
+    zoom:1;              /* for IE7*/
+    vertical-align:middle;
+    margin-left:20px
+}
+
+label {
+    display:inline-block;
+    *display: inline;     /* for IE7*/
+    zoom:1;              /* for IE7*/
+    float: left;
+    padding-top: 5px;
+    text-align: right;
+    width: 140px;
+}
+
+.lonk{
+    width: 64px;
+    height: 64px;
+    border-spacing: 0px;
+    border: 0px;
+    margin: 2px;
+}
+
+.corner{
+    width: 32px;
+    height: 32px;
+}
+
+.true{
+}
+
+.false{
+    -webkit-filter: grayscale(50%) brightness(30%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(50%) brightness(30%);
+}
+
+.mini{
+    width: 16;
+    height: 16;
+    vertical-align: text-bottom;
+}
+
+.boss{
+    width: 12;
+    height: 12;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 75% 75%;
+
+    position: absolute;
+    margin-left: -6px;
+    margin-top: -6px;
+
+    z-index: 2;
+}
+
+.dungeon{
+    width: 18;
+    height: 18;
+    background-size: 100% 100%;
+
+    position: absolute;
+    margin-left: -12px;
+    margin-top: -12px;
+    cursor: pointer;
+}
+
+.itemdiv{
+    position: relative;
+    left: 0px;
+    justify-content: center;
+}
+
+.mapdiv{
+    background-image: url("images/map.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    position: relative;
+    width: 925px;
+    height: 950px;
+    left: 0px;
+}
+
+.layoutdiv {
+    width: 100%;
+}
+
+
+.submapdiv{
+    background-color: black;
+
+    position: absolute;
+    width: 240px;
+    height: 260px;
+    margin-top: 690px;
+}
+
+
+.mapvdiv{
+    background-image: url("images/mapv.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    position: relative;
+    width: 438px;
+    height: 888px;
+    margin-left: 0px;
+}
+
+.chest{
+    width: 9;
+    height: 9;
+    background-size: 100% 100%;
+
+    position: absolute;
+    margin-left: -8px;
+    margin-top: -8px;
+    cursor: pointer;
+}
+
+.unavailable{
+    background-color: rgb(255,0,0);
+}
+
+.available{
+    background-color: rgb(0,255,0);
+}
+
+.possible{
+    background-color: rgb(210,190,30);
+}
+
+.opened{
+    background-color: rgb(127,127,127);
+}
+
+
+.DCunavailable{
+    color: rgb(255,0,0);
+}
+
+.DCavailable{
+    color: rgb(0,255,0);
+}
+
+.DCpossible{
+    color: rgb(210,190,30);
+}
+
+.DCopened{
+    color: rgb(127,127,127);
+}
+
+.DChighlight{
+    color: rgb(255,255,0);
+}
+
+
+.mapspan .tooltipgray {
+    visibility: hidden;
+    width: 120px;
+    background-color: gray;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.mapspan .tooltipgray:hover {
+    display: none;
+}
+
+.mapspan:hover .tooltipgray {
+    visibility: visible;
+}
+
+.mapspan .tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 170%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.mapspan .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.mapspan .tooltip:hover {
+    display: none;
+}
+
+.mapspan:hover .tooltip {
+    visibility: visible;
+}

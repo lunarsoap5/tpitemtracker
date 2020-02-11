@@ -1,0 +1,135 @@
+var defaultItemGrid = [
+    [
+        "Rod",
+        "Slingshot",
+        "Lanturn",
+        "Boomerang",
+        "IronBoots",
+        "Bow",
+    ],
+    [
+        "Bombs",
+        "Bombsb",
+        "GiantBombs",
+        "Hawkeye",
+        "Clawshot",
+        "Spinner",
+    ],
+    [
+        "Chainball",
+        "Dominion",
+        "Bottle",
+        "Bottle",
+        "Bottle",
+        "Bottle",
+    ],
+    [
+        "Entry",
+        "Charm",
+        "Bugs",
+        "Skills",
+        "Sword",
+        "Shield",
+    ],
+    [
+        "Wallet",
+        "Soul",
+        "Scent",
+        "Letters",
+        "ZoraArmor",
+        "MagicArmor"
+    ],
+    [
+        "Shard1",
+        "Shard2",
+        "Shard3",
+        "Shard4",
+    ],
+    [
+        "Shadow1",
+        "Shadow2",
+        "Shadow3",
+    ]
+]
+
+
+var baseItems = {
+    Bow: 0,
+    Clawshot: 0,
+    Chainball: false,
+    Slingshot: false,
+    Boomerang: false,
+    Bombs: 0,
+    Bombsb: 0,
+    Rod: 0,
+    Lanturn: false,
+    GiantBombs: 0,
+    Hawkeye: false,
+    Spinner: false,
+    Dominion: false,
+    Entry: 0,
+    Charm: 0,
+    Bugs: 0,
+    Bottle: 0,
+    Wallet: 1,
+    Sword: 0,
+    Skills: 0,
+    Shield: 0,
+    Soul: 0,
+    Scent: 0,
+    Letters: false,
+    ZoraArmor: false,
+    MagicArmor: false,
+    IronBoots: false,
+   
+    Shard1: false,
+    Shard2: false,
+    Shard3: false,
+    Shard4: false,
+    Shadow1: false,
+    Shadow2: false,
+    Shadow3: false,
+    
+
+    blank: false,
+};
+
+var itemsMin = {
+    Bow: 0,
+    Bombs: 0,
+    Clawshot: 0,
+    Bombsb: 0,
+    Rod: 0,
+    GiantBombs: 0,
+    Bugs: 0,
+    Bottle: 0,
+    Sword: 0,
+    Skills: 0,
+    Shield: 0,
+    Soul: 0,
+    Scent: 0,
+    Charm: 0,
+    Entry: 0,
+    Wallet: 1,
+};
+
+var itemsMax = {
+    Bow: 3,
+    Bombs: 4,
+    Bombsb: 4,
+    GiantBombs: 4,
+    Clawshot: 2,
+    Rod: 2,
+    Bugs: 2,
+    Bottle: 8,
+    Sword: 4,
+    Skills: 1,
+    Shield: 2,
+    Soul: 3,
+    Scent: 5,
+    Charm: 4,
+    Entry: 4,
+    Wallet: 3,
+};
+
+var items = Object.assign(baseItems);
