@@ -1,0 +1,87 @@
+﻿<html>
+<head>
+    <title>Twilight Princess Item Tracker</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=XARiXwer_c4reOgi7GpG2XICGia-I6MzxE1k6EQSafbPd1LJ7HHZFayoVpn5Po2Bn8jTJVlJzWomTdYJ-xhHvw" charset="UTF-8"></script>
+</head>
+<body>
+    <script src="script/items.js"></script>
+    <script src="script/chests.js"></script>
+    <script type="text/javascript">
+        if (document.addEventListener) { // IE >= 9; other browsers
+            document.addEventListener('contextmenu', function (e) {
+                //Runs when you right click to bring up context menu
+                if (mouseOverItem == true) {
+                    //We might still want context menu while in edit mode.
+                    if (!editmode) {
+                        //Call the method that handles right clicking.
+                        gridItemRClick(mouseLastOverR, mouseLastOverC, mouseLastOverCor);
+                        e.preventDefault();
+                    }
+                }
+
+            }, false);
+        } else { // IE < 9
+            document.attachEvent('oncontextmenu', function () {
+                if (mouseOverItem == true) {
+                    if (!editmode) {
+                        gridItemRClick(mouseLastOverR, mouseLastOverC, mouseLastOverCor);
+                        //This is method used in old  browsers
+                        window.event.returnValue = false;
+                    }
+                }
+
+
+            });
+        }
+    </script>
+    <script src="script/main.js"></script>
+    <div id='layoutdiv'>
+        <div id='itemdiv' oncontextmenu="gridItemRClick()" class='itemdiv'>
+        </div>
+        <div id='mapdiv' class='mapdiv'>
+            <div id='submapdiv' class='submapdiv'>
+                <div align='center'><span id='submaparea' style="font-size:20px">Hyrule</span></div>
+                <hr style="margin-top: 4px; margin-bottom: 4px">
+                <ul onselectstart="return false" id='submaplist' style="margin-top: 4px; margin-bottom: 4px; overflow-y: auto; height: 232px;"></ul>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Setting panel-->
+    <button id='settingsbutton' type='button' onclick='showSettings(this)'>🔧</button>
+    <fieldset id='settings' class='settings'>
+        <legend>Settings</legend>
+        <fieldset>
+            <legend>Item Tracker</legend>
+            <button type="button" onclick="EditMode()">Edit Mode</button>
+            <button type="button" onclick="ResetLayout()">Reset Layout</button>
+            <button type="button" onclick="ResetTracker()">Reset Tracker</button>
+            <br>
+            Size<input type="range" name='itemdivsize' id='itemrange' value='100' max='200' min='1' onchange="setZoom('itemdiv', this)">
+            <span id='itemdivsize'>100%</span><br>
+            <input type="checkbox" name="showprizes" onchange="showPrizes(this)">Show Dungeon Items (BETA)<br>
+        </fieldset>
+        <fieldset>
+            <legend>Map Tracker</legend>
+            <input type="checkbox" name="showmap" checked='true' onchange="showTracker('mapdiv', this)">Enabled<br>
+            Size<input type="range" name='mapdivsize' id='maprange' value='100' max='200' min='1' onchange="setZoom('mapdiv', this)">
+            <span id='mapdivsize'>100%</span><br>
+            Position:
+            <input type='radio' name='mapposition' value='Side' checked='true' onclick="setOrder(false)">Side
+            <input type='radio' name='mapposition' value='Below' onclick="setOrder(true)">Below<br>
+        </fieldset>
+    </fieldset>
+    <table id='itemconfig' class='itemconfig' style='display:none'></table>
+    <script>
+        init();
+    </script>
+    <br/>
+    <br/>
+    <footer style='bottom:0; width:100%; text-align: center; position: relative; color:grey'>
+        Twilight Princess Randomizer Tracker v1.01 
+    </footer>
+</body>
+</html>
