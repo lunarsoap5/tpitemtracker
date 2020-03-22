@@ -23,6 +23,8 @@ var mouseOverItem = false;
 var mouseLastOverR;
 var mouseLastOverC;
 var mouseLastOverCor;
+var opened = 0;
+var Dopened = 0;
 
 var itemGrid = [];
 var itemLayout = [];
@@ -68,6 +70,7 @@ var cookieDefault = {
     chests: serializeChests(),
     dungeonChests: serializeDungeonChests(),
 }
+
 
 var cookielock = false;
 function loadCookie() {
@@ -176,6 +179,7 @@ function deserializeDungeonChests(serializedDungeons) {
     }
 }
 
+
 // Event of clicking a chest on the map
 function toggleChest(x) {
     chests[x].isOpened = !chests[x].isOpened;
@@ -191,6 +195,10 @@ function refreshChest(x) {
 // Highlights a chest location
 function highlight(x) {
     document.getElementById(x).style.backgroundImage = 'url(images/highlighted.png)';
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    Dopened = document.getElementsByClassName("DCopened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 }
 
 function unhighlight(x) {
@@ -200,6 +208,10 @@ function unhighlight(x) {
 // Highlights a chest location (but for dungeons)
 function highlightDungeon(x) {
     document.getElementById('dungeon' + x).style.backgroundImage = 'url(images/highlighted.png)';
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    Dopened = document.getElementsByClassName("DCopened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 }
 
 function unhighlightDungeon(x) {
@@ -235,6 +247,7 @@ function clickDungeon(d) {
         s.style.cursor = "pointer";
 
         DClist.appendChild(s);
+        
     }
 }
 
@@ -287,6 +300,43 @@ function setZoom(target, sender) {
     saveCookie();
 }
 
+function setDistance(target, sender) {
+    document.getElementById(target).style.width = (sender.value / 40 * 20)+ "%";
+    document.getElementById(target).style.width = (sender.value / 40 * 20) + "%";
+
+    document.getElementById(target + 'size').innerHTML = (sender.value) + '%';
+    saveCookie();
+}
+
+function setOpacity(target, sender) {
+    x = document.getElementsByClassName(target);
+    for (var i = 0; i < x.length; i++) {
+        x[i].style.backgroundColor = "rgba(0,0,0, " + sender.value / 100 + ")";
+    }
+
+    document.getElementById(target + 'size').innerHTML = (sender.value) + '%';
+    saveCookie();
+}
+
+function setBackground() {
+    var none = document.getElementById("none").selected;
+    var castle = document.getElementById("castle").selected;
+    var meadow = document.getElementById("meadow").selected;
+    var bridge = document.getElementById("bridge").selected;
+
+    if (none == true) {
+        document.body.style.backgroundImage = "url('images/none.png')";
+    }
+    else if (castle == true) {
+        document.body.style.backgroundImage = "url('images/castle.jpg')";
+    }
+    else if (meadow == true) {
+        document.body.style.backgroundImage = "url('images/meadow.jpg')";
+    }
+    else if (bridge == true) {
+        document.body.style.backgroundImage = "url('images/bridge.jpg')";
+    }
+}
 
 function showSettings(sender) {
     if (editmode) {
@@ -337,24 +387,40 @@ function EditMode() {
 }
 
 
-function ResetLayout() {
-		initGridRow(defaultItemGrid);
-		updateGridItemAll();
+function ResetLayout()
+{
+	initGridRow(defaultItemGrid);
+	updateGridItemAll();
 	
-		document.getElementById('itemdiv').style.zoom = 100 / 100;
-		document.getElementById('itemdiv').style.zoom = 100 / 100;
-		document.getElementById('itemdiv').style.MozTransform = 'scale(' + (100 / 100) + ')';
-		document.getElementById('itemdiv').style.MozTransformOrigin = '0 0';
-		document.getElementById('itemdivsize').innerHTML='100%';
-		document.getElementById('itemrange').value=100;
+	document.getElementById('itemdiv').style.zoom = 100 / 100;
+	document.getElementById('itemdiv').style.zoom = 100 / 100;
+	document.getElementById('itemdiv').style.MozTransform = 'scale(' + (100 / 100) + ')';
+	document.getElementById('itemdiv').style.MozTransformOrigin = '0 0';
+	document.getElementById('itemdivsize').innerHTML='100%';
+	document.getElementById('itemrange').value=100;
 	
-		document.getElementById('mapdiv').style.zoom = 100 / 100;
-		document.getElementById('mapdiv').style.zoom = 100 / 100;
-		document.getElementById('mapdiv').style.MozTransform = 'scale(' + (100 / 100) + ')';
-		document.getElementById('mapdiv').style.MozTransformOrigin = '0 0';
-		document.getElementById('mapdivsize').innerHTML='100%';
-		document.getElementById('maprange').value=100;
-	}
+	document.getElementById('mapdiv').style.zoom = 100 / 100;
+	document.getElementById('mapdiv').style.zoom = 100 / 100;
+	document.getElementById('mapdiv').style.MozTransform = 'scale(' + (100 / 100) + ')';
+	document.getElementById('mapdiv').style.MozTransformOrigin = '0 0';
+    document.getElementById('mapdivsize').innerHTML='100%';
+    document.getElementById('maprange').value = 100;
+
+    document.getElementById('twilighttest').style.width = "1%";
+    document.getElementById('twilighttest').style.width = "1%";
+    document.getElementById('trackerDistanceID').value = 1;
+    document.getElementById('twilighttestsize').innerHTML = "1%";    
+
+    x = document.getElementsByClassName("tracker");
+    for (var i = 0; i < x.length; i++)
+    {
+        x[i].style.backgroundColor = "rgba(0,0,0,1)";
+    }
+    document.getElementById('trackerOpacityID').value = 100;
+    document.getElementById('trackersize').innerHTML = "100%"; 
+    document.body.style.backgroundImage = "url('images/none.png')";
+    saveCookie();
+}
 
 
 function ResetTracker() {
@@ -688,7 +754,6 @@ function updateMap() {
                 }
             }
         }
-
         var child = document.getElementById('dungeon' + k).firstChild;
         while (child) {
             if (child.className == 'chestCount') {
@@ -696,12 +761,24 @@ function updateMap() {
                     child.innerHTML = '';
                 } else {
                     child.innerHTML = DCcount;
+                    if (DCcount > 0) {
+                        dungeonChest = dungeonChest + DCcount;
+                    }
                 }
                 break;
             }
             child = child.nextSibling;
         }
     }
+    if (dungeonChestOld < dungeonChest) {
+        dungeonChest = dungeonChest - dungeonChestOld;
+    }
+
+    dungeonChestOld = dungeonChest;
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    Dopened = document.getElementsByClassName("DCopened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
     var itemlist = document.getElementById('submaplist').children;
@@ -764,6 +841,7 @@ function populateMapdiv() {
             s.className = 'mapspan chest opened';
         } else {
             s.className = 'mapspan chest ' + chests[k].isAvailable();
+
         }
 
         var ss = document.createElement('span');
@@ -792,6 +870,7 @@ function populateMapdiv() {
             if (dungeons[k].chestlist.hasOwnProperty(key)) {
                 if (!dungeons[k].chestlist[key].isOpened && dungeons[k].chestlist[key].isAvailable()) {
                     DCcount++;
+                    dungeonChest++;
                 }
             }
         }
@@ -802,7 +881,17 @@ function populateMapdiv() {
             ss.innerHTML = '';
         } else {
             ss.innerHTML = DCcount;
+            dungeonChest = dungeonChest + DCcount;
         }
+        if (dungeonChestOld < dungeonChest) {
+            dungeonChest = dungeonChest - dungeonChestOld;
+        }
+
+        dungeonChestOld = dungeonChest;
+        c = document.getElementsByClassName("mapspan chest available").length;
+        opened = document.getElementsByClassName("mapspan chest opened").length;
+        Dopened = document.getElementsByClassName("DCopened").length;
+        document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
         ss.style.color = 'black'
         s.style.textAlign = 'center';
         ss.display = 'inline-block';
@@ -875,6 +964,7 @@ function populateItemconfig() {
 function init() {
     populateMapdiv();
     populateItemconfig();
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 
     loadCookie();
     saveCookie();
@@ -893,9 +983,9 @@ function preloader() {
         }
     }
 
-    for (medallion in dungeonImg) {
+    for (dungReward in dungeonImg) {
         var img = new Image();
-        img.src = 'images/' + dungeonImg[medallion] + '.png';
+        img.src = 'images/' + dungeonImg[dungReward] + '.png';
     }
 }
 function addLoadEvent(func) {

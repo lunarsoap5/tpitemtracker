@@ -1,3 +1,6 @@
+
+var d = 0;
+var k = 0;
 function generalCanGetChest(chestlist) {
     var canGet = 0;
     var unopened = 0;
@@ -13,19 +16,35 @@ function generalCanGetChest(chestlist) {
         }
     }
 
+
+    c = document.getElementsByClassName("mapspan chest available").length;
+    d = document.getElementsByClassName("mapspan dungeon available").length;
+
+
+    
+ 
+
     if (unopened == 0) {
         return "opened";
+        
     }
     if (canGet == unopened) {
         return "available";
+        c++;
     }
     if (canGet == 0) {
         return "unavailable";
+        c--;
     }
     return "possible";
 }
 
 
+function checkCountMinus() {
+    for (var k = 0; k < 1; k++) {
+        c--;
+    }
+}
 
 function hasBoom()
 {
@@ -791,7 +810,7 @@ var dungeons = [
             'Hylian Shield': { isAvailable: function () {
                 return items.Shadow1; }, },
             'Hawkeye': { isAvailable: function () {
-                return items.Bow; }, },
+                return items.Bow && items.Shield >1; }, },
             'Zora Armor': { isAvailable: function () {
                 return items.Lanturn && items.IronBoots && items.Boomerang && items.Bow && hasBoom(); }, },
             'Coral Earring': { isAvailable: function () {
