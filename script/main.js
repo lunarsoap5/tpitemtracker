@@ -973,7 +973,6 @@ function init() {
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
     loadCookie();
     saveCookie();
-    ResetTracker();
 }
 
 function preloader() {
