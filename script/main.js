@@ -971,9 +971,9 @@ function init() {
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
-    ResetTracker();
     loadCookie();
     saveCookie();
+    ResetTracker();
 }
 
 function preloader() {
