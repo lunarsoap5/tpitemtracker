@@ -970,7 +970,7 @@ function init() {
     populateItemconfig();
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: 11 available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
     loadCookie();
     saveCookie();
 }
