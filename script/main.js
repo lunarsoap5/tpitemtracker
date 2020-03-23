@@ -197,7 +197,6 @@ function highlight(x) {
     document.getElementById(x).style.backgroundImage = 'url(images/highlighted.png)';
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    Dopened = document.getElementsByClassName("DCopened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 }
 
@@ -210,7 +209,6 @@ function highlightDungeon(x) {
     document.getElementById('dungeon' + x).style.backgroundImage = 'url(images/highlighted.png)';
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    Dopened = document.getElementsByClassName("DCopened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 }
 
@@ -253,13 +251,21 @@ function clickDungeon(d) {
 
 function toggleDungeonChest(sender, d, c) {
     dungeons[d].chestlist[c].isOpened = !dungeons[d].chestlist[c].isOpened;
-    if (dungeons[d].chestlist[c].isOpened)
+    if (dungeons[d].chestlist[c].isOpened) {
         sender.className = 'DCopened';
-    else if (dungeons[d].chestlist[c].isAvailable())
+        Dopened++;
+    }
+    else if (dungeons[d].chestlist[c].isAvailable()) {
         sender.className = 'DCavailable';
-    else
+    }
+    else {
         sender.className = 'DCunavailable';
+        Dopened--;
+    }
 
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
     updateMap();
     saveCookie();
 }
@@ -777,7 +783,6 @@ function updateMap() {
     dungeonChestOld = dungeonChest;
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    Dopened = document.getElementsByClassName("DCopened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
@@ -890,7 +895,6 @@ function populateMapdiv() {
         dungeonChestOld = dungeonChest;
         c = document.getElementsByClassName("mapspan chest available").length;
         opened = document.getElementsByClassName("mapspan chest opened").length;
-        Dopened = document.getElementsByClassName("DCopened").length;
         document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
         ss.style.color = 'black'
         s.style.textAlign = 'center';
@@ -964,6 +968,8 @@ function populateItemconfig() {
 function init() {
     populateMapdiv();
     populateItemconfig();
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
 
     loadCookie();
