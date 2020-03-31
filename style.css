@@ -96,8 +96,6 @@ label {
     height: 32px;
 }
 
-.true{
-}
 
 .false{
     -webkit-filter: grayscale(50%) brightness(30%); /* Safari 6.0 - 9.0 */
