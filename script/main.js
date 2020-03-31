@@ -33,6 +33,7 @@ var editmode = false;
 var selected = {};
 
 var dungeonSelect = 0;
+var totalChecks = 373;
 
 function setCookie(obj) {
     var d = new Date();
@@ -197,7 +198,7 @@ function highlight(x) {
     document.getElementById(x).style.backgroundImage = 'url(images/highlighted.png)';
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 }
 
 function unhighlight(x) {
@@ -209,7 +210,7 @@ function highlightDungeon(x) {
     document.getElementById('dungeon' + x).style.backgroundImage = 'url(images/highlighted.png)';
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 }
 
 function unhighlightDungeon(x) {
@@ -265,7 +266,7 @@ function toggleDungeonChest(sender, d, c) {
 
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
     updateMap();
     saveCookie();
 }
@@ -433,9 +434,11 @@ function ResetTracker() {
     chests.forEach(chest => delete chest.isOpened);
     dungeons.forEach(dungeon => Object.values(dungeon.chestlist).forEach(chest => delete chest.isOpened));
     items = Object.assign({}, baseItems);
-
+    totalChecks = 373;
+    
     updateGridItemAll();
     updateMap();
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (373) + " Remaining";
     saveCookie();
 }
 
@@ -783,7 +786,7 @@ function updateMap() {
     dungeonChestOld = dungeonChest;
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
     var itemlist = document.getElementById('submaplist').children;
@@ -895,7 +898,7 @@ function populateMapdiv() {
         dungeonChestOld = dungeonChest;
         c = document.getElementsByClassName("mapspan chest available").length;
         opened = document.getElementsByClassName("mapspan chest opened").length;
-        document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+        document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
         ss.style.color = 'black'
         s.style.textAlign = 'center';
         ss.display = 'inline-block';
@@ -970,7 +973,7 @@ function init() {
     populateItemconfig();
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (344 - opened - Dopened) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
     loadCookie();
     saveCookie();
 }
