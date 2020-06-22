@@ -5,7 +5,7 @@ var defaultItemGrid = [
         "Lanturn",
         "Boomerang",
         "IronBoots",
-        "Bow",
+        "Bow"
     ],
     [
         "Bombs",
@@ -13,42 +13,45 @@ var defaultItemGrid = [
         "GiantBombs",
         "Hawkeye",
         "Clawshot",
-        "Spinner",
+        "Spinner"
     ],
     [
         "Chainball",
         "Dominion",
         "Bottle",
-        "Bottle",
-        "Bottle",
-        "Bottle",
+        "Memo",
+        "Sketch",
+        "Skybook"
     ],
     [
-        "Entry",
         "Charm",
         "Bugs",
         "Skills",
         "Sword",
-        "Shield",
+        "MSword",
+        "Shield"
     ],
     [
         "Wallet",
         "Soul",
         "Scent",
-        "Letters",
+        "Crystal",
         "ZoraArmor",
         "MagicArmor"
     ],
     [
-        "Shard1",
-        "Shard2",
-        "Shard3",
-        "Shard4",
+        "Boss1",
+        "Boss2",
+        "Boss3",
+        "Boss4",
+        "Boss5"
     ],
-    [
-        "Shadow1",
-        "Shadow2",
-        "Shadow3",
+    [ 
+        "Boss6",
+        "Boss7",
+        "Boss8",
+        "Shadow",
+        "Shard"
     ]
 ]
 
@@ -66,29 +69,35 @@ var baseItems = {
     GiantBombs: 0,
     Hawkeye: false,
     Spinner: false,
-    Dominion: false,
-    Entry: 0,
+    Memo: false,
+    Sketch: false,
+    Skybook: 0,
+    Dominion: 0,
     Charm: 0,
     Bugs: 0,
     Bottle: 0,
     Wallet: 1,
     Sword: 0,
+    MSword: 0,
     Skills: 0,
     Shield: 0,
     Soul: 0,
     Scent: 0,
-    Letters: false,
+    Shadow: 0,
+    Shard: 0,
+    Crystal: false,
     ZoraArmor: false,
     MagicArmor: false,
     IronBoots: false,
    
-    Shard1: false,
-    Shard2: false,
-    Shard3: false,
-    Shard4: false,
-    Shadow1: false,
-    Shadow2: false,
-    Shadow3: false,
+    Boss1: false,
+    Boss2: false,
+    Boss3: false,
+    Boss4: false,
+    Boss5: false,
+    Boss6: false,
+    Boss7: false,
+    Boss8: false,
     
 
     blank: false,
@@ -104,6 +113,7 @@ var itemsMin = {
     Bugs: 0,
     Bottle: 0,
     Sword: 0,
+    MSword: 0,
     Skills: 0,
     Shield: 0,
     Soul: 0,
@@ -111,6 +121,10 @@ var itemsMin = {
     Charm: 0,
     Entry: 0,
     Wallet: 1,
+    Shadow: 0,
+    Shard: 0,
+    Dominion: 0,
+    Skybook: 0,
 };
 
 var itemsMax = {
@@ -122,7 +136,8 @@ var itemsMax = {
     Rod: 2,
     Bugs: 2,
     Bottle: 8,
-    Sword: 4,
+    Sword: 2,
+    MSword: 2,
     Skills: 1,
     Shield: 2,
     Soul: 3,
@@ -130,6 +145,10 @@ var itemsMax = {
     Charm: 4,
     Entry: 4,
     Wallet: 3,
+    Shadow: 4,
+    Shard: 4,
+    Dominion: 2,
+    Skybook: 7,
 };
 
 var items = Object.assign(baseItems);

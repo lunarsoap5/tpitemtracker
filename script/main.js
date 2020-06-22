@@ -1,11 +1,12 @@
 var defaultrewards = {
-    Shard1: 0,
-    Shard2: 0,
-    Shard3: 0,
-    Shard4: 0,
-    Shadow1: 0,
-    Shadow2: 0,
-    Shadow3: 0,
+    Boss1: 0,
+    Boss2: 0,
+    Boss3: 0,
+    Boss4: 0,
+    Boss5: 0,
+    Boss6: 0,
+    Boss7: 0,
+    Boss8: 0
 };
 var rewards = defaultrewards;
 var dungeonImg = [
@@ -294,6 +295,91 @@ function showPrizes(sender) {
     saveCookie();
 }
 
+//Set the values for the skips if their boxes are checked
+function faronEscape(sender) {
+    faronescape = sender.checked;
+    if (FaronEscape)
+    {
+        FaronEscape = false;
+        updateMap();
+    }
+    else 
+    {
+        FaronEscape = true;
+        updateMap();
+    }
+}
+
+function twilightSkip(sender) {
+    twilightskip = sender.checked;
+    if (TwilightSkip)
+    {
+        TwilightSkip = false;
+        updateMap();
+    }
+    else 
+    {
+        TwilightSkip = true;
+        updateMap();
+    }
+}
+
+function skipMdh(sender) {
+    skipmdh = sender.checked;
+    if (SkipMdh)
+    {
+        SkipMdh = false;
+        updateMap();
+    }
+    else 
+    {
+        SkipMdh = true;
+        updateMap();
+    }
+}
+
+function skipIntro(sender) {
+    skipintro = sender.checked;
+    if (SkipIntro)
+    {
+        SkipIntro = false;
+        updateMap();
+    }
+    else 
+    {
+        SkipIntro = true;
+        updateMap();
+    }
+}
+
+function earlyDesert(sender) {
+    earlydesert = sender.checked;
+    if (EarlyDesert)
+    {
+        EarlyDesert = false;
+        updateMap();
+    }
+    else 
+    {
+        EarlyDesert = true;
+        updateMap();
+    }
+}
+
+function earlyCits(sender) {
+    earlycits = sender.checked;
+    if (EarlyDesert)
+    {
+        EarlyCits = false;
+        updateMap();
+    }
+    else 
+    {
+        EarlyCits = true;
+        updateMap();
+    }
+}
+
 
 
 function setZoom(target, sender) {
@@ -576,6 +662,7 @@ function updateGridItem(row, index) {
 
     if ((typeof items[item]) == 'boolean') {
         itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
+        
     } else {
         itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
     }

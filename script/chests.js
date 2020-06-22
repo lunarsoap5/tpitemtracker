@@ -82,7 +82,7 @@ function canAccessLakebed() {
 
 //Need Auru's Memo to use the cannon to get to the desert
 function canAccessDesert() {
-    return (items.Entry);
+    return ((items.Entry && items.Crystal) || EarlyDesert);
 }
 
 //Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
@@ -92,22 +92,22 @@ function canAccessSnowpeak() {
 
 //Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
 function canAccessTot() {
-    return (items.Entry >= 3 && items.Sword >=3 && items.Bow);
+    return (items.Boss5 && items.Sword >= 3 && items.Bow);
 }
 
 //Need Dominion Rod to move the Owl Statues and Charm to get Skybook to access Cannon and Clawshot to enter cannon
 function canAccessCITS() {
-    return (items.Dominion && items.Entry >= 4 && items.Clawshot && items.Charm >= 4);
+    return ((items.Entry >= 4 && items.Clawshot) || EarlyCits);
 }
 
 // You only need the Mirror Shard from City in the Sky to open up Pallace of Twilight
 function canAccessPoT() {
-    return (items.Shard4);
+    return (items.Boss7);
 }
 
 //To enter Hyrule you need to beat Zant so the requirements for beating Zant are the same as entering Hyrule
 function canAccessHyrule() {
-    return (canAccessPoT() && items.Clawshot > 1 && items.Sword > 3 && items.Boomerang && items.IronBoots && items.ZoraArmor && items.Chainball);
+    return (items.Boss8);
 }
 
 
@@ -321,7 +321,7 @@ var dungeons = [
             'Dungeon Map Chest': { isAvailable: function () {
                 return canAccessDesert() && items.Lanturn; }, },
             'East Redead Lower Small Chest': {
-                isAvailable: function () { return canAccessDesert() && items.Sword >= 3; }, },
+                isAvailable: function () { return canAccessDesert() && items.Crystal; }, },
             'Compass Chest': { isAvailable: function () {
                 return canAccessDesert() && items.Lanturn; }, },
             'East Upper Turnable Readed Chest': { isAvailable: function () {
@@ -458,22 +458,22 @@ var dungeons = [
             'Dominion Rod Chest': { isAvailable: function () {
                 return canAccessTot() && items.Spinner; }, },
             'Scale Room Upper Chest': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
             'Helmasaur Room Small Chest': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
             'Big Key Chest': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
             'Second Stair Heart Piece Chest': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
             'Armos Room South Chest': { isAvailable: function () {
                 return canAccessTot() && items.Spinner; }, },
             'Armos Room Right Heart Piece Chest': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
             'Armagohma': { isAvailable: function () {
-                return canAccessTot() && items.Spinner && items.Dominion; }, },
+                return canAccessTot() && items.Spinner && items.Dominion >= 1; }, },
        },
         isBeatable: function() {
-            if (canAccessTot() && items.Spinner && items.Dominion) {
+            if (canAccessTot() && items.Spinner && items.Dominion >= 1) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -626,7 +626,7 @@ var dungeons = [
             'Graveyard Grave Switch Room Back Left Small Chest': { isAvailable: function () {
                 return canAccessHyrule() && hasBoom(); }, },
             'Graveyard Owl Statue Chest': { isAvailable: function () {
-                return canAccessHyrule() && hasBoom() && items.Lanturn && items.Dominion; }, },
+                return canAccessHyrule() && hasBoom() && items.Lanturn && items.Dominion > 1; }, },
             'Dungeon Map Chest': { isAvailable: function () {
                 return canAccessHyrule() && items.Boomerang; }, },
             'East Castle Balcony Chest': { isAvailable: function () {
@@ -677,7 +677,7 @@ var dungeons = [
                 return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lanturn) && items.Spinner; }, },
             },
         isBeatable: function () {
-            if (canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && items.Bow && items.Lanturn && items.Spinner && items.Dominion && hasBoom() ) {
+            if (canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && items.Bow && items.Lanturn && items.Spinner && items.Dominion > 1 && hasBoom() ) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -792,7 +792,7 @@ var dungeons = [
             'Inn Small Chest': { isAvailable: function () {
                 return true; }, },
             'Barnes Bomb Bag': { isAvailable: function () {
-                return items.Shadow2; }, },
+                return items.Boss2; }, },
             'Eldin Spring Heart Piece': { isAvailable: function () {
                 return items.IronBoots && canSmash(); }, },
             'Bomb Rock Spire Heart Piece': { isAvailable: function () {
@@ -800,7 +800,7 @@ var dungeons = [
             'Graveyard Lanturn Chest': { isAvailable: function () {
                 return items.Lanturn; }, },
             'Watchtower Chest': { isAvailable: function () {
-                return items.Shadow2; }, },
+                return true; }, },
             'Watchtower Alcove Chest': { isAvailable: function () {
                 return canSmash(); }, },
             'Archery Heart Piece': { isAvailable: function () {
@@ -816,7 +816,7 @@ var dungeons = [
             'Coral Earring': { isAvailable: function () {
                 return items.Entry >= 2; }, },
             'Renados Letter': { isAvailable: function () {
-                return items.Shard3; }, },
+                return items.Boss6; }, },
             'Horse Call': { isAvailable: function () {
                 return items.Charm >=4; }, },
         },
@@ -1005,7 +1005,7 @@ var chests = [
         x: "54.33%",
         y: "90.16%",
         isAvailable: function () {
-            if (items.Sword >2 && items.Lanturn) {
+            if (items.Crystal && items.Lanturn) {
                 return "available";
             }
             return "unavailable";
@@ -1071,7 +1071,7 @@ var chests = [
         x: "51.91%",
         y: "69.2%",
         isAvailable: function() {
-            if (items.Lanturn) {
+            if (items.Lanturn && FaronEscape) {
                 return "available";
             }
             return "unavailable";
@@ -1104,7 +1104,7 @@ var chests = [
         x: "54.01%",
         y: "69.6%",
         isAvailable: function () {
-            if (items.Dominion && canSmash() && items.Sword >=3) {
+            if (items.Dominion > 1 && canSmash() && items.Sword >=3) {
                 return "available";
             }
             return "unavailable";
@@ -1115,7 +1115,7 @@ var chests = [
         x: "55.01%",
         y: "69.6%",
         isAvailable: function () {
-            if (items.Dominion && canSmash()) {
+            if (items.Dominion > 1 && canSmash()) {
                 return "available";
             }
             return "unavailable";
@@ -1137,7 +1137,7 @@ var chests = [
         x: "44.20%",
         y: "65.68%",
         isAvailable: function() {
-            if (items.Shadow3)
+            if (items.Crystal)
                 return "available";
             return "unavailable";
         },
@@ -1147,7 +1147,7 @@ var chests = [
         x: "85.83%",
         y: "41.28%",
         isAvailable: function() {
-            if (items.Shadow2 || items.Clawshot) {
+            if (items.Boss2 || items.Clawshot) {
                 return "available";
             }
             return "unavailable";
@@ -1158,7 +1158,7 @@ var chests = [
         x: "45.08%",
         y: "68.88%",
         isAvailable: function() {
-            if (canAccessTot() && items.Dominion)
+            if (canAccessTot() && items.Dominion > 1)
                 return "available";
             return "unavailable";
         },
@@ -1217,7 +1217,7 @@ var chests = [
         x: "42.16%",
         y: "68.88%",
         isAvailable: function() {
-            if (items.Sword >2 && canSmash()) {
+            if (items.Crystal && canSmash()) {
                 return "available";
             }
             return "unavailable";
@@ -1228,7 +1228,7 @@ var chests = [
         x: "45.25%",
         y: "38.48%",
         isAvailable: function () {
-            if (items.Sword > 2 && items.Clawshot) {
+            if (items.Crystal && items.Clawshot) {
                 return "available";
             }
             return "unavailable";
@@ -1239,7 +1239,7 @@ var chests = [
         x: "38.95%",
         y: "55.26%",
         isAvailable: function() {
-            if (items.Sword >=3 && items.Shadow3) {
+            if (items.Sword >=3 && items.Boss3) {
                 return "available";
             }
             return "unavailable";
@@ -1274,7 +1274,7 @@ var chests = [
         x: "38.41%",
         y: "45.92%",
         isAvailable: function() {
-            if (items.Sword >2 && items.IronBoots && items.Shadow3) {
+            if (items.Crystal && items.IronBoots && items.Boss3) {
                 return "available";
             }
             return "unavailable";
@@ -1318,7 +1318,7 @@ var chests = [
         x: "54.0%",
         y: "22.8%",
         isAvailable: function() {
-            if (items.Sword >2 && items.Lanturn) {
+            if (items.Crystal && items.Lanturn) {
                 return "available";
             }
             return "unavailable";
@@ -1329,7 +1329,7 @@ var chests = [
         x: "53.83%",
         y: "29.84%",
         isAvailable: function() {
-            if (items.Sword >2 && items.IronBoots) {
+            if (items.Crystal && items.IronBoots) {
                 return "available";
             }
             return "unavailable";
@@ -1351,7 +1351,7 @@ var chests = [
         x: "46.33%",
         y: "56.24%",
         isAvailable: function () {
-            if (items.Sword >2 && items.Clawshot && items.Lanturn && shootPew()) {
+            if (items.Crystal && items.Clawshot && items.Lanturn && shootPew()) {
                 return "available";
             }
             return "unavailable";
@@ -1384,7 +1384,7 @@ var chests = [
         x: "58.11%",
         y: "64.16%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1395,7 +1395,7 @@ var chests = [
         x: "57.01%",
         y: "64.16%",
         isAvailable: function () {
-            if (items.Sword >2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1406,7 +1406,7 @@ var chests = [
         x: "57.01%",
         y: "65.16%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1428,7 +1428,7 @@ var chests = [
         x: "55.8%",
         y: "46.12%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1439,7 +1439,7 @@ var chests = [
         x: "69.66%",
         y: "39.36%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1450,7 +1450,7 @@ var chests = [
         x: "70.86%",
         y: "39.36%",
         isAvailable: function () {
-            if (items.Sword > 2 && items.Lanturn) {
+            if (items.Crystal && items.Lanturn) {
                 return "available";
             }
             return "unavailable";
@@ -1461,7 +1461,7 @@ var chests = [
         x: "77.41%",
         y: "34.88%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1472,7 +1472,7 @@ var chests = [
         x: "33.58%",
         y: "60.32%",
         isAvailable: function () {
-            if (canAccessDesert() && items.Sword >2) {
+            if (canAccessDesert() && items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1527,7 +1527,7 @@ var chests = [
         x: "21.66%",
         y: "50.64%",
         isAvailable: function () {
-            if (canAccessDesert() && items.Sword > 2 && canSmash()) {
+            if (canAccessDesert() && items.Crystal && canSmash()) {
                 return "available";
             }
             return "unavailable";
@@ -1681,7 +1681,7 @@ var chests = [
         x: "42.5%",
         y: "9.12%",
         isAvailable: function () {
-            if (items.Sword >2 && items.Chainball && canAccessSnowpeak()) {
+            if (items.Crystal && items.Chainball && canAccessSnowpeak()) {
                 return "available";
             }
             return "unavailable";
@@ -1725,7 +1725,7 @@ var chests = [
         x: "77.75%",
         y: "32.64%",
         isAvailable: function () {
-            if (items.Dominion && items.Clawshot >=1 && items.Entry >=1) {
+            if (items.Dominion > 1 && items.Clawshot >=1 && items.Entry >=1) {
                 return "available";
             }
             return "unavailable";
@@ -1736,7 +1736,7 @@ var chests = [
         x: "77.75%",
         y: "28.64%",
         isAvailable: function () {
-            if (items.Dominion) {
+            if (items.Dominion > 1) {
                 return "available";
             }
             return "unavailable";
@@ -1747,7 +1747,7 @@ var chests = [
         x: "66%",
         y: "48.8%",
         isAvailable: function () {
-            if (items.Dominion) {
+            if (items.Dominion > 1) {
                 return "available";
             }
             return "unavailable";
@@ -1758,7 +1758,7 @@ var chests = [
         x: "67%",
         y: "48.8%",
         isAvailable: function () {
-            if (items.Dominion) {
+            if (items.Dominion > 1) {
                 return "available";
             }
             return "unavailable";
@@ -1769,7 +1769,7 @@ var chests = [
         x: "45.38%",
         y: "43.84%",
         isAvailable: function () {
-            if (items.Dominion) {
+            if (items.Dominion > 1) {
                 return "available";
             }
             return "unavailable";
@@ -1780,7 +1780,7 @@ var chests = [
         x: "46.38%",
         y: "43.84%",
         isAvailable: function () {
-            if (items.Dominion) {
+            if (items.Dominion > 1) {
                 return "available";
             }
             return "unavailable";
@@ -1791,7 +1791,7 @@ var chests = [
         x: "41.45%",
         y: "43.44%",
         isAvailable: function () {
-            if (items.Dominion && items.Clawshot) {
+            if (items.Dominion > 1 && items.Clawshot) {
                 return "available";
             }
             return "unavailable";
@@ -1802,7 +1802,7 @@ var chests = [
         x: "42.45%",
         y: "43.44%",
         isAvailable: function () {
-            if (items.Dominion && items.Clawshot) {
+            if (items.Dominion > 1 && items.Clawshot) {
                 return "available";
             }
             return "unavailable";
@@ -1813,7 +1813,7 @@ var chests = [
         x: "20.58%",
         y: "59.6%",
         isAvailable: function () {
-            if (items.Dominion && canAccessDesert()) {
+            if (items.Dominion > 1 && canAccessDesert()) {
                 return "available";
             }
             return "unavailable";
@@ -1824,7 +1824,7 @@ var chests = [
         x: "20.58%",
         y: "61.1%",
         isAvailable: function () {
-            if (items.Dominion && canAccessDesert()) {
+            if (items.Dominion > 1 && canAccessDesert()) {
                 return "available";
             }
             return "unavailable";
@@ -1868,7 +1868,7 @@ var chests = [
         x: "64.5%",
         y: "9%",
         isAvailable: function () {
-            if (items.Sword >2 || canSmash()) {
+            if (items.Crystal || canSmash()) {
                 return "available";
             }
             return "unavailable";
@@ -1879,7 +1879,7 @@ var chests = [
         x: "65.8%",
         y: "9.5%",
         isAvailable: function () {
-            if (items.Rod && (items.Sword >2 || canSmash())) {
+            if (items.Rod && (items.Crystal || canSmash())) {
                 return "available";
             }
             return "unavailable";
@@ -1890,7 +1890,7 @@ var chests = [
         x: "65.8%",
         y: "14.5%",
         isAvailable: function () {
-            if (items.Sword > 2) {
+            if (items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1901,7 +1901,7 @@ var chests = [
         x: "35.58%",
         y: "53.36%",
         isAvailable: function () {
-            if (items.Shadow3 && items.Sword >2) {
+            if (items.Boss3 && items.Crystal) {
                 return "available";
             }
             return "unavailable";
@@ -1956,7 +1956,7 @@ var chests = [
         x: "36.25%",
         y: "11.68%",
         isAvailable: function () {
-            if (items.Shard2) {
+            if (items.Boss5) {
                 return "available";
             }
             return "unavailable";

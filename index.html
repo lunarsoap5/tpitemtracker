@@ -37,6 +37,14 @@
         var dungeonChest = 0;
         var dungeonChestOld = 0;
         var c = 0;
+        var FaronEscape = false;
+        var TwilightSkip = false;
+        var SkipMDH = false;
+        var SkipIntro = false;
+        var EarlyDesert = false;
+        var EarlyCits = false;
+
+        
     </script>
     <script src="script/main.js"></script>
     <div id='layoutdiv'>
@@ -94,6 +102,15 @@
                 <option id="bridge">Bridge</option>
             </select>
             <button onclick="setBackground()">Set</button>
+        </fieldset>
+        <fieldset>
+            <legend>Skip Options</legend>
+            <input type="checkbox" name="faronescape" onchange="faronEscape(this)">Faron Escape<br>
+            <input type="checkbox" name="twilightskip" onchange="twilightSkip(this)">Twilight Skip<br>
+            <input type="checkbox" name="skipmdh" onchange="skipMdh(this)">Skip MDH<br>
+            <input type="checkbox" name="skipintro" onchange="skipIntro(this)">Skip Intro<br>
+            <input type="checkbox" name="earlydesert" onchange="earlyDesert(this)">Early Desert<br>
+            <input type="checkbox" name="earlycits" onchange="earlyCits(this)">Early CiTS<br>
         </fieldset>
     </fieldset>
     <table id='itemconfig' class='itemconfig' style='display:none'></table>
