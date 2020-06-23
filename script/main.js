@@ -324,6 +324,20 @@ function twilightSkip(sender) {
     }
 }
 
+function removeBoxes(sender) {
+    removeboxes = sender.checked;
+    if (RemoveBoxes)
+    {
+        RemoveBoxes = false;
+        updateGridItemAll();
+    }
+    else 
+    {
+        RemoveBoxes = true;
+        updateGridItemAll();
+    }
+}
+
 function skipMdh(sender) {
     skipmdh = sender.checked;
     if (SkipMdh)
@@ -660,11 +674,26 @@ function updateGridItem(row, index) {
         return;
     }
 
-    if ((typeof items[item]) == 'boolean') {
-        itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
-        
-    } else {
-        itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
+    if ((typeof items[item]) == 'boolean') 
+    {
+        if (RemoveBoxes)
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
+        }
+        else 
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png), url(images/ItemBox.png)';
+        }
+    } else 
+    {
+        if (RemoveBoxes)
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
+        }
+        else
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
+        }
     }
 
     itemGrid[row][index]['item'].className = 'griditem ' + !!items[item];

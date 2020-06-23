@@ -82,12 +82,12 @@ function canAccessLakebed() {
 
 //Need Auru's Memo to use the cannon to get to the desert
 function canAccessDesert() {
-    return ((items.Entry && items.Crystal) || EarlyDesert);
+    return ((items.Memo && items.Crystal) || EarlyDesert);
 }
 
 //Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
 function canAccessSnowpeak() {
-    return (items.Entry >= 2 && items.Scent >=4 && items.Rod >=2);
+    return (items.Sketch && items.Scent >=4 && items.Rod >=2);
 }
 
 //Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
@@ -97,7 +97,7 @@ function canAccessTot() {
 
 //Need Dominion Rod to move the Owl Statues and Charm to get Skybook to access Cannon and Clawshot to enter cannon
 function canAccessCITS() {
-    return ((items.Entry >= 4 && items.Clawshot) || EarlyCits);
+    return ((items.Skybook >=7 && items.Clawshot) || EarlyCits);
 }
 
 // You only need the Mirror Shard from City in the Sky to open up Pallace of Twilight
@@ -814,7 +814,7 @@ var dungeons = [
             'Zora Armor': { isAvailable: function () {
                 return items.Lanturn && items.IronBoots && items.Boomerang && items.Bow && hasBoom(); }, },
             'Coral Earring': { isAvailable: function () {
-                return items.Entry >= 2; }, },
+                return items.Sketch; }, },
             'Renados Letter': { isAvailable: function () {
                 return items.Boss6; }, },
             'Horse Call': { isAvailable: function () {
@@ -1725,7 +1725,7 @@ var chests = [
         x: "77.75%",
         y: "32.64%",
         isAvailable: function () {
-            if (items.Dominion > 1 && items.Clawshot >=1 && items.Entry >=1) {
+            if (items.Dominion > 1 && items.Clawshot >=1) {
                 return "available";
             }
             return "unavailable";

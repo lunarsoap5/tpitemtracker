@@ -43,6 +43,7 @@
         var SkipIntro = false;
         var EarlyDesert = false;
         var EarlyCits = false;
+        var RemoveBoxes = false;
 
         
     </script>
@@ -76,6 +77,7 @@
             Size<input type="range" name='itemdivsize' id='itemrange' value='100' max='200' min='1' onchange="setZoom('itemdiv', this)">
             <span id='itemdivsize'>100%</span><br>
             <input type="checkbox" name="showprizes" onchange="showPrizes(this)">Show Dungeon Items (BETA)<br>
+            <input type="checkbox" name="removeboxes" onchange="removeBoxes(this)">Remove Box From Behind Items<br>
         </fieldset>
         <fieldset>
             <legend>Map Tracker</legend>
