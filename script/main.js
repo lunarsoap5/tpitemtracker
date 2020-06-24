@@ -298,7 +298,7 @@ function showPrizes(sender) {
 //Set the values for the skips if their boxes are checked
 function faronEscape(sender) {
     faronescape = sender.checked;
-    if (FaronEscape)
+    if (!faronescape)
     {
         FaronEscape = false;
         updateMap();
@@ -312,7 +312,7 @@ function faronEscape(sender) {
 
 function twilightSkip(sender) {
     twilightskip = sender.checked;
-    if (TwilightSkip)
+    if (!twilightskip)
     {
         TwilightSkip = false;
         updateMap();
@@ -326,7 +326,7 @@ function twilightSkip(sender) {
 
 function removeBoxes(sender) {
     removeboxes = sender.checked;
-    if (RemoveBoxes)
+    if (!removeboxes)
     {
         RemoveBoxes = false;
         updateGridItemAll();
@@ -340,7 +340,7 @@ function removeBoxes(sender) {
 
 function skipMdh(sender) {
     skipmdh = sender.checked;
-    if (SkipMdh)
+    if (!skipmdh)
     {
         SkipMdh = false;
         updateMap();
@@ -354,7 +354,7 @@ function skipMdh(sender) {
 
 function skipIntro(sender) {
     skipintro = sender.checked;
-    if (SkipIntro)
+    if (!skipintro)
     {
         SkipIntro = false;
         updateMap();
@@ -368,7 +368,7 @@ function skipIntro(sender) {
 
 function earlyDesert(sender) {
     earlydesert = sender.checked;
-    if (EarlyDesert)
+    if (!earlydesert)
     {
         EarlyDesert = false;
         updateMap();
@@ -382,7 +382,7 @@ function earlyDesert(sender) {
 
 function earlyCits(sender) {
     earlycits = sender.checked;
-    if (EarlyDesert)
+    if (!earlycits)
     {
         EarlyCits = false;
         updateMap();
@@ -390,6 +390,20 @@ function earlyCits(sender) {
     else 
     {
         EarlyCits = true;
+        updateMap();
+    }
+}
+
+function openGates(sender) {
+    opengates = sender.checked;
+    if (!opengates)
+    {
+        OpenGates = false;
+        updateMap();
+    }
+    else 
+    {
+        OpenGates = true;
         updateMap();
     }
 }
@@ -900,9 +914,9 @@ function updateMap() {
     }
 
     dungeonChestOld = dungeonChest;
-    c = document.getElementsByClassName("mapspan chest available").length;
-    opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
+    //c = document.getElementsByClassName("mapspan chest available").length;
+    //opened = document.getElementsByClassName("mapspan chest opened").length;
+    //document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
     var itemlist = document.getElementById('submaplist').children;
@@ -1090,6 +1104,7 @@ function init() {
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
+    updateMap();
     loadCookie();
     saveCookie();
 }

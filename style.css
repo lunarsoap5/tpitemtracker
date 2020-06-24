@@ -98,8 +98,8 @@ label {
 
 
 .false{
-    -webkit-filter: grayscale(50%) brightness(50%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(50%) brightness(50%);
+    -webkit-filter: grayscale(50%) brightness(30%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(50%) brightness(30%);
 }
 
 .mini{

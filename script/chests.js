@@ -82,12 +82,12 @@ function canAccessLakebed() {
 
 //Need Auru's Memo to use the cannon to get to the desert
 function canAccessDesert() {
-    return ((items.Memo && items.Crystal) || EarlyDesert);
+    return ((items.Memo && items.Crystal) || (EarlyDesert && items.Crystal));
 }
 
 //Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
 function canAccessSnowpeak() {
-    return (items.Sketch && items.Scent >=4 && items.Rod >=2);
+    return (items.Scent >=4);
 }
 
 //Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
@@ -148,8 +148,9 @@ var dungeons = [
         y: "66.2%",
         chestlist: {
             'Entrance Vine Chest': { isAvailable: function () { return canAccessForest() && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball); }, },
-            'Central Chest Behind Stairs': { isAvailable: function () { return canAccessForest(); }, },
+            'Central Chest Behind Stairs': { isAvailable: function () { return canAccessForest() && items.Boomerang; }, },
             'Dungeon Map Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
+            'Ooccoo': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
             'Windless Bridge Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
             'Second Monkey Under Bridge Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
             'Totem Pole Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
@@ -193,6 +194,8 @@ var dungeons = [
             'Gor Amato Small Chest': { isAvailable: function () {
                 return canAccessMines(); }, },
             'Gor Amato Key Shard': { isAvailable: function () {
+                return canAccessMines(); }, },
+            'Ooccoo': { isAvailable: function () {
                 return canAccessMines(); }, },
             'Magnet Maze Heart Piece': { isAvailable: function () {
                 return canAccessMines(); }, },
@@ -253,6 +256,8 @@ var dungeons = [
             'Stalactite Room Small Chest': { isAvailable: function () {
                 return canAccessLakebed() && shootPew(); }, },
             'Central Room Small Chest': { isAvailable: function () {
+                return canAccessLakebed() && shootPew(); }, },
+            'Ooccoo': { isAvailable: function () {
                 return canAccessLakebed() && shootPew(); }, },
             'Dungeon Map Chest': { isAvailable: function () {
                 return canAccessLakebed() && shootPew(); }, },
@@ -316,6 +321,8 @@ var dungeons = [
         chestlist: {
             'Entrance Chest': { isAvailable: function () {
                 return canAccessDesert()  }, },
+            'Poe Scent': { isAvailable: function () {
+                return canAccessDesert() && items.Lantern;  }, },
             'Lobby Heart Piece Chest': { isAvailable: function () {
                 return canAccessDesert() && items.Lanturn; }, },
             'Dungeon Map Chest': { isAvailable: function () {
@@ -337,6 +344,8 @@ var dungeons = [
             'Stalfos Northeast Small Chest': { isAvailable: function () {
                 return canAccessDesert() && (hasBoom() || items.Chainball) && items.Lanturn; }, },
             'North Turning Room Chest': { isAvailable: function () {
+                return canAccessDesert() && items.Lanturn; }, },
+            'Ooccoo': { isAvailable: function () {
                 return canAccessDesert() && items.Lanturn; }, },
             'Spinner Chest': { isAvailable: function () {
                 return canAccessDesert() && items.Lanturn; }, },
@@ -382,7 +391,9 @@ var dungeons = [
             'Entrance Right Armor Small Chest': { isAvailable: function () {
                 return canAccessSnowpeak() && items.Chainball; } },
             'Dungeon Map': { isAvailable: function () { 
-				return canAccessSnowpeak(); } },
+                return canAccessSnowpeak(); } },
+            'Ooccoo': { isAvailable: function () { 
+                return canAccessSnowpeak(); } },
             'Courtyard Partially Buried Small Chest': { isAvailable: function () {
                 return canAccessSnowpeak(); } },
             'Courtyard Open Chest': { isAvailable: function () {
@@ -437,6 +448,8 @@ var dungeons = [
         x: "43.83%",
         y: "63.36%",
         chestlist: {
+            'Ooccoo': { isAvailable: function () {
+                return canAccessTot(); }, },
             'Lobby Lanturn Chest': { isAvailable: function () {
                 return canAccessTot() && items.Lanturn; }, },
             'First Stair Pot Small Chest': { isAvailable: function () {
@@ -491,12 +504,14 @@ var dungeons = [
         x: "38.0%",
         y: "50.56%",
         chestlist: {
+            'Ooccoo': { isAvailable: function () {
+                return canAccessCITS(); }, },
             'Southwest Underwater Chest': { isAvailable: function () {
                 return canAccessCITS() && items.IronBoots; }, },
             'Underwater Southeast Chest': { isAvailable: function () {
                 return canAccessCITS() && items.IronBoots; }, },
             'West First Chest': { isAvailable: function () {
-                return canAccessCITS() && items.Spinner; }, },
+                return canAccessCITS() && items.Clawshot > 1; }, },
             'Dungeon Map Chest': { isAvailable: function () {
                 return canAccessCITS() && items.Spinner && items.IronBoots; }, },
             'East Tile Worm Small Chest': { isAvailable: function () {
@@ -815,10 +830,14 @@ var dungeons = [
                 return items.Lanturn && items.IronBoots && items.Boomerang && items.Bow && hasBoom(); }, },
             'Coral Earring': { isAvailable: function () {
                 return items.Sketch; }, },
+            'Jump Strike': { isAvailable: function () {
+                return items.Crystal && canAccessSnowpeak(); }, },
             'Renados Letter': { isAvailable: function () {
                 return items.Boss6; }, },
             'Horse Call': { isAvailable: function () {
                 return items.Charm >=4; }, },
+            'Powered Dominion Rod': { isAvailable: function () {
+                return items.Skybook >=1; }, },
         },
         isBeatable: function() {
             return this.canGetChest();
@@ -877,6 +896,8 @@ var dungeons = [
                 return items.Soul >1; }, },
             'Invoice': { isAvailable: function () {
                 return items.Charm >=1; }, },
+            'Medicine Scent': { isAvailable: function () {
+                return items.Charm > 1; }, },
             'Agitha 1st Bug': { isAvailable: function () {
                 return items.Bugs; }, },
             'Agitha 2nd Bug': { isAvailable: function () {
@@ -1187,7 +1208,7 @@ var chests = [
     },
     {
         name: "Small Chest Under Waterfall",
-        x: "55.43%",
+        x: "55.93%",
         y: "10.56%",
         isAvailable: function() {
             return "available";
@@ -1195,7 +1216,7 @@ var chests = [
     },
     {
         name: "Small Chest Near Mother and Child Isles",
-        x: "56.23%",
+        x: "56.73%",
         y: "11.44%",
         isAvailable: function () {
             return "available";
@@ -1415,7 +1436,7 @@ var chests = [
     {
         name: "Castle Pillar Chest",
         x: "52.83%",
-        y: "45.16%",
+        y: "44.16%",
         isAvailable: function () {
             if (items.Clawshot) {
                 return "available";
@@ -1990,6 +2011,117 @@ var chests = [
         y: "23.8%",
         isAvailable: function () {
             if (items.Charm >= 4) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    //Custom Chests
+    {
+        name: "Ending Blow",
+        x: "48.16%",
+        y: "68.6%",
+        isAvailable: function() {
+            if (items.Lanturn) {
+                return "available";
+            }
+            return "unavailable"
+        },
+    },
+    {
+        name: "Shield Attack",
+        x: "54.5%",
+        y: "81.24%",
+        isAvailable: function() {
+            if (items.Crystal) {
+                return "available";
+            }
+            return "unavailable"
+        },
+    },
+    {
+        name: "Back Slice",
+        x: "48.38%",
+        y: "40.84%",
+        isAvailable: function () {
+            if (items.Crystal) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Helm Splitter",
+        x: "52.83%",
+        y: "46.16%",
+        isAvailable: function () {
+            if (items.Crystal) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Mortal Draw",
+        x: "14.13%",
+        y: "47.36%",
+        isAvailable: function () {
+            if (items.Crystal && canAccessDesert()) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Great Spin",
+        x: "53.85%",
+        y: "38.8%",
+        isAvailable: function () {
+            if (items.Crystal && items.Charm > 2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Youth's Scent",
+        x: "62%",
+        y: "59.88%",
+        isAvailable: function () {
+            if (items.Boss1 || FaronEscape) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Ilia Scent",
+        x: "62.0%",
+        y: "23.3%",
+        isAvailable: function() {
+            if ((FaronEscape || items.Boss1) && ((items.Boss2 && canSmash()) || (TwilightSkip && OpenGates))) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Reekfish Scent",
+        x: "55.73%",
+        y: "11.44%",
+        isAvailable: function() {
+            if (items.Rod > 1) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        name: "Light Sword",
+        x: "15.3%",
+        y: "39.14%",
+        isAvailable: function() {
+            if (canAccessPoT() && items.Clawshot > 1) {
                 return "available";
             }
             return "unavailable";
