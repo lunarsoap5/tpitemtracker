@@ -48,7 +48,7 @@ function checkCountMinus() {
 
 function hasBoom()
 {
-    return ((items.Bombs || items.Bombsb || items.GiantBombs))
+    return ((items.Bombs || items.WBombs))
 }
 
 function canSmash()
@@ -59,10 +59,6 @@ function canSmash()
 function shootPew()
 {
     return (hasBoom() && items.Bow);
-}
-
-function canPlay(song){
-    return (song && items.Ocarina);
 }
 
 //Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
@@ -77,7 +73,7 @@ function canAccessMines() {
 
 //Need iron boots to use water bombs and Zora Armor so you do not drown
 function canAccessLakebed() {
-    return (items.ZoraArmor && hasBoom() && items.IronBoots);
+    return (items.ZoraArmor && items.WBombs && items.IronBoots);
 }
 
 //Need Auru's Memo to use the cannon to get to the desert
@@ -92,12 +88,12 @@ function canAccessSnowpeak() {
 
 //Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
 function canAccessTot() {
-    return (items.Boss5 && items.Sword >= 3 && items.Bow);
+    return (items.Boss5 && items.MSword >= 1 && items.Bow);
 }
 
 //Need Dominion Rod to move the Owl Statues and Charm to get Skybook to access Cannon and Clawshot to enter cannon
 function canAccessCITS() {
-    return ((items.Skybook >=7 && items.Clawshot) || EarlyCits);
+    return ((items.Skybook >=7 || EarlyCits) && items.Clawshot);
 }
 
 // You only need the Mirror Shard from City in the Sky to open up Pallace of Twilight
@@ -119,21 +115,21 @@ var dungeons = [
         y: "85.84%",
         chestlist: {
             'Wooden Sword Chest': { isAvailable: function () {
-                return (items.Slingshot); }, },
+                return true; }, },
             'Link House Basement Chest': { isAvailable: function () {
                 return items.Lanturn; }, },
             'Fishing Rod': { isAvailable: function () {
                 return true; }, },
             'Seras Bottle': { isAvailable: function () {
-                return items.Rod; }, },
+                return true; }, },
             'Slingshot': { isAvailable: function () {
-                return items.Rod; }, },
+                return true; }, },
             'Ordon Shield': { isAvailable: function () {
-                return true; }, },
+                return (items.Sword >=1 || SkipIntro); }, },
             'Ordon Sword': { isAvailable: function () {
-                return true; }, },
+                return (items.Sword >=1 || SkipIntro); }, },
             'Iron Boots Chest': { isAvailable: function () {
-                return (items.Shadow1); }, },
+                return (items.Boss1 || (FaronEscape && ((SkipIntro && SkipTwilight) || items.Sword >=1))); }, },
         },
         isBeatable: function() {
             return this.canGetChest();
@@ -159,7 +155,7 @@ var dungeons = [
             'Big Baba Small Key': { isAvailable: function () { return items.Lanturn && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
             'Boomerang': { isAvailable: function () { return items.Lanturn && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
             'West Tile Worm Heart Piece': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
-            'Compass Chest': { isAvailable: function () { return items.Boomerang && canAccessForest(); }, },
+            'Compass Chest': { isAvailable: function () { return (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
             'Big Key Chest': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
             'Water Cave Near Big Key': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
             'North Deku Like Chest': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
@@ -888,10 +884,6 @@ var dungeons = [
                 return items.Clawshot; }, },
             'STAR Challenge 2': { isAvailable: function () {
                 return items.Clawshot >1; }, },
-            'Agitha 1': { isAvailable: function () {
-                return items.Bugs; }, },
-            'Agitha 2': { isAvailable: function () {
-                return items.Bugs >1; }, },
             'Jovani Bottle': { isAvailable: function () {
                 return items.Soul >1; }, },
             'Invoice': { isAvailable: function () {
@@ -899,53 +891,53 @@ var dungeons = [
             'Medicine Scent': { isAvailable: function () {
                 return items.Charm > 1; }, },
             'Agitha 1st Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=1; }, },
             'Agitha 2nd Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=2; }, },
             'Agitha 3rd Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=3; }, },
             'Agitha 4th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=4; }, },
             'Agitha 5th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=5; }, },
             'Agitha 6th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=6; }, },
             'Agitha 7th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=7; }, },
             'Agitha 8th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=8; }, },
             'Agitha 9th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=9; }, },
             'Agitha 10th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=10; }, },
             'Agitha 11th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=11; }, },
             'Agitha 12th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=12; }, },
             'Agitha 13th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=13; }, },
             'Agitha 14th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=14; }, },
             'Agitha 15th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=15; }, },
             'Agitha 16th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=16; }, },
             'Agitha 17th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=17; }, },
             'Agitha 18th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=18; }, },
             'Agitha 19th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=19; }, },
             'Agitha 20th Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=20; }, },
             'Agitha 21st Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=21; }, },
             'Agitha 22nd Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=22; }, },
             'Agitha 23rd Bug': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=23; }, },
             'Agitha All Bugs': { isAvailable: function () {
-                return items.Bugs; }, },
+                return items.Bugs >=24; }, },
         },
         isBeatable: function() {
             return this.canGetChest();
@@ -1153,16 +1145,6 @@ var chests = [
 	            return "unavailable"
 	        },
 	},
-    {
-        name: "Master Sword",
-        x: "44.20%",
-        y: "65.68%",
-        isAvailable: function() {
-            if (items.Crystal)
-                return "available";
-            return "unavailable";
-        },
-    },
     {
         name: "Alcove Heart Piece Chest",
         x: "85.83%",
@@ -2127,5 +2109,28 @@ var chests = [
             return "unavailable";
         },
     },
+    {
+        name: "Master Sword",
+        x: "44.70%",
+        y: "65.68%",
+        isAvailable: function() {
+            if (items.Crystal || (items.Boss3 && !SkipMDH))
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        name: "Shadow Crystal",
+        x: "43.70%",
+        y: "65.68%",
+        isAvailable: function() {
+            if (items.Crystal || (items.Boss3 && !SkipMDH))
+                return "available";
+            return "unavailable";
+        },
+    },
+
+    //Poes
+
 ]
 

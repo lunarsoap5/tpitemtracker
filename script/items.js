@@ -9,27 +9,27 @@ var defaultItemGrid = [
     ],
     [
         "Bombs",
-        "Bombsb",
-        "GiantBombs",
+        "WBombs",
         "Hawkeye",
         "Clawshot",
-        "Spinner"
+        "Spinner",
+        "Chainball",
     ],
     [
-        "Chainball",
         "Dominion",
         "Bottle",
         "Memo",
         "Sketch",
-        "Skybook"
+        "Skybook",
+        "Charm",
     ],
     [
-        "Charm",
         "Bugs",
         "Skills",
         "Sword",
         "MSword",
-        "Shield"
+        "Shield",
+        "GTunic"
     ],
     [
         "Wallet",
@@ -63,10 +63,9 @@ var baseItems = {
     Slingshot: false,
     Boomerang: false,
     Bombs: 0,
-    Bombsb: 0,
+    WBombs: false,
     Rod: 0,
     Lanturn: false,
-    GiantBombs: 0,
     Hawkeye: false,
     Spinner: false,
     Memo: false,
@@ -89,6 +88,7 @@ var baseItems = {
     ZoraArmor: false,
     MagicArmor: false,
     IronBoots: false,
+    GTunic: 1,
    
     Boss1: false,
     Boss2: false,
@@ -107,9 +107,7 @@ var itemsMin = {
     Bow: 0,
     Bombs: 0,
     Clawshot: 0,
-    Bombsb: 0,
     Rod: 0,
-    GiantBombs: 0,
     Bugs: 0,
     Bottle: 0,
     Sword: 0,
@@ -125,22 +123,21 @@ var itemsMin = {
     Shard: 0,
     Dominion: 0,
     Skybook: 0,
+    GTunic: 1
 };
 
 var itemsMax = {
     Bow: 3,
     Bombs: 4,
-    Bombsb: 4,
-    GiantBombs: 4,
     Clawshot: 2,
     Rod: 2,
-    Bugs: 2,
+    Bugs: 24,
     Bottle: 8,
     Sword: 2,
     MSword: 2,
     Skills: 1,
     Shield: 2,
-    Soul: 3,
+    Soul: 60,
     Scent: 5,
     Charm: 4,
     Entry: 4,
@@ -149,6 +146,7 @@ var itemsMax = {
     Shard: 4,
     Dominion: 2,
     Skybook: 7,
+    GTunic: 1
 };
 
 var items = Object.assign(baseItems);
