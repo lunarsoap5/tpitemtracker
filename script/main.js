@@ -181,7 +181,6 @@ function deserializeDungeonChests(serializedDungeons) {
     }
 }
 
-
 // Event of clicking a chest on the map
 function toggleChest(x) {
     chests[x].isOpened = !chests[x].isOpened;
@@ -423,6 +422,23 @@ function openGates(sender) {
         OpenGates = true;
         updateMap();
     }
+}
+
+function noPoeOnLoad() {
+    for (var i = 104; i < 153; i++) {
+        document.getElementById("" + i).style.zIndex = "-1";
+    }
+    for (var j = 17; j < 21; j++) {
+        document.getElementById("dungeon" + j).style.zIndex = "-1";
+    }
+}
+
+function setGlitchedLogicOff() {
+    glitchedLogic = false;
+}
+
+function setGlitchedLogicOn() {
+    glitchedLogic = true;
 }
 
 
@@ -945,7 +961,7 @@ function updateMap() {
     var itemlist = document.getElementById('submaplist').children;
     for (var item in itemlist) {
         if (itemlist.hasOwnProperty(item)) {
-            if ( dungeons[dungeonSelect].chestlist[itemlist[item].innerHTML].isOpened) {
+            if (dungeons[dungeonSelect].chestlist[itemlist[item].innerHTML].isOpened) {
                 itemlist[item].className = 'DCopened';
             } else if ( dungeons[dungeonSelect].chestlist[itemlist[item].innerHTML].isAvailable()) {
                 itemlist[item].className = 'DCavailable';
@@ -1064,6 +1080,7 @@ function populateMapdiv() {
         s.appendChild(ss);
 
         mapdiv.appendChild(s);
+        
     }
 
     document.getElementById('submaparea').innerHTML = dungeons[dungeonSelect].name;
@@ -1128,6 +1145,7 @@ function init() {
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
+    noPoeOnLoad();
     loadCookie();
     saveCookie();
 }

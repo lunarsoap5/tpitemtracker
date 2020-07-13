@@ -1,6 +1,4 @@
 
-var d = 0;
-var k = 0;
 function generalCanGetChest(chestlist) {
     var canGet = 0;
     var unopened = 0;
@@ -15,36 +13,25 @@ function generalCanGetChest(chestlist) {
             }
         }
     }
-
-
-    c = document.getElementsByClassName("mapspan chest available").length;
-    d = document.getElementsByClassName("mapspan dungeon available").length;
-
-
     
  
 
     if (unopened == 0) {
-        return "opened";
-        
+        return "opened"; 
     }
     if (canGet == unopened) {
         return "available";
-        c++;
     }
     if (canGet == 0) {
         return "unavailable";
-        c--;
     }
     return "possible";
 }
 
 
-function checkCountMinus() {
-    for (var k = 0; k < 1; k++) {
-        c--;
-    }
-}
+
+
+
 
 function hasBoom()
 {
@@ -59,6 +46,19 @@ function canSmash()
 function shootPew()
 {
     return (hasBoom() && items.Bow);
+}
+
+//Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
+function canAccessFaron() {
+    return (items.Vessel >= 1 || TwilightSkip);
+}
+
+function canAccessEldin() {
+    return (items.Vessel >= 2 || TwilightSkip);
+}
+
+function canAccessLanayru() {
+    return (items.Vessel >= 3 || TwilightSkip);
 }
 
 //Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
@@ -83,7 +83,7 @@ function canAccessDesert() {
 
 //Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
 function canAccessSnowpeak() {
-    return (items.Scent >=4);
+    return (items.ReekfishScent);
 }
 
 //Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
@@ -129,7 +129,7 @@ var dungeons = [
             'Ordon Sword': { isAvailable: function () {
                 return (items.Sword >=1 || SkipIntro); }, },
             'Iron Boots Chest': { isAvailable: function () {
-                return (items.Boss1 || (FaronEscape && ((SkipIntro && SkipTwilight) || items.Sword >=1))); }, },
+                return ((items.Boss1 && items.Vessel >=1) || (FaronEscape && ((SkipIntro && TwilightSkip) || items.Sword >=1))); }, },
         },
         isBeatable: function() {
             return this.canGetChest();
@@ -819,7 +819,7 @@ var dungeons = [
             'Cliff Heart Piece': { isAvailable: function () {
                 return shootPew() && items.Boomerang; }, },
             'Hylian Shield': { isAvailable: function () {
-                return items.Shadow1; }, },
+                return items.Boss1; }, },
             'Hawkeye': { isAvailable: function () {
                 return items.Bow && items.Shield >1; }, },
             'Zora Armor': { isAvailable: function () {
@@ -885,7 +885,9 @@ var dungeons = [
             'STAR Challenge 2': { isAvailable: function () {
                 return items.Clawshot >1; }, },
             'Jovani Bottle': { isAvailable: function () {
-                return items.Soul >1; }, },
+                return items.Soul >= 20; }, },
+            'Jovani All Souls': { isAvailable: function () {
+                return items.Soul >= 60; }, },
             'Invoice': { isAvailable: function () {
                 return items.Charm >=1; }, },
             'Medicine Scent': { isAvailable: function () {
@@ -998,6 +1000,142 @@ var dungeons = [
             return generalCanGetChest(this.chestlist);
         },
     },
+
+    {
+        name: "Arbiter's Grounds Poes",
+        x: "15.2%",
+        y: "41.44%",
+        chestlist: {
+            'Lobby Poe': { //1
+                isAvailable: function () {
+                    return canAccessDesert()
+                },
+            },
+            'East Lower Poe': { //2
+                isAvailable: function () {
+                    return canAccessDesert() && items.Lantern;
+                },
+            },
+            'East Upper Poe': { //3
+                isAvailable: function () {
+                    return canAccessDesert() && items.Lanturn;
+                },
+            },
+            'West Poe': { //4
+                isAvailable: function () {
+                    return canAccessDesert() && items.Lanturn;
+                },
+            }
+        },
+        isBeatable: function () {
+            if (canAccessDesert() && items.Lanturn ) {
+                if (this.canGetChest() == 'available') {
+                    return 'available';
+                }
+                return 'possible';
+            } else {
+                return "unavailable";
+            }
+        },
+        canGetChest: function () {
+            return generalCanGetChest(this.chestlist);
+        },
+    },
+    {
+        name: "Snowpeak Ruins Poes",
+        x: "21.31%",
+        y: "28.64%",
+        chestlist: {
+            'Lobby Armor Poe': { //5
+                isAvailable: function () {
+                    return canAccessSnowpeak() && items.Chainball;
+                }
+            },
+            'Lobby Poe': { //6
+                isAvailable: function () {
+                    return canAccessSnowpeak() && items.Chainball;
+                }
+            },
+            'Mini Freezard Poe': { //7
+                isAvailable: function () {
+                    return canAccessSnowpeak();
+                }
+            },
+        },
+        isBeatable: function () { 
+            if (canAccessSnowpeak() && items.Chainball && hasBoom()) {
+                if (this.canGetChest() == 'available') {
+                    return 'available';
+                }
+                return 'possible';
+            } else {
+                return "unavailable";
+            }
+        },
+        canGetChest: function () {
+            return generalCanGetChest(this.chestlist);
+        },
+    },
+    {
+        name: "Temple of Time Poes",
+        x: "43.83%",
+        y: "63.36%",
+        chestlist: {
+            'Poe Behind Gate': { //8
+                isAvailable: function () {
+                    return canAccessTot() && items.Dominion >= 1 && items.Lanturn;
+                },
+            },
+            'Poe Above Scales': { //9
+                isAvailable: function () {
+                    return canAccessTot() && items.Lanturn;
+                },
+            },          
+        },
+        isBeatable: function () { 
+            if (canAccessTot() && items.Spinner && items.Dominion >= 1 && items.Lanturn) {
+                if (this.canGetChest() == 'available') {
+                    return 'available';
+                }
+                return 'possible';
+            } else {
+                return "unavailable";
+            }
+        },
+        canGetChest: function () {
+            return generalCanGetChest(this.chestlist);
+        },
+    },
+    {
+        name: "CiTS Poes",
+        x: "38.0%",
+        y: "50.56%",
+        chestlist: {
+            'Garden Island Poe': { //10
+                isAvailable: function () {
+                    return canAccessCITS();
+                },
+            },
+            'Poe Above Central Fan': { //11
+                isAvailable: function () {
+                    return canAccessCITS() && items.IronBoots;
+                },
+            },
+        },
+        isBeatable: function () {
+            if (canAccessCITS() && items.Spinner && items.IronBoots && items.Clawshot >= 2) {
+                if (this.canGetChest() == 'available') {
+                    return 'available';
+                }
+                return 'possible';
+            } else {
+                return "unavailable";
+            }
+        },
+        canGetChest: function () {
+            return generalCanGetChest(this.chestlist);
+        },
+    }
 ];
 
 //define overworld chests
@@ -1007,7 +1145,7 @@ var chests = [
         x: "56.33%",
         y: "90.16%",
         isAvailable: function () {
-            if (items.Shadow1) {
+            if (items.Boss1) {
                 return "available";
             }
             return "unavailable";
@@ -1117,7 +1255,7 @@ var chests = [
         x: "54.01%",
         y: "69.6%",
         isAvailable: function () {
-            if (items.Dominion > 1 && canSmash() && items.Sword >=3) {
+            if ((glitchedLogic == false && items.Dominion > 1 && canSmash() && items.Crystal) || (glitchedLogic == true && items.Crystal)) {
                 return "available";
             }
             return "unavailable";
@@ -1182,7 +1320,7 @@ var chests = [
         x: "50.43%",
         y: "11.06%",
         isAvailable: function () {
-            if (items.Shard1) {
+            if (items.Boss4) {
                 return "available";
             }
             return "unavailable";
@@ -1242,7 +1380,7 @@ var chests = [
         x: "38.95%",
         y: "55.26%",
         isAvailable: function() {
-            if (items.Sword >=3 && items.Boss3) {
+            if (items.Crystal && items.Boss3) {
                 return "available";
             }
             return "unavailable";
@@ -2130,7 +2268,555 @@ var chests = [
         },
     },
 
-    //Poes
-
+    // Poes =============================================================================================
+    
+    {
+        //12
+        name: "Jovani Poe",
+        x: "54.75%",
+        y: "42.2%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //13
+        name: "East Castle Town Bridge Poe",
+        x: "58.25%",
+        y: "40.56%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //14
+        name: "South Castle Town Field Poe",
+        x: "53.66%",
+        y: "45.84%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //15
+        name: "Castle Ruins Poe",
+        x: "45.16%",
+        y: "43.36%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //16
+        name: "Faron Mist Poe",
+        x: "51.41%",
+        y: "69.76%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //17
+        name: "Lost Woods Poe",
+        x: "47%",
+        y: "71.4%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //18
+        name: "Faron Field Poe",
+        x: "54.58%",
+        y: "59.04%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //19
+        name: "Kakariko Gorge Poe",
+        x: "65.25%",
+        y: "53.52%",
+        isAvailable: function () {
+            if (items.Shard2) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //20
+        name: "Poe Under Rock",
+        x: "42.16%",
+        y: "68.88%",
+        isAvailable: function () {
+            if (items.Sword > 2 && canSmash()) {
+                return "available";
+            }
+            return "unavailable";
+        },
+    },
+    {
+        //21
+        name: "Master Sword Poe",
+        x: "44.20%",
+        y: "65.68%",
+        isAvailable: function () {
+            if (items.Shadow3)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //22
+        name: "Past - Poe",
+        x: "43.78%",
+        y: "68.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //23
+        name: "CoO - F17 Poe",
+        x: "14.25%",
+        y: "60.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //24
+        name: "CoO - F33 Poe",
+        x: "15.25%",
+        y: "60.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //25
+        name: "CoO - F44 Poe",
+        x: "14.25%",
+        y: "61.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //26
+        name: "Death Mountain Poe",
+        x: "85.91%",
+        y: "44%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //27
+        name: "Poe By Entrance",
+        x: "33.75%",
+        y: "60.40%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //28
+        name: "Poe Above CoO",
+        x: "14.17%",
+        y: "59.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //29
+        name: "Poe Above Grotto",
+        x: "20.83%",
+        y: "50.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //30
+        name: "Poe in Grotto #1",
+        x: "21.83%",
+        y: "50.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //31
+        name: "Poe in Grotto #2",
+        x: "20.83%",
+        y: "51.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //32
+        name: "Poe next to Bublin Camp",
+        x: "13.33%",
+        y: "47.2%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //33
+        name: "Bublin Camp Poe",
+        x: "15%",
+        y: "45.2%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //34
+        name: "Poe before AG",
+        x: "15%",
+        y: "43.6%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //35
+        name: "Graveyard Open Poe",
+        x: "84.16%",
+        y: "54.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //36
+        name: "Graveyard Grave Poe",
+        x: "84.16%",
+        y: "55.4%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //37
+        name: "Hidden Village Poe",
+        x: "70.41%",
+        y: "24.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //38
+        name: "Eldin Longcave Poe",
+        x: "65.83%",
+        y: "57.2%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //39
+        name: "Bridge Poe",
+        x: "54.25%",
+        y: "26.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //40
+        name: "Grotto Poe #1",
+        x: "49.66%",
+        y: "26.8%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //41
+        name: "Grotto Poe #2",
+        x: "50.66%",
+        y: "26.8%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //42
+        name: "Poe on Rock Ledge",
+        x: "44.42%",
+        y: "56%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //43
+        name: "Bomb Shop Poe",
+        x: "81.83%",
+        y: "51.76%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //44
+        name: "Watchtower Poe",
+        x: "80.83%",
+        y: "50.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //45
+        name: "Poe by the Dock",
+        x: "46.58%",
+        y: "50.64%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //46
+        name: "Alcove Poe",
+        x: "40.08%",
+        y: "54.72%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //47
+        name: "Poe near Tower",
+        x: "34.08%",
+        y: "53.12%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //48
+        name: "Isle of Riches Poe",
+        x: "39.08%",
+        y: "49.12%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //49
+        name: "Flight by Fowl Ledge Poe",
+        x: "36.42%",
+        y: "46.72%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //50
+        name: "LLC Poe #1",
+        x: "38.5%",
+        y: "54.8%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //51
+        name: "LLC Poe #2",
+        x: "39.5%",
+        y: "55.8%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //52
+        name: "LLC Poe #3",
+        x: "38.5%",
+        y: "55.8%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //53
+        name: "Poe in Blizzard",
+        x: "44.67%",
+        y: "9.36%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //54
+        name: "Poe under Tree",
+        x: "41.5%",
+        y: "8.08%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //55
+        name: "Poe above Grotto",
+        x: "41.75%",
+        y: "9.46%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //56
+        name: "Poe in Cave",
+        x: "38.08%",
+        y: "11.44%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //57
+        name: "Poe in Cave",
+        x: "21.75%",
+        y: "31.52%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //58
+        name: "Upper Zora River Poe",
+        x: "64%",
+        y: "14.16%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //59
+        name: "Poe Behind Waterfall",
+        x: "54.5%",
+        y: "9.52%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //60
+        name: "Poe By Mother and Child Rocks",
+        x: "55.25%",
+        y: "11.36%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
 ]
 
