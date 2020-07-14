@@ -425,6 +425,18 @@ function openGates(sender) {
     }
 }
 
+function cuccoDive(sender) {
+    cuccodive = sender.checked;
+    if (!cuccodive) {
+        CuccoDive = false;
+        updateMap();
+    }
+    else {
+        CuccoDive = true;
+        updateMap();
+    }
+}
+
 function noPoeOnLoad() {
     for (var i = 104; i < 153; i++) {
         document.getElementById("" + i).style.zIndex = "-1";

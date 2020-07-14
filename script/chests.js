@@ -175,7 +175,7 @@ function canAccessMines() {
 
 //Need iron boots to use water bombs and Zora Armor so you do not drown
 function canAccessLakebed() {
-    if (glitchedLogic == true && canSwimWithWBs()) {
+    if (glitchedLogic == true && (canSwimWithWBs() || items.ZoraArmor || CuccoDive == true || (TwilightSkip == false && items.IronBoots))) {
         return true;
     }
     return (items.ZoraArmor && items.WBombs && items.IronBoots);
