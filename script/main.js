@@ -437,6 +437,18 @@ function cuccoDive(sender) {
     }
 }
 
+function helmaLJA(sender) {
+    helmalja = sender.checked;
+    if (!helmalja) {
+        HelmaLJA = false;
+        updateMap();
+    }
+    else {
+        HelmaLJA = true;
+        updateMap();
+    }
+}
+
 function noPoeOnLoad() {
     for (var i = 104; i < 153; i++) {
         document.getElementById("" + i).style.zIndex = "-1";
@@ -449,11 +461,13 @@ function noPoeOnLoad() {
 function setGlitchedLogicOff() {
     glitchedLogic = false;
     cookieobj.logic = glitchedLogic;
+    updateMap();
 }
 
 function setGlitchedLogicOn() {
     glitchedLogic = true;
     cookieobj.logic = glitchedLogic;
+    updateMap();
 }
 
 
