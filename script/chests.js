@@ -1866,7 +1866,7 @@ var chests = [
         x: "77.75%",
         y: "32.64%",
         isAvailable: function () {
-            if (items.Dominion > 1 && items.Clawshot >=1) {
+            if ((items.Dominion > 1 && items.Clawshot >= 1) || glitchedLogic == true && (canLJA() || items.Crystal)) {
                 return "available";
             }
             return "unavailable";
