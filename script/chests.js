@@ -1,4 +1,3 @@
-
 function generalCanGetChest(chestlist) {
     var canGet = 0;
     var unopened = 0;
@@ -14,8 +13,6 @@ function generalCanGetChest(chestlist) {
         }
     }
     
- 
-
     if (unopened == 0) {
         return "opened"; 
     }
@@ -28,10 +25,115 @@ function generalCanGetChest(chestlist) {
     return "possible";
 }
 
+// Tricks/glitches \\
 
+// Bomb Boost (no Jump Strike)
+function canBombBoost() {
+    return (hasSword() && hasBombs());
+}
 
+// Bomb Boost (with Jump Strike)
+function canBombBoostJS() {
+    return (canBombBoost() && hasJumpStrike());
+}
 
+// Bomb Boost (with Spinner)
+function canBombBoostSpinner() {
+    return (hasSword() && hasBombs() && items.Spinner);
+}
 
+// Boomerang LJA (no Jump Strike)
+function canLJA() {
+    return (items.Boomerang && hasSword());
+}
+
+// Boomerang LJA (with Jump Strike)
+function canLJAJS() {
+    return (canLJA() && hasJumpStrike());
+}
+
+// Swim with Water Bombs
+// Needs WBs, something to sink in water with, and an equippable item to place over boots/MA
+function canSwimWithWBs() {
+    var ironBootsEquipsBools = [items.Chainball, items.Slingshot, items.Boomerang, items.Lanturn, items.Hawkeye, items.Spinner, items.Memo, items.Sketch];
+    var ironBootsEquipsInts = [items.Bow, items.Clawshot, items.Bombs, items.Rod, items.Skybook, items.Dominion, items.Charm, items.Bottle];
+
+    if (canSink() && items.WBombs) {
+        if (items.MagicArmor) {
+            if (items.GTunic >= 1 || items.ZoraArmor) {
+                return true;
+            }
+        }
+        else if (items.IronBoots) {
+            for (var i = 0; i < ironBootsEquipsBools.length; i++) {
+                if (ironBootsEquipsBools[i] == true) {
+                    return true;
+                }
+            }
+            for (var i = 0; i < ironBootsEquipsInts.length; i++) {
+                if (ironBootsEquipsInts[i] >= 1) {
+                    return true;
+                }
+            }
+        }
+    }
+}
+
+// General logic \\
+
+// Can sink in water?
+function canSink() {
+    return (items.IronBoots || items.MagicArmor);
+}
+
+// Can break/burn webs? (same as canSmash() but named more clear for me)
+function canBreakWebs() {
+    return (canSmash());
+}
+
+// Inventory \\
+
+function hasBombs() {
+    return (hasBoom());
+}
+
+function hasSword() {
+    return (items.Sword >= 1 || items.MSword >= 1);
+}
+
+function hasShield() {
+    return (items.Shield >= 1);
+}
+
+// Skills \\
+
+function hasEndingBlow() {
+    return (hasSword() && items.Skills >= 1);
+}
+
+function hasShieldAttack() {
+    return (hasSword() && hasShield() && items.Skills >= 2);
+}
+
+function hasBackslice() {
+    return (hasSword() && items.Skills >= 3);
+}
+
+function hasHelmSplitter() {
+    return (hasSword() && items.Skills >= 4);
+}
+
+function hasMortalDraw() {
+    return (hasSword() && items.Skills >= 5);
+}
+
+function hasJumpStrike() {
+    return (hasSword() && items.Skills >= 6);
+}
+
+function hasGreatSpin() {
+    return (hasSword() && items.Skills >= 7);
+}
 
 function hasBoom()
 {
@@ -73,6 +175,9 @@ function canAccessMines() {
 
 //Need iron boots to use water bombs and Zora Armor so you do not drown
 function canAccessLakebed() {
+    if (glitchedLogic == true && canSwimWithWBs()) {
+        return true;
+    }
     return (items.ZoraArmor && items.WBombs && items.IronBoots);
 }
 
