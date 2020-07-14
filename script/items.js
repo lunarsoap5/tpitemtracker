@@ -24,20 +24,27 @@ var defaultItemGrid = [
         "Charm",
     ],
     [
-        "Bugs",
         "Skills",
         "Sword",
         "MSword",
         "Shield",
-        "GTunic"
+        "GTunic",
+        "Wallet"
     ],
     [
-        "Wallet",
+        "Bugs",
         "Soul",
-        "Scent",
         "Crystal",
         "ZoraArmor",
-        "MagicArmor"
+        "MagicArmor",
+        "Vessel"
+    ],
+    [
+        "YouthScent",
+        "IliaScent",
+        "PoeScent",
+        "ReekfishScent",
+        "MedicineScent"
     ],
     [
         "Boss1",
@@ -81,7 +88,12 @@ var baseItems = {
     Skills: 0,
     Shield: 0,
     Soul: 0,
-    Scent: 0,
+    Vessel: 0,
+    YouthScent: false,
+    IliaScent: false,
+    PoeScent: false,
+    ReekfishScent: false,
+    MedicineScent: false,
     Shadow: 0,
     Shard: 0,
     Crystal: false,
@@ -123,6 +135,7 @@ var itemsMin = {
     Shard: 0,
     Dominion: 0,
     Skybook: 0,
+    Vessel: 0,
     GTunic: 1
 };
 
@@ -132,7 +145,7 @@ var itemsMax = {
     Clawshot: 2,
     Rod: 2,
     Bugs: 24,
-    Bottle: 8,
+    Bottle: 4,
     Sword: 2,
     MSword: 2,
     Skills: 1,
@@ -146,6 +159,7 @@ var itemsMax = {
     Shard: 4,
     Dominion: 2,
     Skybook: 7,
+    Vessel: 3,
     GTunic: 1
 };
 

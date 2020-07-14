@@ -7,6 +7,7 @@
 <body>
     <script src="script/items.js"></script>
     <script src="script/chests.js"></script>
+    <script src="script/poelogic.js"></script>
     <script type="text/javascript">
         if (document.addEventListener) { // IE >= 9; other browsers
             document.addEventListener('contextmenu', function (e) {
@@ -45,8 +46,9 @@
         var EarlyCits = false;
         var RemoveBoxes = false;
         var OpenGates = false;
+        var glitchedLogic = false;
 
-        
+
     </script>
     <script src="script/main.js"></script>
     <div id='layoutdiv'>
@@ -64,7 +66,7 @@
         </div>
     </div>
 
-    
+
     <!-- Setting panel-->
     <button id='settingsbutton' type='button' onclick='showSettings(this)'>🔧</button>
     <fieldset id='settings' class='settings'>
@@ -88,6 +90,17 @@
             Position:
             <input type='radio' name='mapposition' value='Side' checked='true' onclick="setOrder(false)">Side
             <input type='radio' name='mapposition' value='Below' onclick="setOrder(true)">Below<br>
+        </fieldset>
+        <fieldset>
+            <legend>Logic Options</legend>
+            <input type='radio' name='glitchedLogic' value='Normal' checked='true' onclick="setGlitchedLogicOff()">Standard Logic
+            <input type='radio' name='glitchedLogic' value='Glitched' onclick="setGlitchedLogicOn()">Glitched Logic<br>
+        </fieldset>
+        <fieldset>
+            <legend>Map Viewer</legend>
+            <input type='radio' name='checktracker' value="map" id="maptracker" checked='true' onclick="setMapTracker()">Map Tracker
+            <input type='radio' name='checktracker' value="poe" id="poetracker" onclick="setPoeTracker()">Poe Tracker<br>
+            <input type='radio' name='checktracker' value="bug" id="bugtracker" onclick="setBugTracker()">Bug Tracker<br>
         </fieldset>
         <fieldset>
             <legend>Cosmetic Changes</legend>
@@ -121,14 +134,14 @@
     <script>
         init();
     </script>
-    <br/>
-    <br/>
+    <br />
+    <br />
     <footer style='bottom:0; width:100%; text-align: center; position: relative; color:grey'>
         <center>
-        <div id='credits' style="background-color:black; width:25%; text-align: center;">
-            Twilight Princess Randomizer Tracker v1.2 by Lunar Soap<br />
-            With help and inspiration from <a href="https://github.com/TreZc0">TreZc0</a> and <a href="https://github.com/TestRunnerSRL">TestRunner</a>
-        </div>
+            <div id='credits' style="background-color:black; width:25%; text-align: center;">
+                Twilight Princess Randomizer Tracker v1.2 by Lunar Soap<br />
+                With help and inspiration from <a href="https://github.com/TreZc0">TreZc0</a> and <a href="https://github.com/TestRunnerSRL">TestRunner</a>
+            </div>
         </center>
     </footer>
 </body>
