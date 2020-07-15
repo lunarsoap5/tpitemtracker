@@ -1001,6 +1001,7 @@ var dungeons = [
         },
     },
 
+    //Dungeon Poes
     {
         name: "Arbiter's Grounds Poes",
         x: "15.2%",
@@ -1008,7 +1009,7 @@ var dungeons = [
         chestlist: {
             'Lobby Poe': { //1
                 isAvailable: function () {
-                    return canAccessDesert()
+                    return canAccessDesert() && items.Lantern
                 },
             },
             'East Lower Poe': { //2
@@ -1028,7 +1029,7 @@ var dungeons = [
             }
         },
         isBeatable: function () {
-            if (canAccessDesert() && items.Lanturn ) {
+            if (canAccessDesert() && items.Lanturn && items.Spinner ) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -2252,8 +2253,9 @@ var chests = [
         x: "44.70%",
         y: "65.68%",
         isAvailable: function() {
-            if (items.Crystal || (items.Boss3 && !SkipMDH))
+            if (items.Crystal || (items.Boss3 && !SkipMDH)) {
                 return "available";
+            }
             return "unavailable";
         },
     },
@@ -2277,7 +2279,7 @@ var chests = [
         y: "42.2%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2289,7 +2291,7 @@ var chests = [
         y: "40.56%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2301,7 +2303,7 @@ var chests = [
         y: "45.84%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2313,7 +2315,7 @@ var chests = [
         y: "43.36%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2325,7 +2327,7 @@ var chests = [
         y: "69.76%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2337,7 +2339,7 @@ var chests = [
         y: "71.4%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2349,7 +2351,7 @@ var chests = [
         y: "59.04%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2361,7 +2363,7 @@ var chests = [
         y: "53.52%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2373,7 +2375,7 @@ var chests = [
         y: "68.88%",
         isAvailable: function () {
             if (items.Sword > 2 && canSmash()) {
-                return "available";
+                return "poeavailable";
             }
             return "unavailable";
         },
@@ -2385,7 +2387,7 @@ var chests = [
         y: "65.68%",
         isAvailable: function () {
             if (items.Shadow3)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2396,7 +2398,7 @@ var chests = [
         y: "68.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2407,7 +2409,7 @@ var chests = [
         y: "60.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2418,7 +2420,7 @@ var chests = [
         y: "60.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2429,7 +2431,7 @@ var chests = [
         y: "61.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2440,7 +2442,7 @@ var chests = [
         y: "44%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2451,7 +2453,7 @@ var chests = [
         y: "60.40%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2462,7 +2464,7 @@ var chests = [
         y: "59.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2473,7 +2475,7 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2484,7 +2486,7 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2495,7 +2497,7 @@ var chests = [
         y: "51.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2506,7 +2508,7 @@ var chests = [
         y: "47.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2517,7 +2519,7 @@ var chests = [
         y: "45.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2528,7 +2530,7 @@ var chests = [
         y: "43.6%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2539,7 +2541,7 @@ var chests = [
         y: "54.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2550,7 +2552,7 @@ var chests = [
         y: "55.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2561,7 +2563,7 @@ var chests = [
         y: "24.00%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2572,7 +2574,7 @@ var chests = [
         y: "57.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2583,7 +2585,7 @@ var chests = [
         y: "26.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2594,7 +2596,7 @@ var chests = [
         y: "26.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2605,7 +2607,7 @@ var chests = [
         y: "26.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2616,7 +2618,7 @@ var chests = [
         y: "56%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2627,7 +2629,7 @@ var chests = [
         y: "51.76%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2638,7 +2640,7 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2649,7 +2651,7 @@ var chests = [
         y: "50.64%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2660,7 +2662,7 @@ var chests = [
         y: "54.72%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2671,7 +2673,7 @@ var chests = [
         y: "53.12%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2682,7 +2684,7 @@ var chests = [
         y: "49.12%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2693,7 +2695,7 @@ var chests = [
         y: "46.72%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2704,7 +2706,7 @@ var chests = [
         y: "54.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2715,7 +2717,7 @@ var chests = [
         y: "55.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2726,7 +2728,7 @@ var chests = [
         y: "55.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2737,7 +2739,7 @@ var chests = [
         y: "9.36%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2748,7 +2750,7 @@ var chests = [
         y: "8.08%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2759,7 +2761,7 @@ var chests = [
         y: "9.46%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2770,7 +2772,7 @@ var chests = [
         y: "11.44%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2781,7 +2783,7 @@ var chests = [
         y: "31.52%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2792,7 +2794,7 @@ var chests = [
         y: "14.16%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2803,7 +2805,7 @@ var chests = [
         y: "9.52%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "available";
+                return "poeavailable";
             return "unavailable";
         },
     },
@@ -2812,6 +2814,142 @@ var chests = [
         name: "Poe By Mother and Child Rocks",
         x: "55.25%",
         y: "11.36%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "poeavailable";
+            return "unavailable";
+        },
+    },
+
+
+    //============================================
+    // Golden Bugs
+    {
+        //1
+        name: "Male Beetle",
+        x: "53.58%",
+        y: "62.16%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //2
+        name: "Female Beetle",
+        x: "57.33%",
+        y: "58.72%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //3
+        name: "Male Pill Bug",
+        x: "65%",
+        y: "53.60%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //4
+        name: "Female Pill Bug",
+        x: "68.16%",
+        y: "54.56%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //5
+        name: "Male Ant",
+        x: "84.58%",
+        y: "53.92%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //6
+        name: "Female Ant",
+        x: "80.75%",
+        y: "52.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //7
+        name: "Male Grasshopper",
+        x: "74.58%",
+        y: "40.80%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //8
+        name: "Female Grasshopper",
+        x: "66.67%",
+        y: "34.56%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //9
+        name: "Male Phasmid",
+        x: "78.58%",
+        y: "33.12%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //10
+        name: "Female Phasmid",
+        x: "80.00%",
+        y: "26.64%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //11
+        name: "Male Mantis",
+        x: "41.17%",
+        y: "46.24%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "unavailable";
+        },
+    },
+    {
+        //12
+        name: "Female Mantis",
+        x: "42.75%",
+        y: "54.16%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";

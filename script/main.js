@@ -71,7 +71,6 @@ var cookieDefault = {
     obtainedItems: items,
     chests: serializeChests(),
     dungeonChests: serializeDungeonChests(),
-    logic: glitchedLogic,
 }
 
 
@@ -436,12 +435,12 @@ function noPoeOnLoad() {
 
 function setGlitchedLogicOff() {
     glitchedLogic = false;
-    cookieobj.logic = glitchedLogic;
+    updateMap();
 }
 
 function setGlitchedLogicOn() {
     glitchedLogic = true;
-    cookieobj.logic = glitchedLogic;
+    updateMap();
 }
 
 
