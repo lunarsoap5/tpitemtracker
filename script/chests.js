@@ -52,6 +52,16 @@ function canLJAJS() {
     return (canLJA() && hasJumpStrike());
 }
 
+// Door storage
+function canGetDoorStorage() {
+    return (hasSword() && items.Crystal);
+}
+
+// Can wolf super jump
+function canWolfSuperJump() {
+    return (items.Crystal || TwilightSkip == false && items.Vessel <= 3);
+}
+
 // Swim with Water Bombs
 // Needs WBs, something to sink in water with, and an equippable item to place over boots/MA
 function canSwimWithWBs() {

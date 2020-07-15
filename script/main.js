@@ -449,6 +449,54 @@ function helmaLJA(sender) {
     }
 }
 
+function star2OneClaw(sender) {
+    star2oneclaw = sender.checked;
+    if (!star2oneclaw) {
+        Star2OneClaw = false;
+        updateMap();
+    }
+    else {
+        Star2OneClaw = true;
+        updateMap();
+    }
+}
+
+function morpheelMA(sender) {
+    morpheelma = sender.checked;
+    if (!morpheelma) {
+        MorpheelMA = false;
+        updateMap();
+    }
+    else {
+        MorpheelMA = true;
+        updateMap();
+    }
+}
+
+function totDoorSkip(sender) {
+    totdoorskip = sender.checked;
+    if (!totdoorskip) {
+        ToTDoorSkip = false;
+        updateMap();
+    }
+    else {
+        ToTDoorSkip = true;
+        updateMap();
+    }
+}
+
+function swordShieldSkip(sender) {
+    swordshieldskip = sender.checked;
+    if (!swordshieldskip) {
+        SwordShieldSkip = false;
+        updateMap();
+    }
+    else {
+        SwordShieldSkip = true;
+        updateMap();
+    }
+}
+
 function noPoeOnLoad() {
     for (var i = 104; i < 153; i++) {
         document.getElementById("" + i).style.zIndex = "-1";
