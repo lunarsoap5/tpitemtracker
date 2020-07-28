@@ -48,37 +48,75 @@ function shootPew()
     return (hasBoom() && items.Bow);
 }
 
-//Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
-function canAccessFaron() {
+function canDoDamage() {
+    return (items.Bow || items.Spinner || items.Chainball || items.Sword >= 1 || items.MSword >= 1 || items.IronBoots || hasBoom());
+}
+
+function hasRangedItem() {
+    return (items.Bow || items.Chainball || items.Clawshot >= 1 || items.Slingshot || items.Boomerang);
+}
+
+function canBurnWebs() {
+    return (items.Lanturn || items.Chainball || hasBoom());
+}
+
+function faronTwilightCleared() {
     return (items.Vessel >= 1 || TwilightSkip);
 }
 
-function canAccessEldin() {
+function eldinTwilightCleared() {
     return (items.Vessel >= 2 || TwilightSkip);
 }
 
-function canAccessLanayru() {
+function lanayruTwilightCleared() {
     return (items.Vessel >= 3 || TwilightSkip);
 }
 
-//Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
-function canAccessForest() {
-    return (items.Lanturn && items.Sword >= 2);
+
+//Area Access
+function canAccessNorthFaron() {
+    return (faronTwilightCleared() && (items.Lanturn || items.Crystal));
 }
 
-//Need iron boots to beat Gor Coron
-function canAccessMines() {
-    return (items.IronBoots);
+function canAccessKakGorge() {
+    return (eldinTwilightCleared());
 }
 
-//Need iron boots to use water bombs and Zora Armor so you do not drown
-function canAccessLakebed() {
-    return (items.ZoraArmor && items.WBombs && items.IronBoots);
+function canAccessKakVillage() {
+    return (eldinTwilightCleared());
+}
+
+function canAccessDeathMountain() {
+    return ((canAccessKakVillage() || items.Crystal) && items.IronBoots || MinesPatch);
+}
+
+function canAccessLakeHylia() {
+    return (lanayruTwilightCleared() && (hasBoom() || OpenGates))
 }
 
 //Need Auru's Memo to use the cannon to get to the desert
 function canAccessDesert() {
-    return ((items.Memo && items.Crystal) || (EarlyDesert && items.Crystal));
+    return (canAccessLakeHylia() && (items.Memo || EarlyDesert) && items.Crystal);
+}
+
+//Need lanturn to burn the web at the entrance and sword to get past Golden Wolf
+function canAccessForest() {
+    return (canAccessNorthFaron && (FaronEscape || canBurnWebs()));
+}
+
+//Need iron boots to beat Gor Coron
+function canAccessMines() {
+    return ((canDoDamage() || items.Slingshot || items.Lanturn) && canAccessDeathMountain());
+}
+
+//Need iron boots to use water bombs and Zora Armor so you do not drown
+function canAccessLakebed() {
+    return (items.ZoraArmor && items.WBombs && items.IronBoots && canAccessLakeHylia());
+}
+
+//Need Auru's Memo to use the cannon to get to the desert
+function canAccessArbiters() {
+    return (canAccessDesert() && canDoDamage());
 }
 
 //Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
@@ -115,21 +153,21 @@ var dungeons = [
         y: "85.84%",
         chestlist: {
             'Wooden Sword Chest': { isAvailable: function () {
-                return true; }, },
+                return (items.Rod >=1 || SkipIntro); }, },
             'Link House Basement Chest': { isAvailable: function () {
                 return items.Lanturn; }, },
             'Fishing Rod': { isAvailable: function () {
                 return true; }, },
             'Seras Bottle': { isAvailable: function () {
-                return true; }, },
+                return (items.Rod >= 1 || SkipIntro); }, },
             'Slingshot': { isAvailable: function () {
-                return true; }, },
+                return (items.Rod >= 1 || SkipIntro) }, },
             'Ordon Shield': { isAvailable: function () {
-                return (items.Sword >=1 || SkipIntro); }, },
+                return (canDoDamage() || SkipIntro); }, },
             'Ordon Sword': { isAvailable: function () {
-                return (items.Sword >=1 || SkipIntro); }, },
+                return (canDoDamage() || SkipIntro); }, },
             'Iron Boots Chest': { isAvailable: function () {
-                return ((items.Boss1 && items.Vessel >=1) || (FaronEscape && ((SkipIntro && TwilightSkip) || items.Sword >=1))); }, },
+                return ((canDoDamage() || SkipIntro) && (items.Vessel >= 1 || TwilightSkip)); }, },
         },
         isBeatable: function() {
             return this.canGetChest();
@@ -143,27 +181,27 @@ var dungeons = [
         x: "47.58%",
         y: "66.2%",
         chestlist: {
-            'Entrance Vine Chest': { isAvailable: function () { return canAccessForest() && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball); }, },
-            'Central Chest Behind Stairs': { isAvailable: function () { return canAccessForest() && items.Boomerang; }, },
-            'Dungeon Map Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Ooccoo': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Windless Bridge Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Second Monkey Under Bridge Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Totem Pole Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'West Tile Worm Small Chest': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Deku Like Piece of Heart': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'Big Baba Small Key': { isAvailable: function () { return items.Lanturn && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
-            'Boomerang': { isAvailable: function () { return items.Lanturn && (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
-            'West Tile Worm Heart Piece': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
-            'Compass Chest': { isAvailable: function () { return (items.Bow || items.Slingshot || items.Clawshot || items.Boomerang || items.Chainball) && canAccessForest(); }, },
-            'Big Key Chest': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
-            'Water Cave Near Big Key': { isAvailable: function () { return items.Lanturn && canAccessForest(); }, },
-            'North Deku Like Chest': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
-            'East Tile Worm Chest': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
-            'Diababa': { isAvailable: function () { return items.Lanturn && items.Boomerang && canAccessForest(); }, },
+            'Entrance Vine Chest': { isAvailable: function () { return canAccessForest() && hasRangedItem(); }, },
+            'Central Chest Behind Stairs': { isAvailable: function () { return canAccessForest() && items.Boomerang && canDoDamage(); }, },
+            'Dungeon Map Chest': { isAvailable: function () { return items.Lanturn && canAccessForest() && canDoDamage(); }, },
+            'Ooccoo': { isAvailable: function () { return canAccessForest() && canDoDamage(); }, },
+            'Windless Bridge Chest': { isAvailable: function () { return canBurnWebs() && canAccessForest() && canDoDamage(); }, },
+            'Second Monkey Under Bridge Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Totem Pole Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'West Tile Worm Small Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Deku Like Piece of Heart': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Big Baba Small Key': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Boomerang': { isAvailable: function () { return (canBurnWebs() || items.Clawshot >= 1) && canDoDamage() && canAccessForest(); }, },
+            'West Tile Worm Heart Piece': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Compass Chest': { isAvailable: function () { return canDoDamage() && hasRangedItem() && canAccessForest(); }, },
+            'Big Key Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Water Cave Near Big Key': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'North Deku Like Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'East Tile Worm Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Diababa': { isAvailable: function () { return canBurnWebs() && canDoDamage() && hasRangedItem() && items.Boomerang && canAccessForest(); }, },
         },
         isBeatable: function() {
-            if (canAccessForest() && items.Boomerang && items.Lanturn) {
+            if (canAccessForest()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -184,50 +222,50 @@ var dungeons = [
             'Entrace Small Chest': { isAvailable: function () {
                 return canAccessMines(); }, },
             'Main Magnet Room Bottom Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Dungeon Map Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Gor Amato Small Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Gor Amato Key Shard': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Ooccoo': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Magnet Maze Heart Piece': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Switch Room Underwater Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Switch Room Small Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'After Switch Room Heart Piece': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Outside Beamos Chest': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Gor Ebizo Key Shard': { isAvailable: function () {
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Gor Ebizo Small Chest ': { isAvailable: function () { 
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Small Chest Before Dangoro': { isAvailable: function () { 
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Bow Chest': { isAvailable: function () { 
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots && canDoDamage(); }, },
             'Compass Chest': { isAvailable: function () { 
-                return  canAccessMines() && items.Bow; }, },
+                return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow; }, },
             'Gor Liggs Key Shard': { isAvailable: function () { 
-                return canAccessMines() && items.Bow; }, },
+                return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow; }, },
             'Gor Liggs Chest': { isAvailable: function () { 
-                return canAccessMines() && items.Bow; }, },
+                return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow; }, },
             'Main Magnet Room Top Chest': { isAvailable: function () { 
-                return canAccessMines() && items.Bow; }, },
+                return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow; }, },
             'Outside Underwater Chest': { isAvailable: function () { 
-                return canAccessMines(); }, },
+                return canAccessMines() && items.IronBoots; }, },
             'Outside Clawshot Chest': { isAvailable: function () { 
-                return canAccessMines() && items.Clawshot; }, },
+                return canAccessMines() && items.Clawshot && items.IronBoots; }, },
             'Fyrus': { isAvailable: function () { 
-                return canAccessMines() && items.Bow; }, },
+                return canAccessMines() && items.Bow && items.IronBoots; }, },
         },
         isBeatable: function() {
-            if (canAccessMines && items.IronBoots && items.Clawshot && items.Bow) {
+            if (canAccessMines()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -272,7 +310,7 @@ var dungeons = [
             'Before Deku Toad Submerged Right Chest': { isAvailable: function () {
                 return canAccessLakebed() && shootPew(); }, },
             'Clawshot Chest': { isAvailable: function () {
-                return canAccessLakebed() && shootPew(); }, },
+                return canAccessLakebed() && shootPew() && canDoDamage; }, },
             'Central Room Chanelier Heart Piece': { isAvailable: function () {
                 return canAccessLakebed() && shootPew() && items.Clawshot; }, },
             'Central Room Center Spire Chest': { isAvailable: function () {
@@ -294,10 +332,10 @@ var dungeons = [
             'Big Key Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
             'West Water Maze Small Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
             'East Stalactite Room Heart Piece': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
-            'Morpheel': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'Morpheel': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot && (items.Sword || items.MSword); }, },
         },
         isBeatable: function () {
-            if (canAccessLakebed() && shootPew() && items.Clawshot) {
+            if (canAccessLakebed()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -763,7 +801,7 @@ var dungeons = [
                 return canSmash() && items.Lanturn; }, },
         },
         isBeatable: function() {
-            if ((canPlay(items.SariasSong) || canPlay(items.MinuetofForest)) && items.Hookshot && items.Glove  && items.Bow) {
+            if (canSmash() && items.Lanturn) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
                 }
@@ -2256,6 +2294,9 @@ var chests = [
             if (items.Crystal || (items.Boss3 && !SkipMDH)) {
                 return "available";
             }
+            else if (items.Lanturn) {
+                return "available";
+            }
             return "unavailable";
         },
     },
@@ -2279,9 +2320,9 @@ var chests = [
         y: "42.2%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2291,9 +2332,9 @@ var chests = [
         y: "40.56%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2303,9 +2344,9 @@ var chests = [
         y: "45.84%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2315,9 +2356,9 @@ var chests = [
         y: "43.36%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2327,9 +2368,9 @@ var chests = [
         y: "69.76%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2339,9 +2380,9 @@ var chests = [
         y: "71.4%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2351,9 +2392,9 @@ var chests = [
         y: "59.04%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2363,9 +2404,9 @@ var chests = [
         y: "53.52%",
         isAvailable: function () {
             if (items.Shard2) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2375,9 +2416,9 @@ var chests = [
         y: "68.88%",
         isAvailable: function () {
             if (items.Sword > 2 && canSmash()) {
-                return "poeavailable";
+                return "available";
             }
-            return "unavailable";
+            return "poeunavailable";
         },
     },
     {
@@ -2387,8 +2428,8 @@ var chests = [
         y: "65.68%",
         isAvailable: function () {
             if (items.Shadow3)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2398,8 +2439,8 @@ var chests = [
         y: "68.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2409,8 +2450,8 @@ var chests = [
         y: "60.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2420,8 +2461,8 @@ var chests = [
         y: "60.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2431,8 +2472,8 @@ var chests = [
         y: "61.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2442,8 +2483,8 @@ var chests = [
         y: "44%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2453,8 +2494,8 @@ var chests = [
         y: "60.40%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2464,8 +2505,8 @@ var chests = [
         y: "59.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2475,8 +2516,8 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2486,8 +2527,8 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2497,8 +2538,8 @@ var chests = [
         y: "51.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2508,8 +2549,8 @@ var chests = [
         y: "47.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2519,8 +2560,8 @@ var chests = [
         y: "45.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2530,8 +2571,8 @@ var chests = [
         y: "43.6%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2541,8 +2582,8 @@ var chests = [
         y: "54.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2552,8 +2593,8 @@ var chests = [
         y: "55.4%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2563,8 +2604,8 @@ var chests = [
         y: "24.00%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2574,8 +2615,8 @@ var chests = [
         y: "57.2%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2585,8 +2626,8 @@ var chests = [
         y: "26.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2596,8 +2637,8 @@ var chests = [
         y: "26.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2607,8 +2648,8 @@ var chests = [
         y: "26.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2618,8 +2659,8 @@ var chests = [
         y: "56%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2629,8 +2670,8 @@ var chests = [
         y: "51.76%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2640,8 +2681,8 @@ var chests = [
         y: "50.88%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2651,8 +2692,8 @@ var chests = [
         y: "50.64%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2662,8 +2703,8 @@ var chests = [
         y: "54.72%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2673,8 +2714,8 @@ var chests = [
         y: "53.12%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2684,8 +2725,8 @@ var chests = [
         y: "49.12%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2695,8 +2736,8 @@ var chests = [
         y: "46.72%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2706,8 +2747,8 @@ var chests = [
         y: "54.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2717,8 +2758,8 @@ var chests = [
         y: "55.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2728,8 +2769,8 @@ var chests = [
         y: "55.8%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2739,8 +2780,8 @@ var chests = [
         y: "9.36%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2750,8 +2791,8 @@ var chests = [
         y: "8.08%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2761,8 +2802,8 @@ var chests = [
         y: "9.46%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2772,8 +2813,8 @@ var chests = [
         y: "11.44%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2783,8 +2824,8 @@ var chests = [
         y: "31.52%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2794,8 +2835,8 @@ var chests = [
         y: "14.16%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2805,8 +2846,8 @@ var chests = [
         y: "9.52%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
     {
@@ -2816,8 +2857,8 @@ var chests = [
         y: "11.36%",
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
-                return "poeavailable";
-            return "unavailable";
+                return "available";
+            return "poeunavailable";
         },
     },
 
@@ -2832,7 +2873,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2843,7 +2884,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2854,7 +2895,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2865,7 +2906,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2876,7 +2917,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2887,7 +2928,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2898,7 +2939,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2909,7 +2950,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2920,7 +2961,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2931,7 +2972,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2942,7 +2983,7 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
     {
@@ -2953,8 +2994,409 @@ var chests = [
         isAvailable: function () {
             if (canAccessTot() && items.Dominion)
                 return "available";
-            return "unavailable";
+            return "bugunavailable";
         },
     },
+    {
+        //13
+        name: "Male Dragonfly",
+        x: "55.5%",
+        y: "11.44%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //14
+        name: "Female Dragonfly",
+        x: "65.58%",
+        y: "13.20%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //15
+        name: "Male Butterfly",
+        x: "46.58%",
+        y: "42.24%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //16
+        name: "Female Butterfly",
+        x: "45.5%",
+        y: "38.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //17
+        name: "Male Stag Beetle",
+        x: "50.58%",
+        y: "28.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //18
+        name: "Female Stag Beetle",
+        x: "53.25%",
+        y: "24.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //19
+        name: "Female LadyBug",
+        x: "52.5%",
+        y: "45.2%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //20
+        name: "Male Ladybug",
+        x: "55.08%",
+        y: "46.16%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //21
+        name: "Male Dayfly",
+        x: "22.75%",
+        y: "60.16%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //22
+        name: "Female Dayfly",
+        x: "18.16%",
+        y: "59.2%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //23
+        name: "Male Snail",
+        x: "44.08%",
+        y: "69.6%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        //24
+        name: "Female Snail",
+        x: "42.41%",
+        y: "69.9%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //============================================
+    // Shops
+
+    // Ordon
+    {
+        name: "Milk - 10 Rupees",
+        x: "55.5%",
+        y: "85.76%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Bee Larva - 10 Rupees",
+        x: "56.5%",
+        y: "85.76%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Lantern Oil - 20 Rupees",
+        x: "55.5%",
+        y: "86.76%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //Malo Mark - Kak
+    {
+        name: "Red Potion - 30 Rupees",
+        x: "80.25%",
+        y: "54.28%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Wooden Shield - 50 Rupees",
+        x: "81.25%",
+        y: "54.28%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Hylian Shield - 200 Rupees",
+        x: "80.25%",
+        y: "55.28%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Hawkeye - 100 Rupees",
+        x: "81.25%",
+        y: "55.28%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //Death Mountain
+    {
+        name: "Lantern Oil - 20 Rupees",
+        x: "85.33%",
+        y: "37.60%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Wooden Shield - 50 Rupees",
+        x: "86.33%",
+        y: "37.60%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Milk - 20 Rupees",
+        x: "85.33%",
+        y: "38.60%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //Goron at Kak Night
+    {
+        name: "Lantern Oil - 20 Rupees",
+        x: "80.25%",
+        y: "51.68%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Red Potion - 30 Rupees",
+        x: "81.25%",
+        y: "51.68%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Blue Potion - 100 Rupees",
+        x: "80.25%",
+        y: "52.68%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //Malo Mart -Castle Town
+    {
+        name: "Blue Potion - 50 Rupees",
+        x: "55.33%",
+        y: "40.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Red Potion - 15 Rupees",
+        x: "56.33%",
+        y: "40.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Magic Armor - 598 Rupees",
+        x: "55.33%",
+        y: "41.88%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    // Goron Castle Town Shop
+    {
+        name: "Hylian Shield - 210 Rupees",
+        x: "51.66%",
+        y: "40.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Red Potion - 40 Rupees",
+        x: "52.66%",
+        y: "40.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Lantern Oil - 30 Rupees",
+        x: "51.66%",
+        y: "41.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Arrows - 40 Rupees",
+        x: "52.66%",
+        y: "41.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //Goron Hot Springwater
+    {
+        name: "Hot Springwater - 20 Rupees",
+        x: "54.33%",
+        y: "42.48%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+
+    //CiTS Shop
+    {
+        name: "Bombs - 90 Rupees",
+        x: "37.42%",
+        y: "50.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Red Potion - 30 Rupees",
+        x: "38.42%",
+        y: "50.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Blue Potion - 100 Rupees",
+        x: "37.42%",
+        y: "51.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    },
+    {
+        name: "Lantern Oil - 20 Rupees",
+        x: "38.42%",
+        y: "51.00%",
+        isAvailable: function () {
+            if (canAccessTot() && items.Dominion)
+                return "available";
+            return "bugunavailable";
+        },
+    }
 ]
 

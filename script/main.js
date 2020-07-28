@@ -424,8 +424,38 @@ function openGates(sender) {
     }
 }
 
-function noPoeOnLoad() {
-    for (var i = 104; i < 153; i++) {
+function minesPatch(sender) {
+    minespatch = sender.checked;
+    if (!minespatch) {
+        MinesPatch = false;
+        updateMap();
+    }
+    else {
+        MinesPatch = true;
+        updateMap();
+    }
+}
+
+function taloMap(sender) {
+    talomap = sender.checked;
+    if (!talomap) {
+        TaloMap = false;
+        document.getElementById("mapdiv").style.backgroundImage = "url('images/map.png')";
+        document.body.style.backgroundImage = "url('images/none.png')";
+        updateMap();
+        updateGridItemAll();
+    }
+    else {
+        TaloMap = true;
+        document.getElementById("mapdiv").style.backgroundImage = "url('images/taloItems/map.png')";
+        document.body.style.backgroundImage = "url('images/taloItems/paper.jpg')";
+        updateMap();
+        updateGridItemAll();
+    }
+}
+
+function noExtraOnLoad() {
+    for (var i = 104; i < 202; i++) {
         document.getElementById("" + i).style.zIndex = "-1";
     }
     for (var j = 17; j < 21; j++) {
@@ -704,12 +734,29 @@ function updateGridItem(row, index) {
     if (editmode) {
         if (!item || item == 'blank') {
             itemGrid[row][index]['item'].style.backgroundImage = 'url(images/blank.png)';
-        } else if ((typeof items[item]) == 'boolean') {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
-        } else {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + itemsMax[item] + '.png)';
         }
-
+        else if ((typeof items[item]) == 'boolean')
+        {
+            if (TaloMap)
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png)';
+            }
+            else
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
+            }
+        }
+        else
+        {
+            if (TaloMap)
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + itemsMax[item] + '.png)';
+            }
+            else
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + itemsMax[item] + '.png)';
+            }
+        }
         itemGrid[row][index]['item'].style.border = '1px solid white';
         itemGrid[row][index]['item'].className = 'griditem true'
 
@@ -727,21 +774,45 @@ function updateGridItem(row, index) {
     {
         if (RemoveBoxes)
         {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
+           if (TaloMap)
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png)';
+            }
+            else
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
+            }
         }
         else 
         {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png), url(images/ItemBox.png)';
+            if (TaloMap) {
+
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png), url(images/ItemBox.png)';
+            }
+            else {
+
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png), url(images/ItemBox.png)';
+            }
         }
     } else 
     {
         if (RemoveBoxes)
         {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
+            if (TaloMap) {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + items[item] + '.png)';
+            }
+            else {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
+            }
         }
         else
         {
-            itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
+            if (TaloMap) {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + items[item] + '.png), url(images/ItemBox.png)';
+            }
+            else {
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
+            }
         }
     }
 
@@ -1147,7 +1218,7 @@ function init() {
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
-    noPoeOnLoad();
+    noExtraOnLoad();
     loadCookie();
     saveCookie();
 }
@@ -1156,11 +1227,22 @@ function preloader() {
     for (item in items) {
         if ((typeof items[item]) == 'boolean') {
             var img = new Image();
-            img.src = 'images/' + item + '.png';
+            if (TaloMap) {
+                img.src = 'images/taloItems' + item + '.png';
+            }
+            else {
+                img.src = 'images/' + item + '.png';
+            }
+
         } else {
             for (i = itemsMin[item]; i < itemsMax[item]; i++) {
                 var img = new Image();
-                img.src = 'images/' + item + i + '.png';
+                if (TaloMap) {
+                    img.src = 'images/taloItems' + item + '.png';
+                }
+                else {
+                    img.src = 'images/' + item + '.png';
+                }
             }
         }
     }
