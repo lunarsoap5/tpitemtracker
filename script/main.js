@@ -34,7 +34,7 @@ var editmode = false;
 var selected = {};
 
 var dungeonSelect = 0;
-var totalChecks = 373;
+var totalChecks = 501;
 
 function setCookie(obj) {
     var d = new Date();
@@ -436,6 +436,66 @@ function minesPatch(sender) {
     }
 }
 
+function noBottleReq(sender) {
+    nobottlereq = sender.checked;
+    if (!nobottlereq) {
+        NoBottleReq = false;
+        updateMap();
+    }
+    else {
+        NoBottleReq = true;
+        updateMap();
+    }
+}
+
+function earlyHyruleCastle(sender) {
+    earlyhyrulecastle = sender.checked;
+    if (!earlyhyrulecastle) {
+        EarlyHyruleCastle = false;
+        updateMap();
+    }
+    else {
+        EarlyHyruleCastle = true;
+        updateMap();
+    }
+}
+
+function escortSkip(sender) {
+    escortskip = sender.checked;
+    if (!escortskip) {
+        EscortSkip = false;
+        updateMap();
+    }
+    else {
+        EscortSkip = true;
+        updateMap();
+    }
+}
+
+function earlyToT(sender) {
+    earlytot = sender.checked;
+    if (!earlytot) {
+        EarlyToT = false;
+        updateMap();
+    }
+    else {
+        EarlyToT = true;
+        updateMap();
+    }
+}
+
+function earlyPoT(sender) {
+    earlypot = sender.checked;
+    if (!earlypot) {
+        EarlyPoT = false;
+        updateMap();
+    }
+    else {
+        EarlyPoT = true;
+        updateMap();
+    }
+}
+
 function taloMap(sender) {
     talomap = sender.checked;
     if (!talomap) {
@@ -455,7 +515,7 @@ function taloMap(sender) {
 }
 
 function noExtraOnLoad() {
-    for (var i = 104; i < 202; i++) {
+    for (var i = 104; i < 201; i++) {
         document.getElementById("" + i).style.zIndex = "-1";
     }
     for (var j = 17; j < 21; j++) {
@@ -613,11 +673,11 @@ function ResetTracker() {
     chests.forEach(chest => delete chest.isOpened);
     dungeons.forEach(dungeon => Object.values(dungeon.chestlist).forEach(chest => delete chest.isOpened));
     items = Object.assign({}, baseItems);
-    totalChecks = 373;
+    totalChecks = 501;
     
     updateGridItemAll();
     updateMap();
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (373) + " Remaining";
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + totalChecks + " Remaining";
     saveCookie();
 }
 

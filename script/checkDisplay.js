@@ -9,7 +9,7 @@ function setMapTracker() {
         for (var j = 17; j < 21; j++) {
             document.getElementById("dungeon" + j).style.zIndex = "-1";
         }
-        for (var i = 104; i < 202; i++) {
+        for (var i = 104; i < 201; i++) {
             document.getElementById("" + i).style.zIndex = "-1";
         }
     }
@@ -32,7 +32,7 @@ function setPoeTracker() {
         for (var i = 104; i < 153; i++) {
             document.getElementById("" + i).style.zIndex = "auto";
         }
-        for (var i = 153; i < 202; i++) {
+        for (var i = 153; i < 201; i++) {
             document.getElementById("" + i).style.zIndex = "-1";
         }
     }
@@ -52,7 +52,7 @@ function setBugTracker() {
         for (var i = 153; i < 177; i++) {
             document.getElementById("" + i).style.zIndex = "auto";
         }
-        for (var j = 177; j < 202; j++) {
+        for (var j = 177; j < 201; j++) {
             document.getElementById("" + j).style.zIndex = "-1";
         }
     }
@@ -72,7 +72,7 @@ function setShopTracker() {
         for (var i = 153; i < 177; i++) {
             document.getElementById("" + i).style.zIndex = "-1";
         }
-        for (var j = 177; j < 202; j++) {
+        for (var j = 177; j < 201; j++) {
             document.getElementById("" + j).style.zIndex = "auto";
         }
     }

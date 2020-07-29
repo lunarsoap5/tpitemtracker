@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     <script src="script/items.js"></script>
     <script src="script/chests.js"></script>
-    <script src="script/poelogic.js"></script>
+    <script src="script/checkDisplay.js"></script>
     <script type="text/javascript">
         if (document.addEventListener) { // IE >= 9; other browsers
             document.addEventListener('contextmenu', function (e) {
@@ -50,7 +49,14 @@
         var EarlyCits = false;
         var RemoveBoxes = false;
         var OpenGates = false;
+        var MinesPatch = false;
         var glitchedLogic = false;
+        var NoBottleReq = false;
+        var EarlyHyruleCastle = false;
+        var EscortSkip = false;
+        var EarlyToT = false;
+        var EarlyPoT = false;
+        var TaloMap = false;
 
         function openCity(cityName) {
             var i;
@@ -123,6 +129,7 @@
                 <input type='radio' name='checktracker' value="map" id="maptracker" checked='true' onclick="setMapTracker()">Map Tracker
                 <input type='radio' name='checktracker' value="poe" id="poetracker" onclick="setPoeTracker()">Poe Tracker<br>
                 <input type='radio' name='checktracker' value="bug" id="bugtracker" onclick="setBugTracker()">Bug Tracker<br>
+                <input type='radio' name='checktracker' value="shop" id="shoptracker" onclick="setShopTracker()">Shop Tracker<br>
             </fieldset>
         </div>
 
@@ -143,7 +150,8 @@
                     <option id="meadow">Meadow</option>
                     <option id="bridge">Bridge</option>
                 </select>
-                <button onclick="setBackground()">Set</button>
+                <button onclick="setBackground()">Set</button><br>
+                <input type="checkbox" name="talomap" onchange="taloMap(this)">Talo's Map of Hyrule<br>
             </fieldset>
         </div>
 
@@ -158,6 +166,12 @@
                 <input type="checkbox" name="earlydesert" onchange="earlyDesert(this)">Early Desert<br>
                 <input type="checkbox" name="earlycits" onchange="earlyCits(this)">Early CiTS<br>
                 <input type="checkbox" name="opengates" onchange="openGates(this)">Open Field Gates<br>
+                <input type="checkbox" name="minespatch" onchange="minesPatch(this)">Goron Mines Patch<br>
+                <input type="checkbox" name="nobottlereq" onchange="noBottleReq(this)">No Shop Bottle Requirement?<br>
+                <input type="checkbox" name="earlyHyruleCastle" onchange="earlyHyruleCastle(this)">Early Hyrule Castle<br>
+                <input type="checkbox" name="escortskip" onchange="escortSkip(this)">Escort Skip<br>
+                <input type="checkbox" name="earlytot" onchange="earlyToT(this)">Early ToT<br>
+                <input type="checkbox" name="earlypot" onchange="earlyPoT(this)">Early PoT<br>
             </fieldset>
         </div>
 

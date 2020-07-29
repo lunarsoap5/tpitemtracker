@@ -2,7 +2,7 @@ var defaultItemGrid = [
     [
         "Rod",
         "Slingshot",
-        "Lanturn",
+        "Lantern",
         "Boomerang",
         "IronBoots",
         "Bow"
@@ -72,7 +72,7 @@ var baseItems = {
     Bombs: 0,
     WBombs: false,
     Rod: 0,
-    Lanturn: false,
+    Lantern: false,
     Hawkeye: false,
     Spinner: false,
     Memo: false,
