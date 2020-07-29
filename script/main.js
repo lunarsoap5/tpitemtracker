@@ -1086,9 +1086,9 @@ function updateMap() {
     }
 
     dungeonChestOld = dungeonChest;
-    //c = document.getElementsByClassName("mapspan chest available").length;
-    //opened = document.getElementsByClassName("mapspan chest opened").length;
-    //document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
     var itemlist = document.getElementById('submaplist').children;
@@ -1275,9 +1275,6 @@ function init() {
     populateMapdiv();
     populateItemconfig();
     updateMap();
-    c = document.getElementsByClassName("mapspan chest available").length;
-    opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
     noExtraOnLoad();
     loadCookie();
     saveCookie();
