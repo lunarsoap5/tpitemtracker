@@ -1,3 +1,4 @@
+//set up how we want the item grid to be displayed by default
 var defaultItemGrid = [
     [
         "Rod",
@@ -62,7 +63,7 @@ var defaultItemGrid = [
     ]
 ]
 
-
+// set default parameters for the items
 var baseItems = {
     Bow: 0,
     Clawshot: 0,
@@ -115,6 +116,7 @@ var baseItems = {
     blank: false,
 };
 
+//for our progressive items, we want to set their minimum value
 var itemsMin = {
     Bow: 0,
     Bombs: 0,
@@ -139,6 +141,7 @@ var itemsMin = {
     GTunic: 1
 };
 
+//set how many of each item there is a maximum for
 var itemsMax = {
     Bow: 3,
     Bombs: 4,
@@ -148,7 +151,7 @@ var itemsMax = {
     Bottle: 4,
     Sword: 2,
     MSword: 2,
-    Skills: 1,
+    Skills: 7,
     Shield: 2,
     Soul: 60,
     Scent: 5,
@@ -163,4 +166,5 @@ var itemsMax = {
     GTunic: 1
 };
 
+//assign the default values of the items to the GUI
 var items = Object.assign(baseItems);

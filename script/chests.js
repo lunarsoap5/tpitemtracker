@@ -30,6 +30,7 @@ function generalCanGetChest(chestlist) {
 
 
 
+// Logic functions, these help make item requirements simpler and allow us not to clutter the individual item checks
 function hasBoom() {
     return ((items.Bombs || items.WBombs))
 }
@@ -67,7 +68,7 @@ function lanayruTwilightCleared() {
 }
 
 
-//Area Access
+//Area Access Logic
 function canAccessHyruleField() {
     return (items.Boss1 || FaronEscape);
 }
@@ -77,11 +78,11 @@ function canAccessNorthFaron() {
 }
 
 function canAccessKakGorge() {
-    return (eldinTwilightCleared());
+    return (eldinTwilightCleared() && (canAccessFaronField() || items.Crystal));
 }
 
 function canAccessKakVillage() {
-    return (eldinTwilightCleared());
+    return (eldinTwilightCleared() && (canAccessKakGorge() || items.Crystal));
 }
 
 function canAccessDeathMountain() {
@@ -89,16 +90,15 @@ function canAccessDeathMountain() {
 }
 
 function canAccessLakeHylia() {
-    return (lanayruTwilightCleared() && (canSmash() || OpenGates))
+    return (lanayruTwilightCleared() && (canSmash() || OpenGates) && canAccessLanayruField())
 }
 
-//Need Auru's Memo to use the cannon to get to the desert
 function canAccessDesert() {
     return (canAccessLakeHylia() && (items.Memo || EarlyDesert) && items.Crystal);
 }
 
 function canAccessZoraDomain() {
-    return (lanayruTwilightCleared() && (items.Crystal || canSmash()));
+    return (lanayruTwilightCleared() && (items.Crystal || (canSmash() && canAccessLanayruField())));
 }
 
 function canAccessSnowpeakSummit() {
@@ -106,7 +106,7 @@ function canAccessSnowpeakSummit() {
 }
 
 function canAccessGrove() {
-    return (canAccessNorthFaron() && ((setMDHFlag() && items.Crystal) || (EarlyToT && items.Crystal)));
+    return ((canAccessNorthFaron() && setMDHFlag() && items.Crystal) || (EarlyToT && items.Crystal));
 }
 
 function canAccessGrove2() {
@@ -122,15 +122,15 @@ function canAccessCastleTown() {
 }
 
 function canAccessFaronField() {
-    return (faronTwilightCleared() && (FaronEscape || items.Boss1));
+    return (faronTwilightCleared() && (FaronEscape || items.Boss1 || (items.Crystal && eldinTwilightCleared())));
 }
 
 function canAccessEldinField() {
-    return (eldinTwilightCleared());
+    return (eldinTwilightCleared() && (canAccessFaronField() || items.Crystal));
 }
 
 function canAccessLanayruField() {
-    return (lanayruTwilightCleared() && (hasBoom() || OpenGates));
+    return (lanayruTwilightCleared() && ((hasBoom() && canAccessEldinField()) || OpenGates || items.Crystal));
 }
 
 function canAccessHiddenVillage() {
@@ -140,103 +140,97 @@ function canAccessHiddenVillage() {
 function setMDHFlag() {
     return (SkipMDH || (!SkipMDH && items.Boss3));
 }
-//Need Lantern to burn the web at the entrance and sword to get past Golden Wolf
+
+//Dungeon Access
 function canAccessForest() {
     return (canAccessNorthFaron() && (FaronEscape || canBurnWebs()));
 }
 
-//Need iron boots to beat Gor Coron
 function canAccessMines() {
     return ((canDoDamage() || items.Slingshot || items.Lantern) && canAccessDeathMountain());
 }
 
-//Need iron boots to use water bombs and Zora Armor so you do not drown
 function canAccessLakebed() {
     return (items.ZoraArmor && items.WBombs && items.IronBoots && canAccessLakeHylia());
 }
 
-//Need Auru's Memo to use the cannon to get to the desert
 function canAccessArbiters() {
     return (canAccessDesert() && (items.Sword || items.MSword));
 }
 
-//Need Aleshi's Sketch to get the Coral Earring to get the ReekfishScent
 function canAccessSnowpeakRuins() {
     return (canAccessSnowpeakSummit());
 }
 
-//Need Golden Cuccoo to reach Sacred Grove then need bow to beat Skull Kid and need Master Sword to open Dungeon Entrance
 function canAccessTot() {
     return (canAccessGrove2() && (items.MSword || EarlyToT));
 }
 
-//Need Dominion Rod to move the Owl Statues and Charm to get Skybook to access Cannon and Clawshot to enter cannon
 function canAccessCiTS() {
     return (canAccessLakeHylia() && (items.Skybook >= 7 || EarlyCits) && items.Clawshot);
 }
 
-// You only need the Mirror Shard from City in the Sky to open up Pallace of Twilight
 function canAccessPoT() {
     return (items.Boss7 && canAccessMirrorChamber());
 }
 
-//To enter Hyrule you need to beat Zant so the requirements for beating Zant are the same as entering Hyrule
 function canAccessHyrule() {
     return ((items.Boss8 || EarlyHyruleCastle) && canAccessCastleTown());
 }
 
 
-// define dungeon chests
-var dungeons = [{
+// define grouped chests
+var dungeons = [
+    {
         name: "Ordon Village",
         x: "55.5%",
         y: "85.84%",
         chestlist: {
             'Wooden Sword Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return (items.Rod >= 1 || SkipIntro);
                 },
             },
             'Link House Basement Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return items.Lantern;
                 },
             },
             'Fishing Rod': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return true;
                 },
             },
             'Seras Bottle': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return (items.Rod >= 1 || SkipIntro);
                 },
             },
             'Slingshot': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return (items.Rod >= 1 || SkipIntro)
                 },
             },
             'Ordon Shield': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return (canDoDamage() || SkipIntro);
                 },
             },
             'Ordon Sword': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return (canDoDamage() || SkipIntro);
                 },
             },
             'Iron Boots Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return ((canDoDamage() || SkipIntro) && (items.Vessel >= 1 || TwilightSkip));
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -245,98 +239,26 @@ var dungeons = [{
         x: "47.58%",
         y: "66.2%",
         chestlist: {
-            'Entrance Vine Chest': {
-                isAvailable: function() {
-                    return canAccessForest() && hasRangedItem();
-                },
-            },
-            'Central Chest Behind Stairs': {
-                isAvailable: function() {
-                    return canAccessForest() && items.Boomerang && canDoDamage();
-                },
-            },
-            'Dungeon Map Chest': {
-                isAvailable: function() {
-                    return items.Lantern && canAccessForest() && canDoDamage();
-                },
-            },
-            'Ooccoo': {
-                isAvailable: function() {
-                    return canAccessForest() && canDoDamage();
-                },
-            },
-            'Windless Bridge Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canAccessForest() && canDoDamage();
-                },
-            },
-            'Second Monkey Under Bridge Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'Totem Pole Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'West Tile Worm Small Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'Deku Like Piece of Heart': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'Big Baba Small Key': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'Boomerang': {
-                isAvailable: function() {
-                    return (canBurnWebs() || items.Clawshot >= 1) && canDoDamage() && canAccessForest();
-                },
-            },
-            'West Tile Worm Heart Piece': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest();
-                },
-            },
-            'Compass Chest': {
-                isAvailable: function() {
-                    return canDoDamage() && hasRangedItem() && canAccessForest();
-                },
-            },
-            'Big Key Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest();
-                },
-            },
-            'Water Cave Near Big Key': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && canAccessForest();
-                },
-            },
-            'North Deku Like Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest();
-                },
-            },
-            'East Tile Worm Chest': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest();
-                },
-            },
-            'Diababa': {
-                isAvailable: function() {
-                    return canBurnWebs() && canDoDamage() && hasRangedItem() && items.Boomerang && canAccessForest();
-                },
-            },
+            'Entrance Vine Chest': { isAvailable: function () { return canAccessForest() && hasRangedItem(); }, },
+            'Central Chest Behind Stairs': { isAvailable: function () { return canAccessForest() && items.Boomerang && canDoDamage(); }, },
+            'Dungeon Map Chest': { isAvailable: function () { return items.Lantern && canAccessForest() && canDoDamage(); }, },
+            'Ooccoo': { isAvailable: function () { return canAccessForest() && canDoDamage(); }, },
+            'Windless Bridge Chest': { isAvailable: function () { return canBurnWebs() && canAccessForest() && canDoDamage(); }, },
+            'Second Monkey Under Bridge Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Totem Pole Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'West Tile Worm Small Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Deku Like Piece of Heart': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Big Baba Small Key': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'Boomerang': { isAvailable: function () { return (canBurnWebs() || items.Clawshot >= 1) && canDoDamage() && canAccessForest(); }, },
+            'West Tile Worm Heart Piece': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Compass Chest': { isAvailable: function () { return canDoDamage() && hasRangedItem() && canAccessForest(); }, },
+            'Big Key Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Water Cave Near Big Key': { isAvailable: function () { return canBurnWebs() && canDoDamage() && canAccessForest(); }, },
+            'North Deku Like Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'East Tile Worm Chest': { isAvailable: function () { return canBurnWebs() && canDoDamage() && items.Boomerang && canAccessForest(); }, },
+            'Diababa': { isAvailable: function () { return canBurnWebs() && canDoDamage() && hasRangedItem() && items.Boomerang && canAccessForest(); }, },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessForest()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -346,7 +268,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -356,117 +278,117 @@ var dungeons = [{
         y: "38.16%",
         chestlist: {
             'Entrace Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines();
                 },
             },
             'Main Magnet Room Bottom Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Gor Amato Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Gor Amato Key Shard': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Magnet Maze Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Switch Room Underwater Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Switch Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'After Switch Room Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Outside Beamos Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Gor Ebizo Key Shard': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Gor Ebizo Small Chest ': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Small Chest Before Dangoro': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Bow Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots && canDoDamage();
                 },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow;
                 },
             },
             'Gor Liggs Key Shard': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow;
                 },
             },
             'Gor Liggs Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow;
                 },
             },
             'Main Magnet Room Top Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots && canDoDamage() && items.Bow;
                 },
             },
             'Outside Underwater Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.IronBoots;
                 },
             },
             'Outside Clawshot Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.Clawshot && items.IronBoots;
                 },
             },
             'Fyrus': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessMines() && items.Bow && items.IronBoots;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessMines()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -476,7 +398,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -486,147 +408,123 @@ var dungeons = [{
         y: "47.76%",
         chestlist: {
             'Lobby Left Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed();
                 },
             },
             'Lobby Rear Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed();
                 },
             },
             'Stalactite Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Central Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'East Stalactite Room Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'East Second Floor Southwest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'East Second Floor Southeast Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'East Water Supply Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Before Deku Toad Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Before Deku Toad Submerged Left Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Before Deku Toad Submerged Right Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'Clawshot Chest': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && canDoDamage();
+                isAvailable: function () {
+                    return canAccessLakebed() && shootPew() && canDoDamage;
                 },
             },
             'Central Room Chanelier Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'Central Room Center Spire Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew();
                 },
             },
             'East Water Supply Clawshot Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'West Lower Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'West Water Supply Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'West Second Floor Southwest Underwater Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
             'West Second Floor Central Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakebed() && shootPew() && items.Clawshot;
                 },
             },
-            'West Second Floor Northeast Chest': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot;
-                },
-            },
-            'West Second Floor Southeast Chest': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot;
-                },
-            },
-            'Big Key Chest': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot;
-                },
-            },
-            'West Water Maze Small Chest': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot;
-                },
-            },
-            'East Stalactite Room Heart Piece': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot;
-                },
-            },
-            'Morpheel': {
-                isAvailable: function() {
-                    return canAccessLakebed() && shootPew() && items.Clawshot && (items.Sword || items.MSword);
-                },
-            },
+            'West Second Floor Northeast Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'West Second Floor Southeast Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'Big Key Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'West Water Maze Small Chest': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'East Stalactite Room Heart Piece': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot; }, },
+            'Morpheel': { isAvailable: function () { return canAccessLakebed() && shootPew() && items.Clawshot && (items.Sword || items.MSword); }, },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessLakebed()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -636,7 +534,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -646,117 +544,115 @@ var dungeons = [{
         y: "41.44%",
         chestlist: {
             'Entrance Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters()
                 },
             },
             'Poe Scent': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern;
                 },
             },
             'Lobby Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern;
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern;
                 },
             },
             'East Redead Lower Small Chest': {
-                isAvailable: function() {
-                    return canAccessArbiters() && items.Crystal && items.PoeScent;
-                },
+                isAvailable: function () { return canAccessArbiters() && items.Crystal && items.PoeScent; },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.PoeScent;
                 },
             },
             'East Upper Turnable Readed Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.PoeScent;
                 },
             },
             'Ghoul Rat Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.PoeScent;
                 },
             },
             'West Small Chest Behind Block': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'West Chandelier Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Stalfos West Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && canSmash() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Stalfos Northeast Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && canSmash() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'North Turning Room Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Room First Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Room Second Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Room Lower Central Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Room Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Spinner Room Lower North Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Big Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && canSmash() && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'Stalord': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Spinner && items.Lantern && items.Clawshot && canSmash() && items.Crystal && items.PoeScent;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessArbiters()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -766,7 +662,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -776,112 +672,112 @@ var dungeons = [{
         y: "28.64%",
         chestlist: {
             'Entrance Left Armor Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball;
                 }
             },
             'Entrance Right Armor Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball;
                 }
             },
             'Dungeon Map': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins();
                 }
             },
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins();
                 }
             },
             'Courtyard Partially Buried Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Crystal;
                 }
             },
             'Courtyard Open Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins();
                 }
             },
             'Ordon Pumpkin Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canDoDamage();
                 }
             },
             'Courtyard Buried Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canDoDamage();
                 }
             },
             'Wooden Beam Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canSmash() && canDoDamage();
                 }
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canSmash() && canDoDamage();
                 }
             },
             'Courtyard South Ice Wall Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canSmash() && canDoDamage();
                 }
             },
             'Ball and Chain': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canSmash() && canDoDamage();
                 }
             },
             'Goat Cheese Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage();
                 }
             },
             'West Breakable Floor Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage();
                 }
             },
             'Wooden Beam Room Chandelier Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage();
                 }
             },
             'Entrace Chandelier Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage();
                 }
             },
             'East Chilfos Chandelier Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && items.Clawshot && canDoDamage();
                 }
             },
             'West Cannon Storage Left Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage();
                 }
             },
             'West Cannon Storage Right Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && canSmash() && canDoDamage();
                 }
             },
             'Bedroom Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && hasBoom() && canDoDamage();
                 }
             },
             'Blizzeta': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && hasBoom() && canDoDamage();
                 }
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessSnowpeakRuins()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -891,7 +787,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -901,97 +797,97 @@ var dungeons = [{
         y: "63.36%",
         chestlist: {
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot();
                 },
             },
             'Lobby Lantern Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Lantern;
                 },
             },
             'First Stair Pot Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot();
                 },
             },
             'First Stair Window Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot();
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot();
                 },
             },
             'Armos Room Left Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage();
                 },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow;
                 },
             },
             'Scale Room Spider Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow;
                 },
             },
             'Third Stair Swinging Gilloutine Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow;
                 },
             },
             'Third Stair Window Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow;
                 },
             },
             'Dominion Rod Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow;
                 },
             },
             'Scale Room Upper Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && items.Clawshot && canDoDamage() && items.Bow;
                 },
             },
             'Helmasaur Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow && items.Clawshot;
                 },
             },
             'Big Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && canDoDamage() && items.Bow && items.Clawshot;
                 },
             },
             'Second Stair Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && items.Dominion >= 1 && canDoDamage() && items.Bow;
                 },
             },
             'Armos Room South Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner;
                 },
             },
             'Armos Room Right Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && items.Dominion >= 1 && canDoDamage();
                 },
             },
             'Armagohma': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && items.Dominion >= 1 && items.Clawshot && canDoDamage() && items.Bow;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessTot()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1001,7 +897,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1011,137 +907,137 @@ var dungeons = [{
         y: "50.56%",
         chestlist: {
             'Ooccoo': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS();
                 },
             },
             'Southwest Underwater Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots;
                 },
             },
             'Underwater Southeast Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots;
                 },
             },
             'West First Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && (items.Clawshot > 1 || items.Spinner);
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots;
                 },
             },
             'East Tile Worm Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Boomerang;
                 },
             },
             'East After-Dinofols Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Boomerang && canDoDamage();
                 },
             },
             'East After-Dinofols Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Boomerang && canDoDamage();
                 },
             },
             'Double Clawshot Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Boomerang && canDoDamage();
                 },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Clawshot >= 2 && items.Boomerang && canDoDamage();
                 },
             },
             'West Baba Serpent Alcove Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Narrow Ledge Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Tile Worm Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'Big Baba Tower West Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'Big Baba Tower North Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'Big Baba Tower Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Gardens Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Gardens Poe Island Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Gardens Lower Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'West Gardens Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'Central Outside Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2 && items.Crystal;
                 },
             },
             'Central Outside Poe Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2 && items.Crystal;
                 },
             },
             'Big Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2 && items.Crystal;
                 },
             },
             'Central Upper Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'North Fan Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Clawshot >= 2;
                 },
             },
             'Argorok': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.Spinner && items.IronBoots && items.Clawshot >= 2 && items.MSword;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessCiTS()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1151,7 +1047,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1162,97 +1058,97 @@ var dungeons = [{
         chestlist: {
 
             'West First Room Central Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && canDoDamage();
                 },
             },
             'West First Room Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot && items.Crystal;
                 },
             },
             'West Second Room Central Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot && items.Crystal;
                 },
             },
             'Compass Chest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot && items.Crystal;
                 },
             },
             'West Second Room Southeast Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'East First Room Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot && items.Crystal;
                 },
             },
             'East First Room North Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot && items.Crystal;
                 },
             },
             'East Second Room Northeast Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'East Second Room Northwest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'East Second Room Southeast Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'East First Room Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'East First Room West Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.Crystal;
                 },
             },
             'Central First Room Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.MSword > 1 && items.Crystal;
                 },
             },
             'Big Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.MSword > 1 && items.Crystal;
                 },
             },
             'Central Outdoor Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.MSword > 1 && items.Crystal;
                 },
             },
             'Central Tower Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.MSword > 1 && items.Crystal;
                 },
             },
             'Zant': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessPoT() && items.Clawshot > 1 && items.MSword > 1 && items.Boomerang && items.IronBoots && items.ZoraArmor && items.Chainball && items.Crystal;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessPoT()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1263,7 +1159,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1273,147 +1169,147 @@ var dungeons = [{
         y: "36.56%",
         chestlist: {
             'Graveyard Grave Switch Room Right Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canDoDamage();
                 },
             },
             'Graveyard Grave Switch Room Front Left Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canSmash();
                 },
             },
             'Graveyard Grave Switch Room Back Left Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canSmash();
                 },
             },
             'Graveyard Owl Statue Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canSmash() && items.Lantern && items.Dominion > 1;
                 },
             },
             'Dungeon Map Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Boomerang && canDoDamage();
                 },
             },
             'East Castle Balcony Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Boomerang && canDoDamage();
                 },
             },
             'West Courtyard Northern Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canDoDamage();
                 },
             },
             'West Courtyard Central Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canDoDamage();
                 },
             },
             'King Bublin Key': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canDoDamage();
                 },
             },
             'Compass Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && canDoDamage() && items.Clawshot > 1;
                 },
             },
             'Lantern Staircase Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && canDoDamage();
                 },
             },
             'Main Hall Southwest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && items.Bow && canDoDamage();
                 },
             },
             'Main Hall Northwest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && items.Bow && canDoDamage();
                 },
             },
             'Southeast Balcony Tower Chest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && items.Lantern && canDoDamage();
                 },
             },
             'Big Key Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && canDoDamage();
                 },
             },
             'Treasure Room First Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Second Chest Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Third Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Fourth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Fifth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room First Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Second Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Third Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Fourth Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Fifth Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Sixth Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Seventh Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
             'Treasure Room Eighth Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessHyrule() && items.Clawshot > 1 && items.Boomerang && (items.Bow || items.Lantern) && items.Spinner && canDoDamage() && items.Crystal;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessHyrule()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1423,7 +1319,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1458,82 +1354,82 @@ var dungeons = [{
         y: "55.68%",
         chestlist: {
             'First Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Second Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Third Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Fourth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Fifth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Sixth Chest (Lantern Chest)': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash() && items.Lantern;
                 },
             },
             'Seventh Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Eighth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Ninth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Tenth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Eleventh Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Twelfth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Thirteenth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Fourteenth Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash();
                 },
             },
             'Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && canSmash() && items.Lantern;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessLakeHylia()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1543,7 +1439,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1553,25 +1449,25 @@ var dungeons = [{
         y: "27.6%",
         chestlist: {
             'Dodongo Chest': {
-                isAvailable: function() {
-                    return eldinTwilightCleared() && items.Clawshot && items.IronBoots;
+                isAvailable: function () {
+                    return canAccessEldinField() && items.Clawshot && items.IronBoots;
                 },
             },
             'Lantern Chest': {
-                isAvailable: function() {
-                    return eldinTwilightCleared() && items.Clawshot && items.Lantern && items.IronBoots;
+                isAvailable: function () {
+                    return canAccessEldinField() && items.Clawshot && items.Lantern && items.IronBoots;
                 },
             },
             'Heart Piece Chest': {
-                isAvailable: function() {
-                    return eldinTwilightCleared() && items.Clawshot && items.Lantern && items.IronBoots;
+                isAvailable: function () {
+                    return canAccessEldinField() && items.Clawshot && items.Lantern && items.IronBoots;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1581,90 +1477,90 @@ var dungeons = [{
         y: "53.36%",
         chestlist: {
             'Inn Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage();
                 },
             },
             'Barnes Bomb Bag': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && (items.Boss2 || MinesPatch);
                 },
             },
             'Eldin Spring Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.IronBoots && canSmash();
                 },
             },
             'Bomb Rock Spire Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Boomerang && shootPew();
                 },
             },
             'Graveyard Lantern Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Lantern;
                 },
             },
             'Watchtower Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage();
                 },
             },
             'Watchtower Alcove Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && canSmash();
                 },
             },
             'Archery Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Bow && (items.Boss2 || MinesPatch);
                 },
             },
             'Hylian Shield': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage();
                 },
             },
             'Hawkeye': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && (items.Boss2 || MinesPatch);
                 },
             },
             'Zora Armor': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && lanayruTwilightCleared() && ((items.Bow && items.Boomerang) || EscortSkip);
                 },
             },
             'Coral Earring': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Sketch;
                 },
             },
             'Jump Strike': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && canAccessSnowpeakSummit();
                 },
             },
             'Renados Letter': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Boss6;
                 },
             },
             'Horse Call': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Charm >= 4;
                 },
             },
             'Powered Dominion Rod': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessKakVillage() && items.Skybook >= 1;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1674,45 +1570,45 @@ var dungeons = [{
         y: "52.08%",
         chestlist: {
             'Underwater Left Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.IronBoots;
                 },
             },
             'Underwater Right Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.IronBoots;
                 },
             },
             'Southern Room Left Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.Clawshot;
                 },
             },
             'Southern Room Right Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.Clawshot;
                 },
             },
             'Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.Clawshot && items.Lantern;
                 },
             },
             'West Double Clawshot Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.Clawshot > 1;
                 },
             },
             'East Double Clawshot Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessLakeHylia() && items.Clawshot > 1;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1722,170 +1618,170 @@ var dungeons = [{
         y: "41.2%",
         chestlist: {
             'East Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Charm >= 2;
                 },
             },
             'Donation Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown();
                 },
             },
             'STAR Challenge 1': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Clawshot;
                 },
             },
             'STAR Challenge 2': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Clawshot > 1;
                 },
             },
             'Jovani Bottle': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Soul >= 20;
                 },
             },
             'Jovani All Souls': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Soul >= 60;
                 },
             },
             'Invoice': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Charm >= 1;
                 },
             },
             'Medicine Scent': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Charm > 1;
                 },
             },
             'Agitha 1st Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 1;
                 },
             },
             'Agitha 2nd Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 2;
                 },
             },
             'Agitha 3rd Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 3;
                 },
             },
             'Agitha 4th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 4;
                 },
             },
             'Agitha 5th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 5;
                 },
             },
             'Agitha 6th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 6;
                 },
             },
             'Agitha 7th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 7;
                 },
             },
             'Agitha 8th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 8;
                 },
             },
             'Agitha 9th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 9;
                 },
             },
             'Agitha 10th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 10;
                 },
             },
             'Agitha 11th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 11;
                 },
             },
             'Agitha 12th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 12;
                 },
             },
             'Agitha 13th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 13;
                 },
             },
             'Agitha 14th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 14;
                 },
             },
             'Agitha 15th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 15;
                 },
             },
             'Agitha 16th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 16;
                 },
             },
             'Agitha 17th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 17;
                 },
             },
             'Agitha 18th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 18;
                 },
             },
             'Agitha 19th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 19;
                 },
             },
             'Agitha 20th Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 20;
                 },
             },
             'Agitha 21st Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 21;
                 },
             },
             'Agitha 22nd Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 22;
                 },
             },
             'Agitha 23rd Bug': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 23;
                 },
             },
             'Agitha All Bugs': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCastleTown() && items.Bugs >= 24;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1895,25 +1791,25 @@ var dungeons = [{
         y: "57.31%",
         chestlist: {
             'First Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canSmash() && canAccessKakGorge() && canBurnWebs();
                 },
             },
             'Second Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canSmash() && canAccessKakGorge() && canBurnWebs();
                 },
             },
             'Heart Piece Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canSmash() && canAccessKakGorge() && canBurnWebs();
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1923,30 +1819,30 @@ var dungeons = [{
         y: "44.96%",
         chestlist: {
             'Outside Watchtower Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessDesert() && canDoDamage();
                 },
             },
             'Inner Tent Small Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessDesert() && canDoDamage();
                 },
             },
             'Cooked Boar Heart Piece': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessDesert() && canDoDamage();
                 },
             },
             'Outside Arbiter Grounds Lantern Chest': {
-                isAvailable: function() {
+                isAvailable: function () {
                     return items.Lantern && canAccessDesert() && canDoDamage();
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             return this.canGetChest();
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1958,27 +1854,27 @@ var dungeons = [{
         y: "41.44%",
         chestlist: {
             'Lobby Poe': { //1
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Crystal;
                 },
             },
             'East Lower Poe': { //2
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Crystal && items.PoeScent;
                 },
             },
             'East Upper Poe': { //3
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             },
             'West Poe': { //4
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessArbiters() && canSmash() && items.Lantern && items.Clawshot && items.Crystal && items.PoeScent;
                 },
             }
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessArbiters()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -1988,7 +1884,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -1998,22 +1894,22 @@ var dungeons = [{
         y: "28.64%",
         chestlist: {
             'Lobby Armor Poe': { //5
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && items.Crystal;
                 }
             },
             'Lobby Poe': { //6
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Crystal;
                 }
             },
             'Mini Freezard Poe': { //7
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessSnowpeakRuins() && items.Chainball && canDoDamage() && items.Crystal;
                 }
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessSnowpeak()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -2023,7 +1919,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -2033,17 +1929,17 @@ var dungeons = [{
         y: "63.36%",
         chestlist: {
             'Poe Behind Gate': { //8
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Dominion >= 1 && items.Spinner && items.Crystal;
                 },
             },
             'Poe Above Scales': { //9
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessTot() && items.Spinner && items.Bow && items.Clawshot && items.Crystal;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessTot()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -2053,7 +1949,7 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     },
@@ -2063,17 +1959,17 @@ var dungeons = [{
         y: "50.56%",
         chestlist: {
             'Garden Island Poe': { //10
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2 && items.Crystal;
                 },
             },
             'Poe Above Central Fan': { //11
-                isAvailable: function() {
+                isAvailable: function () {
                     return canAccessCiTS() && items.IronBoots && items.Clawshot >= 2 && items.Crystal;
                 },
             },
         },
-        isBeatable: function() {
+        isBeatable: function () {
             if (canAccessCiTS()) {
                 if (this.canGetChest() == 'available') {
                     return 'available';
@@ -2083,18 +1979,19 @@ var dungeons = [{
                 return "unavailable";
             }
         },
-        canGetChest: function() {
+        canGetChest: function () {
             return generalCanGetChest(this.chestlist);
         },
     }
 ];
 
 //define overworld chests
-var chests = [{
+var chests = [
+    {
         name: "Herding Goats Heart Piece",
         x: "56.33%",
         y: "90.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (((canDoDamage() || SkipIntro) && (items.Vessel >= 1 || TwilightSkip))) {
                 return "available";
             }
@@ -2105,7 +2002,7 @@ var chests = [{
         name: "Grotto - Rat and Chu-Chu Chest",
         x: "54.33%",
         y: "90.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Crystal && items.Lantern) {
                 return "available";
             }
@@ -2116,7 +2013,7 @@ var chests = [{
         name: "Lantern",
         x: "56.16%",
         y: "71.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Slingshot || SkipIntro) {
                 return "available";
             }
@@ -2127,7 +2024,7 @@ var chests = [{
         name: "Coro's Bottle",
         x: "56.16%",
         y: "72.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Slingshot || SkipIntro) {
                 return "available";
             }
@@ -2138,7 +2035,7 @@ var chests = [{
         name: "North Faron Cave Small Chest",
         x: "54.33%",
         y: "68.08%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Lantern) {
                 return "available";
             }
@@ -2149,7 +2046,7 @@ var chests = [{
         name: "North Faron Cave Heart Piece Chest",
         x: "53.33%",
         y: "68.08%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Lantern) {
                 return "available";
             }
@@ -2160,7 +2057,7 @@ var chests = [{
         name: "South Faron Cave Small Chest",
         x: "53.7%",
         y: "71.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canBurnWebs() || SkipIntro) {
                 return "available";
             }
@@ -2171,7 +2068,7 @@ var chests = [{
         name: "Mist - North Mist Small Chest",
         x: "51.91%",
         y: "69.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Lantern) {
                 return "available";
             }
@@ -2182,7 +2079,7 @@ var chests = [{
         name: "Mist - West Stump Small Chest",
         x: "51.01%",
         y: "70.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Lantern) {
                 return "available";
             }
@@ -2193,7 +2090,7 @@ var chests = [{
         name: "Mist - East Mist Chest",
         x: "52.10%",
         y: "70.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Lantern) {
                 return "available";
             }
@@ -2204,7 +2101,7 @@ var chests = [{
         name: "Mist - Owl Statue Chest",
         x: "54.01%",
         y: "69.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Dominion > 1 && canSmash() && items.Crystal) {
                 return "available";
             }
@@ -2215,7 +2112,7 @@ var chests = [{
         name: "Mist - Skybook Letter",
         x: "55.01%",
         y: "69.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Dominion > 1 && canSmash()) {
                 return "available";
             }
@@ -2226,7 +2123,7 @@ var chests = [{
         name: "Near Shop Chest",
         x: "48.66%",
         y: "69.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessNorthFaron()) {
                 return "available";
             }
@@ -2237,8 +2134,8 @@ var chests = [{
         name: "Alcove Heart Piece Chest",
         x: "85.83%",
         y: "41.28%",
-        isAvailable: function() {
-            if (canAccessDeathMountain() && (items.Boss2 || MinesPatch) || items.Clawshot) {
+        isAvailable: function () {
+            if (eldinTwilightCleared() && canAccessDeathMountain() && ((items.Boss2 || MinesPatch) || items.Clawshot)) {
                 return "available";
             }
             return "unavailable";
@@ -2248,7 +2145,7 @@ var chests = [{
         name: "Past - Heart Piece",
         x: "45.08%",
         y: "68.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessTot() && items.Dominion > 1)
                 return "available";
             return "unavailable";
@@ -2258,7 +2155,7 @@ var chests = [{
         name: "Bomb Rock Ledge Heart Piece",
         x: "71.91%",
         y: "43.52%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canSmash() && canAccessEldinField()) {
                 return "available";
             }
@@ -2269,7 +2166,7 @@ var chests = [{
         name: "Ashei Sketch",
         x: "50.43%",
         y: "11.06%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain()) {
                 return "available";
             }
@@ -2280,7 +2177,7 @@ var chests = [{
         name: "Small Chest Under Waterfall",
         x: "55.93%",
         y: "10.56%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && items.Crystal) {
                 return "available";
             }
@@ -2291,7 +2188,7 @@ var chests = [{
         name: "Small Chest Near Mother and Child Isles",
         x: "56.73%",
         y: "11.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain()) {
                 return "available";
             }
@@ -2302,7 +2199,7 @@ var chests = [{
         name: "Underwater Chest",
         x: "39.85%",
         y: "54.06%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && items.IronBoots) {
                 return "available";
             }
@@ -2313,7 +2210,7 @@ var chests = [{
         name: "Grotto - Deku Baba Heart Piece Chest",
         x: "42.16%",
         y: "68.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove() && items.Crystal && canSmash()) {
                 return "available";
             }
@@ -2324,7 +2221,7 @@ var chests = [{
         name: "Grotto - Helmasaur Chest",
         x: "45.25%",
         y: "38.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Crystal && items.Clawshot) {
                 return "available";
             }
@@ -2335,7 +2232,7 @@ var chests = [{
         name: "Grotto - Water Toadpoli Chest",
         x: "38.95%",
         y: "55.26%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && items.Crystal && (items.Boss3 || EarlyCits)) {
                 return "available";
             }
@@ -2346,7 +2243,7 @@ var chests = [{
         name: "Outside Lanayru Spring - Left Statue Small Chest",
         x: "42.05%",
         y: "50.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia()) {
                 return "available";
             }
@@ -2357,7 +2254,7 @@ var chests = [{
         name: "Outside Lanayru Spring - Right Statue Chest",
         x: "43.15%",
         y: "50.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia()) {
                 return "available";
             }
@@ -2368,7 +2265,7 @@ var chests = [{
         name: "Flight-By-Fowl (5)",
         x: "43.5%",
         y: "48.0%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia()) {
                 return "available";
             }
@@ -2379,7 +2276,7 @@ var chests = [{
         name: "Grotto - Shell Blade Chest",
         x: "38.41%",
         y: "45.92%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && items.Crystal && items.IronBoots && (items.Boss3 || EarlyCits) && (items.Sword || items.MSword || items.WBombs)) {
                 return "available";
             }
@@ -2390,7 +2287,7 @@ var chests = [{
         name: "Underwater Right Chest",
         x: "55.5%",
         y: "08.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && items.Lantern && items.IronBoots) {
                 return "available";
             }
@@ -2401,7 +2298,7 @@ var chests = [{
         name: "Goron In Lava Rock",
         x: "55.05%",
         y: "07.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && items.IronBoots && items.WBombs && items.ZoraArmor) {
                 return "available";
             }
@@ -2412,7 +2309,7 @@ var chests = [{
         name: "Underwater Left Chest",
         x: "54.5%",
         y: "08.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && items.Boomerang && items.IronBoots && items.Lantern) {
                 return "available";
             }
@@ -2423,7 +2320,7 @@ var chests = [{
         name: "Grotto - Skultulla Chest",
         x: "54.0%",
         y: "22.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Crystal && items.Lantern) {
                 return "available";
             }
@@ -2434,7 +2331,7 @@ var chests = [{
         name: "Behind Gate Underwater Chest",
         x: "53.83%",
         y: "29.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.IronBoots) {
                 return "available";
             }
@@ -2445,7 +2342,7 @@ var chests = [{
         name: "Bridge Vines Chest",
         x: "41.58%",
         y: "45.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Clawshot) {
                 return "available";
             }
@@ -2456,7 +2353,7 @@ var chests = [{
         name: "Grotto - Bubble Chest",
         x: "46.33%",
         y: "56.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Crystal && items.Clawshot && items.Lantern && shootPew()) {
                 return "available";
             }
@@ -2467,7 +2364,7 @@ var chests = [{
         name: "Oustide Grotto Chest",
         x: "44.83%",
         y: "56.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Clawshot && shootPew()) {
                 return "available";
             }
@@ -2478,7 +2375,7 @@ var chests = [{
         name: "Under Bridge Chest",
         x: "54.91%",
         y: "58.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && items.Clawshot) {
                 return "available";
             }
@@ -2489,7 +2386,7 @@ var chests = [{
         name: "Grotto - Chu, Baba, and Keese  Right Chest",
         x: "58.11%",
         y: "64.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && items.Crystal) {
                 return "available";
             }
@@ -2500,7 +2397,7 @@ var chests = [{
         name: "Grotto - Chu, Baba, and Keese  Left Chest",
         x: "57.01%",
         y: "64.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && items.Crystal) {
                 return "available";
             }
@@ -2511,7 +2408,7 @@ var chests = [{
         name: "Grotto - Chu, Baba, and Keese  Rear Chest",
         x: "57.01%",
         y: "65.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && items.Crystal) {
                 return "available";
             }
@@ -2522,7 +2419,7 @@ var chests = [{
         name: "Castle Pillar Chest",
         x: "52.83%",
         y: "44.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.Clawshot && items.Crystal) {
                 return "available";
             }
@@ -2533,7 +2430,7 @@ var chests = [{
         name: "Grotto - Tetike Chest",
         x: "55.8%",
         y: "46.12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.Crystal) {
                 return "available";
             }
@@ -2544,7 +2441,7 @@ var chests = [{
         name: "Grotto - Bomskit Left Chest",
         x: "69.66%",
         y: "39.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && items.Crystal) {
                 return "available";
             }
@@ -2555,7 +2452,7 @@ var chests = [{
         name: "Grotto - Bomskit Right Chest",
         x: "70.86%",
         y: "39.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && items.Crystal && items.Lantern) {
                 return "available";
             }
@@ -2566,7 +2463,7 @@ var chests = [{
         name: "Grotto - Water Bomb Fish Chest",
         x: "77.41%",
         y: "34.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && items.Crystal) {
                 return "available";
             }
@@ -2577,7 +2474,7 @@ var chests = [{
         name: "Grotto - Skulltula Chest",
         x: "33.58%",
         y: "60.32%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Crystal) {
                 return "available";
             }
@@ -2588,7 +2485,7 @@ var chests = [{
         name: "Peahat Chest",
         x: "29.08%",
         y: "60.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot) {
                 return "available";
             }
@@ -2599,7 +2496,7 @@ var chests = [{
         name: "East Canyon Chest",
         x: "29.33%",
         y: "56.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2610,7 +2507,7 @@ var chests = [{
         name: "Lone Small Chest",
         x: "22.50%",
         y: "57.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2621,7 +2518,7 @@ var chests = [{
         name: "West Canyon Chest",
         x: "14.08%",
         y: "57.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot) {
                 return "available";
             }
@@ -2632,7 +2529,7 @@ var chests = [{
         name: "Grotto - Poe and Boulder Chest",
         x: "21.66%",
         y: "50.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Crystal && canSmash()) {
                 return "available";
             }
@@ -2643,7 +2540,7 @@ var chests = [{
         name: "North Small Chest Behind Gate",
         x: "17%",
         y: "49.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2654,7 +2551,7 @@ var chests = [{
         name: "South Chest Behind Gate",
         x: "26.5%",
         y: "61.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2665,7 +2562,7 @@ var chests = [{
         name: "Top-Left Small Chest by Campfire",
         x: "15%",
         y: "51.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2676,7 +2573,7 @@ var chests = [{
         name: "Right Small Chest by Campfire",
         x: "16%",
         y: "51.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2687,7 +2584,7 @@ var chests = [{
         name: "Bottom-Left Small Chest by Campfire",
         x: "15%",
         y: "52.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2698,7 +2595,7 @@ var chests = [{
         name: "Small Chest With Boxes",
         x: "16.33%",
         y: "47.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert()) {
                 return "available";
             }
@@ -2709,7 +2606,7 @@ var chests = [{
         name: "Spinner Wall Heart Piece Chest",
         x: "41.41%",
         y: "38.08%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Spinner) {
                 return "available";
             }
@@ -2720,7 +2617,7 @@ var chests = [{
         name: "Grotto - Stalfos Left Small Chest",
         x: "74.16%",
         y: "19.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (((canAccessEldinField() && canSmash()) || canAccessLanayruField()) && items.Spinner) {
                 return "available";
             }
@@ -2731,7 +2628,7 @@ var chests = [{
         name: "Grotto - Stalfos Right Small Chest",
         x: "75.16%",
         y: "19.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (((canAccessEldinField() && canSmash()) || canAccessLanayruField()) && items.Spinner) {
                 return "available";
             }
@@ -2742,7 +2639,7 @@ var chests = [{
         name: "Grotto - Stalfos Heart Piece Chest",
         x: "74.66%",
         y: "18.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (((canAccessEldinField() && canSmash()) || canAccessLanayruField()) && items.Spinner && canSmash()) {
                 return "available";
             }
@@ -2753,7 +2650,7 @@ var chests = [{
         name: "Fountain Chest",
         x: "54.01%",
         y: "45.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.Spinner && items.Clawshot) {
                 return "available";
             }
@@ -2764,7 +2661,7 @@ var chests = [{
         name: "Wooden Statue",
         x: "54.01%",
         y: "47.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.MedicineScent) {
                 return "available";
             }
@@ -2775,7 +2672,7 @@ var chests = [{
         name: "Frozen Lantern Chest",
         x: "38.26%",
         y: "11.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Chainball && items.Lantern && canAccessSnowpeakSummit()) {
                 return "available";
             }
@@ -2786,7 +2683,7 @@ var chests = [{
         name: "Grotto - Freezard Chest",
         x: "42.5%",
         y: "9.12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Crystal && items.Chainball && canAccessSnowpeakSummit()) {
                 return "available";
             }
@@ -2797,7 +2694,7 @@ var chests = [{
         name: "Frozen Block Cave Chest",
         x: "52.85%",
         y: "26.04%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Chainball) {
                 return "available";
             }
@@ -2808,7 +2705,7 @@ var chests = [{
         name: "Lost Woods - Lantern Chest",
         x: "45.41%",
         y: "70.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove2() && items.Lantern) {
                 return "available";
             }
@@ -2819,7 +2716,7 @@ var chests = [{
         name: "Lost Woods - Spinner Chest",
         x: "42.91%",
         y: "70.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove() && items.Spinner) {
                 return "available";
             }
@@ -2830,7 +2727,7 @@ var chests = [{
         name: "Eldin Bridge Owl Chest",
         x: "77.75%",
         y: "32.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && items.Dominion > 1) {
                 return "available";
             }
@@ -2841,7 +2738,7 @@ var chests = [{
         name: "Eldin Bridge Skybook Letter",
         x: "77.75%",
         y: "28.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && items.Dominion > 1) {
                 return "available";
             }
@@ -2852,7 +2749,7 @@ var chests = [{
         name: "Gorge Owl Statue Chest",
         x: "66%",
         y: "48.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && items.Dominion > 1) {
                 return "available";
             }
@@ -2863,7 +2760,7 @@ var chests = [{
         name: "Gorge Skybook Letter",
         x: "67%",
         y: "48.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && items.Dominion > 1) {
                 return "available";
             }
@@ -2874,7 +2771,7 @@ var chests = [{
         name: "Castle Ruins Owl Statue Chest",
         x: "45.38%",
         y: "43.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Dominion > 1) {
                 return "available";
             }
@@ -2885,7 +2782,7 @@ var chests = [{
         name: "Castle Ruins Skybook Letter",
         x: "46.38%",
         y: "43.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Dominion > 1) {
                 return "available";
             }
@@ -2896,7 +2793,7 @@ var chests = [{
         name: "Hylia Bridge Owl Statue Chest",
         x: "41.45%",
         y: "43.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Dominion > 1 && items.Clawshot) {
                 return "available";
             }
@@ -2907,7 +2804,7 @@ var chests = [{
         name: "Hylia Bridge Skybook Letter",
         x: "42.45%",
         y: "43.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Dominion > 1 && items.Clawshot) {
                 return "available";
             }
@@ -2918,7 +2815,7 @@ var chests = [{
         name: "Gerudo Desert Owl Statue Chest",
         x: "20.58%",
         y: "59.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Dominion > 1 && canAccessDesert()) {
                 return "available";
             }
@@ -2929,7 +2826,7 @@ var chests = [{
         name: "Gerudo Desert Skybook Letter",
         x: "20.58%",
         y: "61.1%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Dominion > 1 && canAccessDesert()) {
                 return "available";
             }
@@ -2940,7 +2837,7 @@ var chests = [{
         name: "Gorge Spire Chest",
         x: "61.75%",
         y: "52.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && items.Clawshot > 1) {
                 return "available";
             }
@@ -2951,7 +2848,7 @@ var chests = [{
         name: "Lake Chasm Chest",
         x: "51.50%",
         y: "46.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.Clawshot > 1) {
                 return "available";
             }
@@ -2962,7 +2859,7 @@ var chests = [{
         name: "Gorge Spire Heart Piece",
         x: "62.85%",
         y: "52.40%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && items.Boomerang) {
                 return "available";
             }
@@ -2973,7 +2870,7 @@ var chests = [{
         name: "Fishing Hole Heart Piece",
         x: "64.5%",
         y: "9%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain()) {
                 return "available";
             }
@@ -2984,7 +2881,7 @@ var chests = [{
         name: "Fishing Hole Bottle",
         x: "65.8%",
         y: "9.5%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain()) {
                 return "available";
             }
@@ -2995,7 +2892,7 @@ var chests = [{
         name: "Plumm Fruit Game Heart Piece",
         x: "65.8%",
         y: "14.5%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && items.Crystal) {
                 return "available";
             }
@@ -3006,7 +2903,7 @@ var chests = [{
         name: "Aurus Memo",
         x: "35.58%",
         y: "53.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && items.Boss3) {
                 return "available";
             }
@@ -3017,7 +2914,7 @@ var chests = [{
         name: "Iza Bomb Bag",
         x: "65.8%",
         y: "12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && (items.Sword || items.MSword)) {
                 return "available";
             }
@@ -3028,7 +2925,7 @@ var chests = [{
         name: "Giant Bomb Bag",
         x: "66.8%",
         y: "12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && (items.Sword || items.MSword)) {
                 return "available";
             }
@@ -3039,7 +2936,7 @@ var chests = [{
         name: "Tree Heart Piece",
         x: "56%",
         y: "60.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && (items.Boomerang || items.Clawshot)) {
                 return "available";
             }
@@ -3050,7 +2947,7 @@ var chests = [{
         name: "Hot Springwater Goron",
         x: "60.25%",
         y: "40.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && canAccessEldinField()) {
                 return "available";
             }
@@ -3061,7 +2958,7 @@ var chests = [{
         name: "Snowboard Racing",
         x: "36.25%",
         y: "11.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Boss5 && canAccessSnowpeakSummit()) {
                 return "available";
             }
@@ -3072,7 +2969,7 @@ var chests = [{
         name: "Hidden Village - Impaz - Ilia Charm",
         x: "71%",
         y: "24.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessHiddenVillage() && items.Bow) {
                 return "available";
             }
@@ -3083,7 +2980,7 @@ var chests = [{
         name: "Hidden Village - Impaz - Skybook",
         x: "71%",
         y: "25.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessHiddenVillage() && items.Dominion) {
                 return "available";
             }
@@ -3094,7 +2991,7 @@ var chests = [{
         name: "Hidden Village - Hide and Seek",
         x: "72%",
         y: "23.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Charm >= 4 && canAccessHiddenVillage()) {
                 return "available";
             }
@@ -3106,7 +3003,7 @@ var chests = [{
         name: "Ending Blow",
         x: "48.16%",
         y: "68.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessNorthFaron()) {
                 return "available";
             }
@@ -3117,7 +3014,7 @@ var chests = [{
         name: "Shield Attack",
         x: "54.5%",
         y: "81.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDeathMountain() && items.Crystal) {
                 return "available";
             }
@@ -3128,7 +3025,7 @@ var chests = [{
         name: "Back Slice",
         x: "48.38%",
         y: "40.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && canAccessLanayruField() && items.Crystal) {
                 return "available";
             }
@@ -3139,7 +3036,7 @@ var chests = [{
         name: "Helm Splitter",
         x: "52.83%",
         y: "46.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove() && items.Crystal) {
                 return "available";
             }
@@ -3150,7 +3047,7 @@ var chests = [{
         name: "Mortal Draw",
         x: "14.13%",
         y: "47.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Crystal && canAccessDesert() && canAccessLakeHylia()) {
                 return "available";
             }
@@ -3161,7 +3058,7 @@ var chests = [{
         name: "Great Spin",
         x: "53.85%",
         y: "38.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Crystal && canAccessHiddenVillage()) {
                 return "available";
             }
@@ -3172,7 +3069,7 @@ var chests = [{
         name: "Youth's Scent",
         x: "62%",
         y: "59.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge()) {
                 return "available";
             }
@@ -3183,7 +3080,7 @@ var chests = [{
         name: "Ilia Scent",
         x: "62.0%",
         y: "23.3%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField()) {
                 return "available";
             }
@@ -3194,7 +3091,7 @@ var chests = [{
         name: "Reekfish Scent",
         x: "55.73%",
         y: "11.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Rod > 1 && canAccessZoraDomain()) {
                 return "available";
             }
@@ -3205,7 +3102,7 @@ var chests = [{
         name: "Light Sword",
         x: "15.3%",
         y: "39.14%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessPoT() && items.Clawshot > 1 && items.Crystal) {
                 return "available";
             }
@@ -3216,7 +3113,7 @@ var chests = [{
         name: "Master Sword",
         x: "44.70%",
         y: "65.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove()) {
                 return "available";
             }
@@ -3227,7 +3124,7 @@ var chests = [{
         name: "Shadow Crystal",
         x: "43.70%",
         y: "65.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove())
                 return "available";
             return "unavailable";
@@ -3241,7 +3138,7 @@ var chests = [{
         name: "Jovani Poe",
         x: "54.75%",
         y: "42.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && setMDHFlag() || items.Crystal) {
                 return "available";
             }
@@ -3253,7 +3150,7 @@ var chests = [{
         name: "East Castle Town Bridge Poe",
         x: "58.25%",
         y: "40.56%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3265,7 +3162,7 @@ var chests = [{
         name: "South Castle Town Field Poe",
         x: "53.66%",
         y: "45.84%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3277,7 +3174,7 @@ var chests = [{
         name: "Castle Ruins Poe",
         x: "45.16%",
         y: "43.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3289,7 +3186,7 @@ var chests = [{
         name: "Faron Mist Poe",
         x: "51.41%",
         y: "69.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (faronTwilightCleared() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3301,7 +3198,7 @@ var chests = [{
         name: "Lost Woods Poe",
         x: "47%",
         y: "71.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove2() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3313,7 +3210,7 @@ var chests = [{
         name: "Faron Field Poe",
         x: "54.58%",
         y: "59.04%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3325,7 +3222,7 @@ var chests = [{
         name: "Kakariko Gorge Poe",
         x: "65.25%",
         y: "53.52%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && setMDHFlag() && items.Crystal) {
                 return "available";
             }
@@ -3337,7 +3234,7 @@ var chests = [{
         name: "Poe Under Rock",
         x: "42.16%",
         y: "68.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove() && canSmash() && items.Crystal) {
                 return "available";
             }
@@ -3349,7 +3246,7 @@ var chests = [{
         name: "Master Sword Poe",
         x: "44.20%",
         y: "65.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove2() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3360,7 +3257,7 @@ var chests = [{
         name: "Past - Poe",
         x: "43.78%",
         y: "68.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessTot() && items.Dominion && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3371,7 +3268,7 @@ var chests = [{
         name: "CoO - F17 Poe",
         x: "14.25%",
         y: "60.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3382,7 +3279,7 @@ var chests = [{
         name: "CoO - F33 Poe",
         x: "15.25%",
         y: "60.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && items.Crystal && items.Spinner && items.Chainball && items.Dominion > 1)
                 return "available";
             return "poeunavailable";
@@ -3393,7 +3290,7 @@ var chests = [{
         name: "CoO - F44 Poe",
         x: "14.25%",
         y: "61.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot > 1 && items.Crystal && items.Spinner && items.Chainball && items.Dominion > 1)
                 return "available";
             return "poeunavailable";
@@ -3404,7 +3301,7 @@ var chests = [{
         name: "Death Mountain Poe",
         x: "85.91%",
         y: "44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDeathMountain() && (items.Boss2 || MinesPatch) && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3415,7 +3312,7 @@ var chests = [{
         name: "Poe By Entrance",
         x: "33.75%",
         y: "60.40%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3426,7 +3323,7 @@ var chests = [{
         name: "Poe Above CoO",
         x: "14.17%",
         y: "59.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3437,7 +3334,7 @@ var chests = [{
         name: "Poe Above Grotto",
         x: "20.83%",
         y: "50.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3448,7 +3345,7 @@ var chests = [{
         name: "Poe in Grotto #1",
         x: "21.83%",
         y: "50.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3459,7 +3356,7 @@ var chests = [{
         name: "Poe in Grotto #2",
         x: "20.83%",
         y: "51.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && items.Clawshot && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3470,7 +3367,7 @@ var chests = [{
         name: "Poe next to Bublin Camp",
         x: "13.33%",
         y: "47.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3481,7 +3378,7 @@ var chests = [{
         name: "Bublin Camp Poe",
         x: "15%",
         y: "45.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && setMDHFlag() && items.Crystal && canDoDamage())
                 return "available";
             return "poeunavailable";
@@ -3492,7 +3389,7 @@ var chests = [{
         name: "Poe before AG",
         x: "15%",
         y: "43.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert() && setMDHFlag() && items.Crystal && canDoDamage())
                 return "available";
             return "poeunavailable";
@@ -3503,7 +3400,7 @@ var chests = [{
         name: "Graveyard Open Poe",
         x: "84.16%",
         y: "54.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3514,7 +3411,7 @@ var chests = [{
         name: "Graveyard Grave Poe",
         x: "84.16%",
         y: "55.4%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3525,7 +3422,7 @@ var chests = [{
         name: "Hidden Village Poe",
         x: "70.41%",
         y: "24.00%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessHiddenVillage() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3536,7 +3433,7 @@ var chests = [{
         name: "Eldin Longcave Poe",
         x: "65.83%",
         y: "57.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3547,7 +3444,7 @@ var chests = [{
         name: "Bridge Poe",
         x: "54.25%",
         y: "26.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3558,7 +3455,7 @@ var chests = [{
         name: "Grotto Poe #1",
         x: "49.66%",
         y: "26.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3569,7 +3466,7 @@ var chests = [{
         name: "Grotto Poe #2",
         x: "50.66%",
         y: "26.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3580,7 +3477,7 @@ var chests = [{
         name: "Poe on Rock Ledge",
         x: "44.42%",
         y: "56%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && items.Clawshot && shootPew() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3591,7 +3488,7 @@ var chests = [{
         name: "Bomb Shop Poe",
         x: "81.83%",
         y: "51.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3602,7 +3499,7 @@ var chests = [{
         name: "Watchtower Poe",
         x: "80.83%",
         y: "50.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3613,7 +3510,7 @@ var chests = [{
         name: "Poe by the Dock",
         x: "46.58%",
         y: "50.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3624,7 +3521,7 @@ var chests = [{
         name: "Alcove Poe",
         x: "40.08%",
         y: "54.72%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3635,7 +3532,7 @@ var chests = [{
         name: "Poe near Tower",
         x: "34.08%",
         y: "53.12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3646,7 +3543,7 @@ var chests = [{
         name: "Isle of Riches Poe",
         x: "39.08%",
         y: "49.12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3657,7 +3554,7 @@ var chests = [{
         name: "Flight by Fowl Ledge Poe",
         x: "36.42%",
         y: "46.72%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3668,7 +3565,7 @@ var chests = [{
         name: "LLC Poe #1",
         x: "38.5%",
         y: "54.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && canSmash() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3679,7 +3576,7 @@ var chests = [{
         name: "LLC Poe #2",
         x: "39.5%",
         y: "55.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && canSmash() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3690,7 +3587,7 @@ var chests = [{
         name: "LLC Poe #3",
         x: "38.5%",
         y: "55.8%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLakeHylia() && canSmash() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3701,7 +3598,7 @@ var chests = [{
         name: "Poe in Blizzard",
         x: "44.67%",
         y: "9.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessSnowpeakSummit() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3712,7 +3609,7 @@ var chests = [{
         name: "Poe under Tree",
         x: "41.5%",
         y: "8.08%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessSnowpeakSummit() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3723,7 +3620,7 @@ var chests = [{
         name: "Poe above Grotto",
         x: "41.75%",
         y: "9.46%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessSnowpeakSummit() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3734,7 +3631,7 @@ var chests = [{
         name: "Poe in Cave",
         x: "38.08%",
         y: "11.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessSnowpeakSummit() && items.Crystal && items.Chainball)
                 return "available";
             return "poeunavailable";
@@ -3745,7 +3642,7 @@ var chests = [{
         name: "Poe next to Snowpeak Ruins",
         x: "21.75%",
         y: "31.52%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessSnowpeakSummit() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3756,7 +3653,7 @@ var chests = [{
         name: "Upper Zora River Poe",
         x: "64%",
         y: "14.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3767,7 +3664,7 @@ var chests = [{
         name: "Poe Behind Waterfall",
         x: "54.5%",
         y: "9.52%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3778,7 +3675,7 @@ var chests = [{
         name: "Poe By Mother and Child Rocks",
         x: "55.25%",
         y: "11.36%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain() && setMDHFlag() && items.Crystal)
                 return "available";
             return "poeunavailable";
@@ -3793,7 +3690,7 @@ var chests = [{
         name: "Male Beetle",
         x: "53.58%",
         y: "62.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField())
                 return "available";
             return "bugunavailable";
@@ -3804,7 +3701,7 @@ var chests = [{
         name: "Female Beetle",
         x: "57.33%",
         y: "58.72%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessFaronField() && (items.Boomerang || items.Clawshot))
                 return "available";
             return "bugunavailable";
@@ -3815,7 +3712,7 @@ var chests = [{
         name: "Male Pill Bug",
         x: "65%",
         y: "53.60%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge())
                 return "available";
             return "bugunavailable";
@@ -3826,7 +3723,7 @@ var chests = [{
         name: "Female Pill Bug",
         x: "68.16%",
         y: "54.56%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakGorge())
                 return "available";
             return "bugunavailable";
@@ -3837,7 +3734,7 @@ var chests = [{
         name: "Male Ant",
         x: "84.58%",
         y: "53.92%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage())
                 return "available";
             return "bugunavailable";
@@ -3848,7 +3745,7 @@ var chests = [{
         name: "Female Ant",
         x: "80.75%",
         y: "52.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage())
                 return "available";
             return "bugunavailable";
@@ -3859,7 +3756,7 @@ var chests = [{
         name: "Male Grasshopper",
         x: "74.58%",
         y: "40.80%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField())
                 return "available";
             return "bugunavailable";
@@ -3870,7 +3767,7 @@ var chests = [{
         name: "Female Grasshopper",
         x: "66.67%",
         y: "34.56%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField())
                 return "available";
             return "bugunavailable";
@@ -3881,7 +3778,7 @@ var chests = [{
         name: "Male Phasmid",
         x: "78.58%",
         y: "33.12%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3892,7 +3789,7 @@ var chests = [{
         name: "Female Phasmid",
         x: "80.00%",
         y: "26.64%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessEldinField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3903,7 +3800,7 @@ var chests = [{
         name: "Male Mantis",
         x: "41.17%",
         y: "46.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3914,7 +3811,7 @@ var chests = [{
         name: "Female Mantis",
         x: "42.75%",
         y: "54.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3925,7 +3822,7 @@ var chests = [{
         name: "Male Dragonfly",
         x: "55.5%",
         y: "11.44%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain())
                 return "available";
             return "bugunavailable";
@@ -3936,7 +3833,7 @@ var chests = [{
         name: "Female Dragonfly",
         x: "65.58%",
         y: "13.20%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessZoraDomain())
                 return "available";
             return "bugunavailable";
@@ -3947,7 +3844,7 @@ var chests = [{
         name: "Male Butterfly",
         x: "46.58%",
         y: "42.24%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField())
                 return "available";
             return "bugunavailable";
@@ -3958,7 +3855,7 @@ var chests = [{
         name: "Female Butterfly",
         x: "45.5%",
         y: "38.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3969,7 +3866,7 @@ var chests = [{
         name: "Male Stag Beetle",
         x: "50.58%",
         y: "28.00%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField())
                 return "available";
             return "bugunavailable";
@@ -3980,7 +3877,7 @@ var chests = [{
         name: "Female Stag Beetle",
         x: "53.25%",
         y: "24.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessLanayruField() && (items.Clawshot || items.Boomerang))
                 return "available";
             return "bugunavailable";
@@ -3991,7 +3888,7 @@ var chests = [{
         name: "Female LadyBug",
         x: "52.5%",
         y: "45.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown())
                 return "available";
             return "bugunavailable";
@@ -4002,7 +3899,7 @@ var chests = [{
         name: "Male Ladybug",
         x: "55.08%",
         y: "46.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown())
                 return "available";
             return "bugunavailable";
@@ -4013,7 +3910,7 @@ var chests = [{
         name: "Male Dayfly",
         x: "22.75%",
         y: "60.16%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert())
                 return "available";
             return "bugunavailable";
@@ -4024,7 +3921,7 @@ var chests = [{
         name: "Female Dayfly",
         x: "18.16%",
         y: "59.2%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDesert())
                 return "available";
             return "bugunavailable";
@@ -4035,7 +3932,7 @@ var chests = [{
         name: "Male Snail",
         x: "44.08%",
         y: "69.6%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessGrove())
                 return "available";
             return "bugunavailable";
@@ -4046,7 +3943,7 @@ var chests = [{
         name: "Female Snail",
         x: "42.41%",
         y: "69.9%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessTot())
                 return "available";
             return "bugunavailable";
@@ -4061,7 +3958,7 @@ var chests = [{
         name: "Milk - 10 Rupees",
         x: "55.5%",
         y: "85.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if ((canDoDamage() || SkipIntro) || (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4071,7 +3968,7 @@ var chests = [{
         name: "Bee Larva - 10 Rupees",
         x: "56.5%",
         y: "85.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if ((canDoDamage() || SkipIntro) || (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4081,7 +3978,7 @@ var chests = [{
         name: "Lantern Oil - 20 Rupees",
         x: "55.5%",
         y: "86.76%",
-        isAvailable: function() {
+        isAvailable: function () {
             if ((canDoDamage() || SkipIntro) && (items.Lantern || (items.Bottle || NoBottleReq)))
                 return "available";
             return "bugunavailable";
@@ -4093,7 +3990,7 @@ var chests = [{
         name: "Red Potion - 30 Rupees",
         x: "80.25%",
         y: "54.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4103,7 +4000,7 @@ var chests = [{
         name: "Wooden Shield - 50 Rupees",
         x: "81.25%",
         y: "54.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage())
                 return "available";
             return "bugunavailable";
@@ -4113,7 +4010,7 @@ var chests = [{
         name: "Hylian Shield - 200 Rupees",
         x: "80.25%",
         y: "55.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage())
                 return "available";
             return "bugunavailable";
@@ -4123,7 +4020,7 @@ var chests = [{
         name: "Hawkeye - 100 Rupees",
         x: "81.25%",
         y: "55.28%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (items.Boss2 || MinesPatch)
                 return "available";
             return "bugunavailable";
@@ -4135,7 +4032,7 @@ var chests = [{
         name: "Lantern Oil - 20 Rupees",
         x: "85.33%",
         y: "37.60%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDeathMountain() && (items.Lantern || (items.Bottle || NoBottleReq)))
                 return "available";
             return "bugunavailable";
@@ -4145,7 +4042,7 @@ var chests = [{
         name: "Wooden Shield - 50 Rupees",
         x: "86.33%",
         y: "37.60%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDeathMountain())
                 return "available";
             return "bugunavailable";
@@ -4155,7 +4052,7 @@ var chests = [{
         name: "Milk - 20 Rupees",
         x: "85.33%",
         y: "38.60%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessDeathMountain() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4167,7 +4064,7 @@ var chests = [{
         name: "Lantern Oil - 20 Rupees",
         x: "80.25%",
         y: "51.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && (items.Lantern || (items.Bottle || NoBottleReq)))
                 return "available";
             return "bugunavailable";
@@ -4177,7 +4074,7 @@ var chests = [{
         name: "Red Potion - 30 Rupees",
         x: "81.25%",
         y: "51.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4187,7 +4084,7 @@ var chests = [{
         name: "Blue Potion - 100 Rupees",
         x: "80.25%",
         y: "52.68%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessKakVillage() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4199,7 +4096,7 @@ var chests = [{
         name: "Blue Potion - 50 Rupees",
         x: "55.33%",
         y: "40.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4209,7 +4106,7 @@ var chests = [{
         name: "Red Potion - 15 Rupees",
         x: "56.33%",
         y: "40.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4219,7 +4116,7 @@ var chests = [{
         name: "Magic Armor - 598 Rupees",
         x: "55.33%",
         y: "41.88%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown())
                 return "available";
             return "bugunavailable";
@@ -4231,7 +4128,7 @@ var chests = [{
         name: "Hylian Shield - 210 Rupees",
         x: "51.66%",
         y: "40.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown())
                 return "available";
             return "bugunavailable";
@@ -4241,7 +4138,7 @@ var chests = [{
         name: "Red Potion - 40 Rupees",
         x: "52.66%",
         y: "40.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4251,7 +4148,7 @@ var chests = [{
         name: "Lantern Oil - 30 Rupees",
         x: "51.66%",
         y: "41.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && (items.Lantern || (items.Bottle || NoBottleReq)))
                 return "available";
             return "bugunavailable";
@@ -4261,7 +4158,7 @@ var chests = [{
         name: "Arrows - 40 Rupees",
         x: "52.66%",
         y: "41.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && items.Bow)
                 return "available";
             return "bugunavailable";
@@ -4273,7 +4170,7 @@ var chests = [{
         name: "Hot Springwater - 20 Rupees",
         x: "54.33%",
         y: "42.48%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCastleTown() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4285,7 +4182,7 @@ var chests = [{
         name: "Red Potion - 30 Rupees",
         x: "38.42%",
         y: "50.00%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCiTS() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4295,7 +4192,7 @@ var chests = [{
         name: "Blue Potion - 100 Rupees",
         x: "37.42%",
         y: "51.00%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCiTS() && (items.Bottle || NoBottleReq))
                 return "available";
             return "bugunavailable";
@@ -4305,7 +4202,7 @@ var chests = [{
         name: "Lantern Oil - 20 Rupees",
         x: "38.42%",
         y: "51.00%",
-        isAvailable: function() {
+        isAvailable: function () {
             if (canAccessCiTS() && (items.Lantern || (items.Bottle || NoBottleReq)))
                 return "available";
             return "bugunavailable";

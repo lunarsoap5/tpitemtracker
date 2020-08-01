@@ -1,3 +1,4 @@
+//set the boss reward values for later testing
 var defaultrewards = {
     Boss1: 0,
     Boss2: 0,
@@ -9,6 +10,8 @@ var defaultrewards = {
     Boss8: 0
 };
 var rewards = defaultrewards;
+
+//sets the images of the dungeon rewards to their appropriate values
 var dungeonImg = [
     'Unknown',
     'label1',
@@ -17,8 +20,10 @@ var dungeonImg = [
     'label4',
     'label5',
     'label6',
-    'label7',
+    'label7'
 ];
+
+//set our default variables
 showprizes = true;
 var mouseOverItem = false;
 var mouseLastOverR;
@@ -36,6 +41,7 @@ var selected = {};
 var dungeonSelect = 0;
 var totalChecks = 501;
 
+// if we change an option, we want to update our cookies
 function setCookie(obj) {
     var d = new Date();
     d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
@@ -44,6 +50,7 @@ function setCookie(obj) {
     document.cookie = "key=" + val + ";" + expires + ";path=/";
 }
 
+//upon loading the website we want to get our cookie values that were stored if any
 function getCookie() {
     var name = "key=";
     var ca = document.cookie.split(';');
@@ -59,12 +66,13 @@ function getCookie() {
     return {};
 }
 
+
+//we want to set our default cookie values so that we can just load from there if need be
 var cookieDefault = {
     map: 1,
     iZoom: 100,
     mZoom: 100,
     mPos: 0,
-    glogic: 'Open',
     prize: 1,
     rewards: defaultrewards,
     items: defaultItemGrid,
@@ -73,7 +81,7 @@ var cookieDefault = {
     dungeonChests: serializeDungeonChests(),
 }
 
-
+//assigns the cookie values to their respective parameters
 var cookielock = false;
 function loadCookie() {
     if (cookielock) {
@@ -110,16 +118,10 @@ function loadCookie() {
     document.getElementsByName('showprizes')[0].checked = false;
     document.getElementsByName('showprizes')[0].onchange();
 
-    for (rbuttonID in document.getElementsByName('ganonlogic')) {
-        rbutton = document.getElementsByName('ganonlogic')[rbuttonID];
-        if (rbutton.value == cookieobj.glogic) {
-            rbutton.click();
-        }
-    }
-
     cookielock = false;
 }
 
+//applies the stored cookies to the web cookies
 function saveCookie() {
     if (cookielock) {
         return;
@@ -137,13 +139,6 @@ function saveCookie() {
 
     cookieobj.prize = document.getElementsByName('showprizes')[0].checked ? 1 : 0;
 
-    for (rbuttonID in document.getElementsByName('ganonlogic')) {
-        rbutton = document.getElementsByName('ganonlogic')[rbuttonID];
-        if (rbutton.checked) {
-            cookieobj.glogic = rbutton.value;
-        }
-    }
-
     cookieobj.rewards = JSON.parse(JSON.stringify(rewards));
     cookieobj.items = JSON.parse(JSON.stringify(itemLayout));
     cookieobj.obtainedItems = JSON.parse(JSON.stringify(items));
@@ -155,6 +150,7 @@ function saveCookie() {
     cookielock = false;
 }
 
+//Set up the functions to open and close chests on the map
 function serializeChests() {
     return chests.map(chest => chest.isOpened || false);
 }
@@ -227,6 +223,7 @@ function unhighlightDungeon(x) {
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 }
 
+// Event of clicking a dungeon box on the map
 function clickDungeon(d) {
     document.getElementById('dungeon' + dungeonSelect).style.backgroundImage = 'url(images/poi.png)';
     dungeonSelect = d;
@@ -312,7 +309,7 @@ function showPrizes(sender) {
 }
 
 //Set the values for the skips if their boxes are checked
-function faronEscape(sender) {
+function setFaronEscape(sender) {
     faronescape = sender.checked;
     if (!faronescape)
     {
@@ -326,7 +323,7 @@ function faronEscape(sender) {
     }
 }
 
-function twilightSkip(sender) {
+function setTwilightSkip(sender) {
     twilightskip = sender.checked;
     if (!twilightskip)
     {
@@ -340,7 +337,7 @@ function twilightSkip(sender) {
     }
 }
 
-function removeBoxes(sender) {
+function setRemoveBoxes(sender) {
     removeboxes = sender.checked;
     if (!removeboxes)
     {
@@ -354,7 +351,7 @@ function removeBoxes(sender) {
     }
 }
 
-function skipMdh(sender) {
+function setSkipMdh(sender) {
     skipmdh = sender.checked;
     if (!skipmdh)
     {
@@ -368,7 +365,7 @@ function skipMdh(sender) {
     }
 }
 
-function skipIntro(sender) {
+function setSkipIntro(sender) {
     skipintro = sender.checked;
     if (!skipintro)
     {
@@ -382,7 +379,7 @@ function skipIntro(sender) {
     }
 }
 
-function earlyDesert(sender) {
+function setEarlyDesert(sender) {
     earlydesert = sender.checked;
     if (!earlydesert)
     {
@@ -396,7 +393,7 @@ function earlyDesert(sender) {
     }
 }
 
-function earlyCits(sender) {
+function setEarlyCits(sender) {
     earlycits = sender.checked;
     if (!earlycits)
     {
@@ -410,7 +407,7 @@ function earlyCits(sender) {
     }
 }
 
-function openGates(sender) {
+function setOpenGates(sender) {
     opengates = sender.checked;
     if (!opengates)
     {
@@ -424,7 +421,7 @@ function openGates(sender) {
     }
 }
 
-function minesPatch(sender) {
+function setMinesPatch(sender) {
     minespatch = sender.checked;
     if (!minespatch) {
         MinesPatch = false;
@@ -436,7 +433,7 @@ function minesPatch(sender) {
     }
 }
 
-function noBottleReq(sender) {
+function setNoBottleReq(sender) {
     nobottlereq = sender.checked;
     if (!nobottlereq) {
         NoBottleReq = false;
@@ -448,7 +445,7 @@ function noBottleReq(sender) {
     }
 }
 
-function earlyHyruleCastle(sender) {
+function setEarlyHyruleCastle(sender) {
     earlyhyrulecastle = sender.checked;
     if (!earlyhyrulecastle) {
         EarlyHyruleCastle = false;
@@ -460,7 +457,7 @@ function earlyHyruleCastle(sender) {
     }
 }
 
-function escortSkip(sender) {
+function setEscortSkip(sender) {
     escortskip = sender.checked;
     if (!escortskip) {
         EscortSkip = false;
@@ -472,7 +469,7 @@ function escortSkip(sender) {
     }
 }
 
-function earlyToT(sender) {
+function setEarlyToT(sender) {
     earlytot = sender.checked;
     if (!earlytot) {
         EarlyToT = false;
@@ -484,7 +481,7 @@ function earlyToT(sender) {
     }
 }
 
-function earlyPoT(sender) {
+function setEarlyPoT(sender) {
     earlypot = sender.checked;
     if (!earlypot) {
         EarlyPoT = false;
@@ -496,7 +493,8 @@ function earlyPoT(sender) {
     }
 }
 
-function taloMap(sender) {
+//sets the icons for the Talo Map
+function setTaloMap(sender) {
     talomap = sender.checked;
     if (!talomap) {
         TaloMap = false;
@@ -514,6 +512,7 @@ function taloMap(sender) {
     }
 }
 
+// makes sure that the non chest checks are hidden by default
 function noExtraOnLoad() {
     for (var i = 104; i < 201; i++) {
         document.getElementById("" + i).style.zIndex = "-1";
@@ -523,6 +522,7 @@ function noExtraOnLoad() {
     }
 }
 
+//set glitched logic options
 function setGlitchedLogicOff() {
     glitchedLogic = false;
     updateMap();
@@ -533,8 +533,92 @@ function setGlitchedLogicOn() {
     updateMap();
 }
 
+// Options for when a person clicks on the different check options
+function setMapTracker() {
+    if (document.getElementById('maptracker').checked) {
+        for (var i = 0; i < 104; i++) {
+            document.getElementById("" + i).style.zIndex = "auto";
+        }
+        for (var j = 0; j < 17; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "auto";
+        }
+        for (var j = 17; j < 21; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "-1";
+        }
+        for (var i = 104; i < 201; i++) {
+            document.getElementById("" + i).style.zIndex = "-1";
+        }
+    }
+    else {
+        return;
+    }
+}
+
+function setPoeTracker() {
+    if (document.getElementById('poetracker').checked) {
+        for (var i = 0; i < 104; i++) {
+            document.getElementById(i).style.zIndex = "-1";
+        }
+        for (var j = 0; j < 17; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "-1";
+        }
+        for (var j = 17; j < 21; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "auto";
+        }
+        for (var i = 104; i < 153; i++) {
+            document.getElementById("" + i).style.zIndex = "auto";
+        }
+        for (var i = 153; i < 201; i++) {
+            document.getElementById("" + i).style.zIndex = "-1";
+        }
+    }
+    else {
+        return;
+    }
+}
+
+function setBugTracker() {
+    if (document.getElementById('bugtracker').checked) {
+        for (var i = 0; i < 153; i++) {
+            document.getElementById(i).style.zIndex = "-1";
+        }
+        for (var j = 0; j < 21; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "-1";
+        }
+        for (var i = 153; i < 177; i++) {
+            document.getElementById("" + i).style.zIndex = "auto";
+        }
+        for (var j = 177; j < 201; j++) {
+            document.getElementById("" + j).style.zIndex = "-1";
+        }
+    }
+    else {
+        return;
+    }
+}
+
+function setShopTracker() {
+    if (document.getElementById('shoptracker').checked) {
+        for (var i = 0; i < 153; i++) {
+            document.getElementById(i).style.zIndex = "-1";
+        }
+        for (var j = 0; j < 21; j++) {
+            document.getElementById("dungeon" + j).style.zIndex = "-1";
+        }
+        for (var i = 153; i < 177; i++) {
+            document.getElementById("" + i).style.zIndex = "-1";
+        }
+        for (var j = 177; j < 201; j++) {
+            document.getElementById("" + j).style.zIndex = "auto";
+        }
+    }
+    else {
+        return;
+    }
+}
 
 
+//Set map zoom
 function setZoom(target, sender) {
     document.getElementById(target).style.zoom = sender.value / 100;
     document.getElementById(target).style.zoom = sender.value / 100;
@@ -546,6 +630,7 @@ function setZoom(target, sender) {
     saveCookie();
 }
 
+//Set map distance from item tracker
 function setDistance(target, sender) {
     document.getElementById(target).style.width = (sender.value / 40 * 20)+ "%";
     document.getElementById(target).style.width = (sender.value / 40 * 20) + "%";
@@ -554,6 +639,7 @@ function setDistance(target, sender) {
     saveCookie();
 }
 
+//set unused item opacity
 function setOpacity(target, sender) {
     x = document.getElementsByClassName(target);
     for (var i = 0; i < x.length; i++) {
@@ -564,6 +650,8 @@ function setOpacity(target, sender) {
     saveCookie();
 }
 
+
+//function for setting the custom background images
 function setBackground() {
     var none = document.getElementById("none").selected;
     var castle = document.getElementById("castle").selected;
@@ -584,6 +672,7 @@ function setBackground() {
     }
 }
 
+//backend for the settings button
 function showSettings(sender) {
     if (editmode) {
         var r, c;
@@ -608,7 +697,7 @@ function showSettings(sender) {
     }
 }
 
-
+//displays the map tracker
 function showTracker(target, sender) {
     if (sender.checked) {
         document.getElementById(target).style.display = '';
@@ -618,7 +707,7 @@ function showTracker(target, sender) {
     }
 }
 
-
+//sets the parameters for edit mode
 function EditMode() {
     var r, c;
 
@@ -632,7 +721,7 @@ function EditMode() {
     document.getElementById('settingsbutton').innerHTML = 'Exit Edit Mode';
 }
 
-
+//sets all of the item and map options to their defaults
 function ResetLayout()
 {
 	initGridRow(defaultItemGrid);
@@ -652,10 +741,10 @@ function ResetLayout()
     document.getElementById('mapdivsize').innerHTML='100%';
     document.getElementById('maprange').value = 100;
 
-    document.getElementById('twilighttest').style.width = "1%";
-    document.getElementById('twilighttest').style.width = "1%";
+    document.getElementById('blankspace').style.width = "1%";
+    document.getElementById('blankspace').style.width = "1%";
     document.getElementById('trackerDistanceID').value = 1;
-    document.getElementById('twilighttestsize').innerHTML = "1%";    
+    document.getElementById('blankspacesize').innerHTML = "1%";    
 
     x = document.getElementsByClassName("tracker");
     for (var i = 0; i < x.length; i++)
@@ -674,14 +763,16 @@ function ResetTracker() {
     dungeons.forEach(dungeon => Object.values(dungeon.chestlist).forEach(chest => delete chest.isOpened));
     items = Object.assign({}, baseItems);
     totalChecks = 501;
-    
+    document.getElementById('maptracker').checked = true;
+    setMapTracker();
+
     updateGridItemAll();
     updateMap();
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + totalChecks + " Remaining";
     saveCookie();
 }
 
-
+// creates an extra row when in edit mode
 function addItemRow() {
     var sender = document.getElementById('itemdiv')
     var r = itemLayout.length;
@@ -716,7 +807,7 @@ function addItemRow() {
     saveCookie();
 }
 
-
+// removes an item row when in edit mode
 function removeItemRow() {
     var sender = document.getElementById('itemdiv')
     var r = itemLayout.length - 1;
@@ -728,7 +819,7 @@ function removeItemRow() {
     saveCookie();
 }
 
-
+//adds an item to the item tracker 
 function addItem(r) {
     var i = itemLayout[r].length
 
@@ -787,7 +878,7 @@ function removeItem(r) {
     saveCookie();
 }
 
-
+//sets the images, etc of an item 
 function updateGridItem(row, index) {
     var item = itemLayout[row][index];
 
@@ -1086,9 +1177,6 @@ function updateMap() {
     }
 
     dungeonChestOld = dungeonChest;
-    c = document.getElementsByClassName("mapspan chest available").length;
-    opened = document.getElementsByClassName("mapspan chest opened").length;
-    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
 
     document.getElementById('submaparea').className = 'DC' + dungeons[dungeonSelect].isBeatable();
     var itemlist = document.getElementById('submaplist').children;
@@ -1270,11 +1358,14 @@ function populateItemconfig() {
     }
 }
 
-
+//runs on site load
 function init() {
     populateMapdiv();
     populateItemconfig();
     updateMap();
+    c = document.getElementsByClassName("mapspan chest available").length;
+    opened = document.getElementsByClassName("mapspan chest opened").length;
+    document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
     noExtraOnLoad();
     loadCookie();
     saveCookie();
@@ -1323,4 +1414,4 @@ function addLoadEvent(func) {
     }
 }
 addLoadEvent(preloader);
-// Created by Lunar Soap and TestRunner
+// Created by Lunar Soap, TreZc0_, TestRunner
