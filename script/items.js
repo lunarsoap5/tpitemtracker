@@ -101,7 +101,7 @@ var baseItems = {
     ZoraArmor: false,
     MagicArmor: false,
     IronBoots: false,
-    GTunic: 1,
+    GTunic: false,
    
     Boss1: false,
     Boss2: false,
@@ -137,8 +137,7 @@ var itemsMin = {
     Shard: 0,
     Dominion: 0,
     Skybook: 0,
-    Vessel: 0,
-    GTunic: 1
+    Vessel: 0
 };
 
 //set how many of each item there is a maximum for
@@ -162,8 +161,7 @@ var itemsMax = {
     Shard: 4,
     Dominion: 2,
     Skybook: 7,
-    Vessel: 3,
-    GTunic: 1
+    Vessel: 3
 };
 
 //assign the default values of the items to the GUI
