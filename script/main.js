@@ -77,7 +77,7 @@ var cookieDefault = {
     rewards: defaultrewards,
     items: defaultItemGrid,
     obtainedItems: items,
-    chests: serializeChests(),
+    overworldChests: serializeChests(),
     dungeonChests: serializeDungeonChests(),
 }
 
@@ -101,7 +101,7 @@ function loadCookie() {
     rewards = JSON.parse(JSON.stringify(cookieobj.rewards));
     initGridRow(JSON.parse(JSON.stringify(cookieobj.items)));
     items = JSON.parse(JSON.stringify(cookieobj.obtainedItems));
-    deserializeChests(JSON.parse(JSON.stringify(cookieobj.chests)));
+    deserializeChests(JSON.parse(JSON.stringify(cookieobj.overworldChests)));
     deserializeDungeonChests(JSON.parse(JSON.stringify(cookieobj.dungeonChests)));
 
     updateGridItemAll();
@@ -142,7 +142,7 @@ function saveCookie() {
     cookieobj.rewards = JSON.parse(JSON.stringify(rewards));
     cookieobj.items = JSON.parse(JSON.stringify(itemLayout));
     cookieobj.obtainedItems = JSON.parse(JSON.stringify(items));
-    cookieobj.chests = JSON.parse(JSON.stringify(serializeChests()));
+    cookieobj.overworldChests = JSON.parse(JSON.stringify(serializeChests()));
     cookieobj.dungeonChests = JSON.parse(JSON.stringify(serializeDungeonChests()));
 
     setCookie(cookieobj);
@@ -152,7 +152,7 @@ function saveCookie() {
 
 //Set up the functions to open and close chests on the map
 function serializeChests() {
-    return chests.map(chest => chest.isOpened || false);
+    return overworldChests.map(chest => chest.isOpened || false);
 }
 
 function serializeDungeonChests() {
@@ -160,8 +160,8 @@ function serializeDungeonChests() {
 }
 
 function deserializeChests(serializedChests) {
-    for (var i = 0; i < chests.length; i++) {
-        chests[i].isOpened = serializedChests[i];
+    for (var i = 0; i < overworldChests.length; i++) {
+        overworldChests[i].isOpened = serializedChests[i];
         refreshChest(i);
     }
 }
@@ -179,7 +179,7 @@ function deserializeDungeonChests(serializedDungeons) {
 
 // Event of clicking a chest on the map
 function toggleChest(x) {
-    chests[x].isOpened = !chests[x].isOpened;
+    overworldChests[x].isOpened = !overworldChests[x].isOpened;
     refreshChest(x);
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
@@ -188,7 +188,7 @@ function toggleChest(x) {
 }
 
 function refreshChest(x) {
-    var stateClass = chests[x].isOpened ? 'opened' : chests[x].isAvailable();
+    var stateClass = overworldChests[x].isOpened ? 'opened' : overworldChests[x].isAvailable();
     document.getElementById(x).className = 'mapspan chest ' + stateClass;
 }
 
@@ -512,16 +512,6 @@ function setTaloMap(sender) {
     }
 }
 
-// makes sure that the non chest checks are hidden by default
-function noExtraOnLoad() {
-    for (var i = 104; i < 201; i++) {
-        document.getElementById("" + i).style.zIndex = "-1";
-    }
-    for (var j = 17; j < 21; j++) {
-        document.getElementById("dungeon" + j).style.zIndex = "-1";
-    }
-}
-
 //set glitched logic options
 function setGlitchedLogicOff() {
     glitchedLogic = false;
@@ -759,7 +749,7 @@ function ResetLayout()
 
 
 function ResetTracker() {
-    chests.forEach(chest => delete chest.isOpened);
+    overworldChests.forEach(chest => delete chest.isOpened);
     dungeons.forEach(dungeon => Object.values(dungeon.chestlist).forEach(chest => delete chest.isOpened));
     items = Object.assign({}, baseItems);
     totalChecks = 501;
@@ -962,7 +952,7 @@ function updateGridItem(row, index) {
                 itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + items[item] + '.png), url(images/ItemBox.png)';
             }
             else {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
+                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + items[item] + '.png), url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
             }
         }
     }
@@ -1120,9 +1110,12 @@ function gridItemRClick(row, col, corner) {
                 items[item] = !items[item];
             }
         }
-        else if ((typeof items[item]) == 'boolean') {
+        else if ((typeof items[item]) == 'boolean') 
+        {
             items[item] = !items[item];
-        } else {
+        } 
+        else 
+        {
             if (items[item] == itemsMin[item]) {
                 items[item] = itemsMax[item]
             } else {
@@ -1141,9 +1134,9 @@ function gridItemRClick(row, col, corner) {
 }
 
 function updateMap() {
-    for (k = 0; k < chests.length; k++) {
-        if (!chests[k].isOpened)
-            document.getElementById(k).className = 'mapspan chest ' + chests[k].isAvailable();
+    for (k = 0; k < overworldChests.length; k++) {
+        if (!overworldChests[k].isOpened)
+            document.getElementById(k).className = 'mapspan chest ' + overworldChests[k].isAvailable();
     }
     for (k = 0; k < dungeons.length; k++) {
         document.getElementById('dungeon' + k).className = 'mapspan dungeon ' + dungeons[k].canGetChest();
@@ -1225,7 +1218,7 @@ function populateMapdiv() {
     var mapdiv = document.getElementById('mapdiv');
 
     // Initialize all chests on the map
-    for (k = 0; k < chests.length; k++) {
+    for (k = 0; k < overworldChests.length; k++) {
         var s = document.createElement('span');
         s.style.backgroundImage = 'url(images/poi.png)';
         s.style.color = 'black';
@@ -1233,18 +1226,18 @@ function populateMapdiv() {
         s.onclick = new Function('toggleChest(' + k + ')');
         s.onmouseover = new Function('highlight(' + k + ')');
         s.onmouseout = new Function('unhighlight(' + k + ')');
-        s.style.left = chests[k].x;
-        s.style.top = chests[k].y;
-        if (chests[k].isOpened) {
+        s.style.left = overworldChests[k].x;
+        s.style.top = overworldChests[k].y;
+        if (overworldChests[k].isOpened) {
             s.className = 'mapspan chest opened';
         } else {
-            s.className = 'mapspan chest ' + chests[k].isAvailable();
+            s.className = 'mapspan chest ' + overworldChests[k].isAvailable();
 
         }
 
         var ss = document.createElement('span');
         ss.className = 'tooltip';
-        ss.innerHTML = chests[k].name;
+        ss.innerHTML = overworldChests[k].name;
         s.appendChild(ss);
 
         mapdiv.appendChild(s);
@@ -1366,7 +1359,6 @@ function init() {
     c = document.getElementsByClassName("mapspan chest available").length;
     opened = document.getElementsByClassName("mapspan chest opened").length;
     document.getElementById('checkCounter').innerHTML = "Checks: " + (dungeonChest + c) + " available, " + (totalChecks - opened - Dopened) + " Remaining";
-    noExtraOnLoad();
     loadCookie();
     saveCookie();
 }
