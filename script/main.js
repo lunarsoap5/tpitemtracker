@@ -499,7 +499,7 @@ function setTaloMap(sender) {
     if (!talomap) {
         TaloMap = false;
         document.getElementById("mapdiv").style.backgroundImage = "url('images/map.png')";
-        document.body.style.backgroundImage = "url('images/none.png')";
+        document.body.style.backgroundImage = "url('images/Backgrounds/none.png')";
         updateMap();
         updateGridItemAll();
     }
@@ -649,16 +649,16 @@ function setBackground() {
     var bridge = document.getElementById("bridge").selected;
 
     if (none == true) {
-        document.body.style.backgroundImage = "url('images/none.png')";
+        document.body.style.backgroundImage = "url('images/Backgrounds/none.png')";
     }
     else if (castle == true) {
-        document.body.style.backgroundImage = "url('images/castle.jpg')";
+        document.body.style.backgroundImage = "url('images/Backgrounds/castle.jpg')";
     }
     else if (meadow == true) {
-        document.body.style.backgroundImage = "url('images/meadow.jpg')";
+        document.body.style.backgroundImage = "url('images/Backgrounds/meadow.jpg')";
     }
     else if (bridge == true) {
-        document.body.style.backgroundImage = "url('images/bridge.jpg')";
+        document.body.style.backgroundImage = "url('images/Backgrounds/bridge.jpg')";
     }
 }
 
@@ -743,7 +743,7 @@ function ResetLayout()
     }
     document.getElementById('trackerOpacityID').value = 100;
     document.getElementById('trackersize').innerHTML = "100%"; 
-    document.body.style.backgroundImage = "url('images/none.png')";
+    document.body.style.backgroundImage = "url('images/Backgrounds/none.png')";
     saveCookie();
 }
 
@@ -869,34 +869,31 @@ function removeItem(r) {
 }
 
 //sets the images, etc of an item 
-function updateGridItem(row, index) {
+function updateGridItem(row, index) 
+{
     var item = itemLayout[row][index];
+    var itemImageURLHeader = 'url(images/Items/'; 
+    var itemCountImageHeader = 'url(images/ItemCounts/';
+    
+    //if Talo's Map is enabled, set the URL header appropriately
+    if (TaloMap)
+    {
+        itemImageURLHeader = 'url(images/taloItems/';
+        itemCountImageHeader = 'url(images/taloItems/ItemCounts/';
+    }
 
-    if (editmode) {
+    if (editmode) 
+    {
         if (!item || item == 'blank') {
             itemGrid[row][index]['item'].style.backgroundImage = 'url(images/blank.png)';
         }
         else if ((typeof items[item]) == 'boolean')
         {
-            if (TaloMap)
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png)';
-            }
-            else
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
-            }
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + '.png)';
         }
         else
         {
-            if (TaloMap)
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + itemsMax[item] + '.png)';
-            }
-            else
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + itemsMax[item] + '.png)';
-            }
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + itemsMax[item] + '.png)';
         }
         itemGrid[row][index]['item'].style.border = '1px solid white';
         itemGrid[row][index]['item'].className = 'griditem true'
@@ -906,56 +903,43 @@ function updateGridItem(row, index) {
 
     itemGrid[row][index]['item'].style.border = '0px';
 
-    if (!item || item == 'blank') {
+    if (!item || item == 'blank') 
+    {
         itemGrid[row][index]['item'].style.backgroundImage = '';
         return;
     }
 
-    if ((typeof items[item]) == 'boolean') 
+    if (RemoveBoxes)
     {
-        if (RemoveBoxes)
+        if ((typeof items[item]) == 'boolean') 
         {
-           if (TaloMap)
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png)';
-            }
-            else
-            {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png)';
-            }
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + '.png)';
         }
+        else if (progressiveItems.includes(item))
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + items[item] + '.png';
+        } 
         else 
         {
-            if (TaloMap) {
-
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + '.png), url(images/ItemBox.png)';
-            }
-            else {
-
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + '.png), url(images/ItemBox.png)';
-            }
-        }
-    } else 
-    {
-        if (RemoveBoxes)
-        {
-            if (TaloMap) {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + items[item] + '.png)';
-            }
-            else {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + item + items[item] + '.png)';
-            }
-        }
-        else
-        {
-            if (TaloMap) {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/taloItems/' + item + items[item] + '.png), url(images/ItemBox.png)';
-            }
-            else {
-                itemGrid[row][index]['item'].style.backgroundImage = 'url(images/' + items[item] + '.png), url(images/' + item + items[item] + '.png), url(images/ItemBox.png)';
-            }
+            itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png)';
         }
     }
+    else
+    {
+        if ((typeof items[item]) == 'boolean') 
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + '.png), url(images/ItemBox.png)';
+        }
+        else if (progressiveItems.includes(item))
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = itemImageURLHeader + item + items[item] + '.png), url(images/ItemBox.png)';
+        } 
+        else 
+        {
+            itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png), url(images/ItemBox.png)';
+        }
+    }
+    
 
     itemGrid[row][index]['item'].className = 'griditem ' + !!items[item];
 
@@ -1343,9 +1327,9 @@ function populateItemconfig() {
         rowitem.style.backgroundSize = '100% 100%';
         rowitem.onclick = new Function('itemConfigClick(this)');
         if ((typeof items[key]) == 'boolean') {
-            rowitem.style.backgroundImage = 'url(images/' + key + '.png)';
+            rowitem.style.backgroundImage = 'url(images/Items' + key + '.png)';
         } else {
-            rowitem.style.backgroundImage = 'url(images/' + key + itemsMax[key] + '.png)';
+            rowitem.style.backgroundImage = 'url(images/Items' + key + itemsMax[key] + '.png)';
         }
         row.appendChild(rowitem);
     }
@@ -1368,20 +1352,20 @@ function preloader() {
         if ((typeof items[item]) == 'boolean') {
             var img = new Image();
             if (TaloMap) {
-                img.src = 'images/taloItems' + item + '.png';
+                img.src = 'images/taloItems/' + item + '.png';
             }
             else {
-                img.src = 'images/' + item + '.png';
+                img.src = 'images/Items/' + item + '.png';
             }
 
         } else {
             for (i = itemsMin[item]; i < itemsMax[item]; i++) {
                 var img = new Image();
                 if (TaloMap) {
-                    img.src = 'images/taloItems' + item + '.png';
+                    img.src = 'images/taloItems/' + item + '.png';
                 }
                 else {
-                    img.src = 'images/' + item + '.png';
+                    img.src = 'images/Items/' + item + '.png';
                 }
             }
         }

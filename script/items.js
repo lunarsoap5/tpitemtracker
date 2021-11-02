@@ -10,35 +10,35 @@ var defaultItemGrid = [
     ],
     [
         "Bombs",
-        "WBombs",
         "Hawkeye",
         "Clawshot",
         "Spinner",
         "Chainball",
+        "Dominion"
     ],
     [
-        "Dominion",
         "Bottle",
+        "Renardos_Letter",
+        "Invoice",
+        "Wooden_Statue",
+        "Ilias_Charm",
+        "Horse_Call"
+    ],
+    [
         "Memo",
         "Sketch",
-        "Skybook",
-        "Charm",
-    ],
-    [
-        "Skills",
+        "Crystal",
         "Sword",
-        "MSword",
         "Shield",
-        "GTunic",
         "Wallet"
     ],
     [
+        "Skybook",
+        "Skills",
         "Bugs",
         "Soul",
-        "Crystal",
         "ZoraArmor",
-        "MagicArmor",
-        "Vessel"
+        "MagicArmor"
     ],
     [
         "YouthScent",
@@ -80,7 +80,11 @@ var baseItems = {
     Sketch: false,
     Skybook: 0,
     Dominion: 0,
-    Charm: 0,
+    Renardos_Letter: false,
+    Invoice: false,
+    Wooden_Statue: false,
+    Ilias_Charm: false,
+    Horse_Call: false,
     Bugs: 0,
     Bottle: 0,
     Wallet: 1,
@@ -101,7 +105,6 @@ var baseItems = {
     ZoraArmor: false,
     MagicArmor: false,
     IronBoots: false,
-    GTunic: false,
    
     Boss1: false,
     Boss2: false,
@@ -148,7 +151,7 @@ var itemsMax = {
     Rod: 2,
     Bugs: 24,
     Bottle: 4,
-    Sword: 2,
+    Sword: 4,
     MSword: 2,
     Skills: 7,
     Shield: 2,
@@ -163,6 +166,19 @@ var itemsMax = {
     Skybook: 7,
     Vessel: 3
 };
+
+const progressiveItems =
+[
+    "Bow",
+    "Clawshot",
+    "Wallet",
+    "Rod",
+    "Sword",
+    "Shield",
+    "Dominion",
+    "Vessel"
+];
+
 
 //assign the default values of the items to the GUI
 var items = Object.assign(baseItems);
