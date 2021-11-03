@@ -921,7 +921,14 @@ function updateGridItem(row, index)
         } 
         else 
         {
-            itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png)';
+            if (items[item] == itemsMax[item])
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + 'max.png),' + itemImageURLHeader + item + '.png)';
+            }
+            else
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png)';
+            }
         }
     }
     else
@@ -936,7 +943,14 @@ function updateGridItem(row, index)
         } 
         else 
         {
-            itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png), url(images/ItemBox.png)';
+            if (items[item] == itemsMax[item])
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + 'max.png),' + itemImageURLHeader + item + '.png), url(images/ItemBox.png)';
+            }
+            else
+            {
+                itemGrid[row][index]['item'].style.backgroundImage = itemCountImageHeader + items[item] + '.png),' + itemImageURLHeader + item + '.png), url(images/ItemBox.png)';
+            }
         }
     }
     
